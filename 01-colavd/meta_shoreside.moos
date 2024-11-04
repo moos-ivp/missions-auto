@@ -1,0 +1,287 @@
+//--------------------------------------------------------
+// Shoreside Config file
+// M. Benjamin, MIT	
+
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
+
+#include plugs.moos <origin_warp>
+  
+//--------------------------------------------------------
+Processconfig = ANTLER
+{
+  MSBetweenLaunches = 100
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pRealm          @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  Run = uProcessWatch   @ NewConsole = false
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldShoreBroker @ NewConsole = false
+  Run = uFldNodeComms   @ NewConsole = false
+  Run = uFldCollisionDetect @ NewConsole = false
+  Run = pMissionEval	  @ NewConsole = false
+	RUn = pAutoPoke       @ NewConsole = false
+	#ifdef LAUNCH_GUI yes
+  Run = pMarineViewer   @ NewConsole = false
+#else
+  Run = pMissionHash    @ NewConsole = false
+#endif
+	}
+
+#include plugs.moos <pHostInfo>
+#include plugs.moos <pShare>	
+#include plugs.moos <uProcessWatch>
+
+//----------------------------------------------------
+// pAutoPoke Config Block  
+
+ProcessConfig = pAutoPoke
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  flag = DEPLOY_ALL=true 
+  flag = MOOS_MANUAL_OVERRIDE_ALL=false
+
+	required_nodes = 2
+}
+
+//----------------------------------------------------
+// pMissionEval Configuration Block  
+
+ProcessConfig = pMissionEval
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  lead_condition = ARRIVED=true
+  //pass_condition = ARRIVED=true
+
+  result_flag = MISSION_EVALUATED = true
+
+	report_column = $(MIN_UTIL_CPA)
+	report_column = $[ENCOUNTER]
+	report_column = mhash=$[MHASH_SHORT]
+	report_column = utc=$[MHASH_UTC]
+	report_column = wall=$[WALL_TIME]
+	report_file = results.log
+}
+
+//--------------------------------------------------
+// uFldShoreBroker Config Block
+
+ProcessConfig = uFldShoreBroker
+{ 
+  AppTick   = 1
+  CommsTick = 1
+
+  // Note: [QBRIDGE = FOO]  is shorthand for                    
+  //       [BRIDGE = src=FOO_$V,  alias=FOO] and                
+  //       [BRIDGE = src=FOO_ALL, alias=FOO]
+
+	auto_bridge_appcast = true
+	
+  qbridge  = DEPLOY, RETURN, STATION, NODE_REPORT, NODE_MESSAGE
+  qbridge  = MOOS_MANUAL_OVERRIDE, AVOID
+  qbridge  = RETURN_UPDATES, BCM_DISPLAY_RADII
+  qbridge  = CONTACT_INFO, NODE_GROUP_UPDATE
+
+  bridge   = src=UP_LOITER_$N, alias=UP_LOITER
+  bridge   = src=DRIFT_VECTOR_ADD, alias=DRIFT_VECTOR_ADD
+  bridge   = src=HELM_MAP_CLEAR, alias=HELM_MAP_CLEAR
+  bridge   = src=MISSION_HASH, alias=MISSION_HASH
+}
+
+//--------------------------------------------------
+// uFldNodeComms Config Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  comms_range      = 500
+  critical_range   = 25
+  min_msg_interval = 15
+  max_msg_length   = 1000
+  groups           = true
+
+	app_logging = true
+	
+  view_node_rpt_pulses = false
+}
+
+//--------------------------------------------------
+// pLogger Config Block
+
+ProcessConfig = pLogger
+{
+  AppTick       = 10
+  CommsTick     = 10
+  
+  File          = XLOG_SHORESIDE
+  PATH          = ./
+  SyncLog       = true @ 0.2
+  AsyncLog      = true
+  FileTimeStamp = true
+
+  LogAuxSrc     = true
+
+  // Log it all!!!!!
+  WildCardLogging = true 
+
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardOmitPattern = *_ITER_GAP
+  WildCardOmitPattern = *_ITER_LEN
+}
+
+//--------------------------------------------------
+// uLoadWatch Config Block
+
+ProcessConfig = uLoadWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  thresh = app=pHelmIvP,  gapthresh=3
+  thresh = app=pHostInfo, gapthresh=5
+  thresh = app=any,       gapthresh=2.0
+  thresh = app=uMemWatch, gapthresh=50
+
+  breach_trigger = 5
+}
+
+//--------------------------------------------------------
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  watch_cluster = key=basic, vars=MISSION_HASH
+
+  tiff_file            = forrest19.tif
+  set_pan_x            = -90
+  set_pan_y            = -280
+  zoom                 = 0.65
+  vehicles_shape_scale = 1.5
+  vehicles_name_mode   = names
+
+	app_logging = true
+	
+	watch_cluster = key=mission_top, vars=DEPLOY:RETURN
+	watch_cluster = key=mission_top, vars=STATION_KEEP:LOITER:AVOID
+	
+  circle_viewable_all = false
+
+	content_mode      = appcast       // or realmcast
+	realmcast_channel = mission_top
+	
+  appcast_color_scheme = indigo
+	appcast_font_size    = large
+  procs_font_size      = large
+  nodes_font_size      = large
+
+  stale_report_thresh = 10
+  stale_remove_thresh = 18
+
+	scope = REALMCAST_REQ
+	scope = REALMCAST_REQ_GILDA
+	scope = REALMCAST_REQ_HENRY
+	
+  left_context[return_point] = RETURN_$[UP_VNAME_CLOSEST] = true
+  left_context[return_point] = RETURN_UPDATES_$[UP_VNAME_CLOSEST] = points=$[XPOS],$[YPOS]
+  left_context[station]      = STATION_KEEP_$[UP_VNAME_CLOSEST] = true
+
+  cmd = label=DEPLOY, var=DEPLOY,  sval=true,  receivers=all:$(VNAMES)
+  cmd = label=DEPLOY, var=MOOS_MANUAL_OVERRIDE,  sval=false,  receivers=all:$(VNAMES)
+  cmd = label=DEPLOY, var=AVOID,  sval=true,  receivers=all:$(VNAMES)
+  cmd = label=DEPLOY, var=RETURN,  sval=false,  receivers=all:$(VNAMES)
+  cmd = label=DEPLOY, var=STATION_KEEP,  sval=false,  receivers=all:$(VNAMES)
+
+  cmd = label=RETURN, var=RETURN, sval=true, receivers=all:$(VNAMES)
+  cmd = label=RETURN, var=STATION_KEEP, sval=false, receivers=all:$(VNAMES)
+
+  cmd = label=LOITER-FAST, var=UP_LOITER,  sval=speed=2.8,  receivers=all:$(VNAMES)
+  cmd = label=LOITER-SLOW, var=UP_LOITER,  sval=speed=1.4,  receivers=all:$(VNAMES)
+
+  cmd = label=LOITER-CLOCKWISE-TRUE,  var=UP_LOITER, sval=clockwise=true,  receivers=all:$(VNAMES)
+  cmd = label=LOITER-CLOCKWISE-FALSE, var=UP_LOITER, sval=clockwise=false, receivers=all:$(VNAMES)
+  cmd = label=LOITER-CLOCKWISE-BEST, var=UP_LOITER,  sval=clockwise=false, receivers=all:$(VNAMES)
+	
+  button_one = DEPLOY  # DEPLOY_ALL=true 
+  button_one = MOOS_MANUAL_OVERRIDE_ALL=false 
+  button_one = AVOID_ALL=true
+  button_one = RETURN_ALL=false # STATION_ALL=false
+
+  button_two = RETURN  # RETURN_ALL=true
+  button_two = RETURN  # STATION_KEEP_ALL=false
+  button_3   = STATION:true # STATION_ALL=true
+  button_4   = STATION:false # STATION_ALL=false
+}
+
+//--------------------------------------------------------
+// uFldCollisionDetect Config Block
+
+ProcessConfig = uFldCollisionDetect                             
+{                                                               
+  AppTick   = 4
+  CommsTick = 4
+                                                                
+  //condition = DEPLOY_ALL = true
+
+  encounter_flag = ENCOUNTER = $CPA
+  collision_flag = COLLISION_CPA = $CPA
+  collision_flag = COLLISION = true
+  near_miss_flag = NEAR_MISS_CPA = $CPA
+  near_miss_flag = NEAR_MISS = true
+                                                                
+  encounter_range = 80          // in meters       
+  near_miss_range = 10          // in meters       
+  collision_range = 5           // in meters       
+                                                                
+  post_closest_range = true     // default is false             
+
+	//verbose = true
+	
+  pulse_render   = true         // default true                 
+  pulse_range    = 20           // default is 20 meters         
+  pulse_duration = 10           // default is 10 seconds        
+                                                                
+  encounter_rings = false       // default true                 
+                                                                
+  report_all_encounters = true  // default is false             
+                                                                
+  app_logging = true  // {true or file} By default disabled     
+}                        
+
+
+//--------------------------------------------------                                             
+// uPokeDB Config Block 
+
+ProcessConfig = uPokeDB
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+                                                                
+  poke = DEPLOY_ALL=true                                        
+  poke = MOOS_MANUAL_OVERRIDE_ALL=false                         
+}                      
+	
+//--------------------------------------------------                                             
+// uQueryDB Config Block 
+
+ProcessConfig = uQueryDB
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  max_wait_time  = 5
+  max_dbup_time  = $(MAX_TIME)
+
+  pass_condition = (MISSION_EVALUATED = true)
+}
