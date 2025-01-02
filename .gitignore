@@ -1,0 +1,17 @@
+*.tar
+*.mhi
+*/24*
+*/25*
+*/26*
+*/LOG*
+*/XLOG*
+*/targ*
+*/vcolors.txt
+*/vloiterpos.txt
+*/vdestpos.txt
+*/vpositions.txt
+*/vnames.txt
+*/.LastOpenedMOOSLogDirectory
+*/*++
+*/*~
+*#
