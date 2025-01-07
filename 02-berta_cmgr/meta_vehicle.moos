@@ -105,6 +105,12 @@ ProcessConfig = pContactMgrV20
 	
   disable_var = XYZ_DISABLE_TARGET
   enable_var  = XYZ_ENABLE_TARGET
+
+	disable_flag = TESTING_DISABLE = $[RECENT_DISABLED]
+	disable_flag = TOTAL_DISABLED = $[TOTAL_DISABLED]
+
+	enable_flag = TESTING_ENABLE = $[RECENT_ENABLED]
+	enable_flag = TOTAL_DISABLED = $[TOTAL_DISABLED]
 	
 	post_closest_range   = true
   hold_alerts_for_helm = true
