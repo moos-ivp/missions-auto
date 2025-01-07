@@ -46,7 +46,8 @@ ProcessConfig = uFldShoreBroker
   qbridge  = MOOS_MANUAL_OVERRIDE, AVOID, UP_LOITER
   qbridge  = RETURN_UPDATES, BCM_DISPLAY_RADII
   qbridge  = CONTACT_INFO, NODE_GROUP_UPDATE
-  qbridge  = BHV_ABLE_FILTER
+  qbridge  = BHV_ABLE_FILTER 
+  qbridge  = XYZ_DISABLE_TARGET, XYZ_ENABLE_TARGET
 
   bridge   = src=UP_LOITER_$N, alias=UP_LOITER
   bridge   = src=DRIFT_VECTOR_ADD, alias=DRIFT_VECTOR_ADD
@@ -151,6 +152,7 @@ ProcessConfig = pMarineViewer
 	scope = CMGR_WARNING
 	
   left_context[disable] = XYZ_DISABLE_TARGET_$[UP_VNAME_CLOSEST] = contact=abe, action=disable
+  left_context[enable]  = XYZ_ENABLE_TARGET_$[UP_VNAME_CLOSEST] = contact=abe, action=enable
 
   left_context[return_point] = RETURN_$[UP_VNAME_CLOSEST] = true
   left_context[return_point] = RETURN_UPDATES_$[UP_VNAME_CLOSEST] = points=$[XPOS],$[YPOS]

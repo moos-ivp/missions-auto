@@ -88,11 +88,8 @@ ProcessConfig = pContactMgrV20
   decay = 30,60
 
 	app_logging = true
-	
-  alert_verbose = true
+	alert_verbose = true
 
-	contact_local_coords = force_lat_lon
-	
   contact_max_age   = 35
   display_radii     = true
 	display_radii_id  = avd
@@ -101,13 +98,13 @@ ProcessConfig = pContactMgrV20
 
 	early_warning_range = 60
 	early_warning_flag  = CMGR_WARNING = Warning=$[CONTACT], at $[RNG]
-	early_warning_ref_spd = 3.4
+	early_warning_ref_spd = 2.4
 	early_warning_radii = true
 
 	cease_warning_flag = CMGR_WARNING = off
 	
   disable_var = XYZ_DISABLE_TARGET
-  enable_var  = XYZ_REENABLE_TARGET
+  enable_var  = XYZ_ENABLE_TARGET
 	
 	post_closest_range   = true
   hold_alerts_for_helm = true
