@@ -65,8 +65,8 @@ vecho "ZBATCH: " $ZBATCH
 FLOW_DOWN_ARGS+="${TIME_WARP} --nogui -a --zbatch=${ZBATCH}" 
 vecho "zlaunch.sh FLOW_DOWN_ARGS:[$FLOW_DOWN_ARGS]"
 
-for ((i=0; i<8; ++i)); do 
-    STEP=5
+for ((i=0; i<20; ++i)); do 
+    STEP=2
     DELTA=$(($STEP * $i))
     for ((j=0; j<$EACH; ++j)); do
 	MIN_UTIL_CPA=$((5+$DELTA))

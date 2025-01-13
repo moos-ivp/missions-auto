@@ -92,15 +92,13 @@ ProcessConfig = pContactMgrV20
 
   contact_max_age   = 35
   display_radii     = true
-	display_radii_id  = avd
   alert_range_color = gray70
-  cpa_range_color   = gray30
 
-	early_warning_range = 60
-	early_warning_flag  = CMGR_WARNING = Warning=$[CONTACT], at $[RNG]
-	early_warning_ref_spd = 2.4
+	early_warning_time = 10
+	early_warning_flag  = CMGR_WARNING = Warning=$[CONTACT], at $[RNG], at $[UTC]
 	early_warning_radii = true
-
+	ewarn_radii_color = dodger_blue
+	
 	cease_warning_flag = CMGR_WARNING = off
 	
   disable_var = XYZ_DISABLE_TARGET

@@ -23,7 +23,7 @@ Processconfig = ANTLER
   Run = uFldNodeComms   @ NewConsole = false
   Run = uFldCollisionDetect @ NewConsole = false
   Run = pMissionEval	  @ NewConsole = false
-	RUn = pAutoPoke       @ NewConsole = false
+	Run = pAutoPoke       @ NewConsole = false
 	#ifdef LAUNCH_GUI yes
   Run = pMarineViewer   @ NewConsole = false
 #else
