@@ -1,0 +1,61 @@
+
+I. Why we want to auto-test:
+
+(1) check that stuff isn't broken (Pass/Fail)
+(2) measure the performance (get a score)
+    a. To ensure an established level of performance is
+       maintained as new code changes are pushed
+    b. To compare two alternative methods as we develop
+    c. To support adversarial head-head competitions.
+
+II. What is a "good" mission
+
+    a. For SOME sim missions, we want the ability to take the same mission
+       and run it on the water with minimal changes, just command line switches
+    b. For ALL in-water missions we want the ability to easily sim
+    c. A mission should be stand-alone, no dependencies on files external to
+       the mission folder.
+    d. For multi-vehicle mission, unless specifically designed to be say a 2
+    vehicle mission, the number of vehicles should be selectable on the command line
+    to be any arbrarily large number of vehicles
+
+    e. In multi-vehicle missions, vehicles need to have unique names, and IP/PORT
+       assignments. In simulation, initial positions need to be reasoned about to
+       ensure vehicles are not starting on each other.
+
+III. What is a good "auto-enabled" mission
+
+    a. able to launch on the command line with auto-poke and headless options
+
+
+
+
+Structure of a mission.
+
+o What is a MOOS community
+
+o Understand uField
+
+o Understand launch structure
+  - Run MOOS from command line
+  - Launch a MOOS Community with pAntler
+  - Launch a MOOS Set of Communities with launch files
+
+o launch files
+  - bash script basics
+
+o Three supported mission structions
+  o Simple alpha
+  o uField / river ready
+  o MTASC
+
+o Auto launching
+
+  headless missions (they don't run a GUI, must be auto-poked)
+  launch.sh; uPokedDB DEPLOY=true; sleep 60; ktm
+
+  launch/poke/wait/kill/archive
+
+o uMayFinish
+
+o 
