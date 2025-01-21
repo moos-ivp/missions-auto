@@ -58,16 +58,18 @@ ProcessConfig = pMissionEval
   CommsTick  = 4
 
   lead_condition = ARRIVED=true
-  //pass_condition = ARRIVED=true
 
-  result_flag = MISSION_EVALUATED = true
+  result_flag   = MISSION_EVALUATED = true
+	mission_form  = 01-colavd
 
+	report_column = m_form=$[MISSION_FORM]
 	report_column = $(MIN_UTIL_CPA)
 	report_column = $[ENCOUNTER]
 	report_column = mhash=$[MHASH_SHORT]
 	report_column = utc=$[MHASH_UTC]
 	report_column = wall=$[WALL_TIME]
-	report_file = results.log
+
+	report_file   = results.log
 }
 
 //--------------------------------------------------
