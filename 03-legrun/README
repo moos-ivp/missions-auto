@@ -1,0 +1,23 @@
+Author: Mike Benjamin
+Date: Oct 31st 2023
+File: README
+
+This mission supports:
+
+ (1) Launching as the shoreside
+ (2) Launching as a vehicle in-water or simulation
+ (3) Launching shoreside and a vehicle in simulation
+
+To launch as shoreside:
+-----------------------
+  $ ./launch_shoreside.sh --ip=<my_ipaddr> 
+
+To launch as vehicle:
+-----------------------
+
+  $ ./launch_vehicle.sh --shore=<shore_ipaddr>
+
+To launch simple simulation:
+-----------------------
+
+  $ ./launch.sh WARP

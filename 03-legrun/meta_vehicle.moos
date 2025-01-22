@@ -1,0 +1,266 @@
+ServerHost = localhost
+ServerPort = $(MOOS_PORT)
+Community  = $(VNAME)
+
+#include plugs.moos <origin_warp>
+
+//------------------------------------------------------------
+ProcessConfig = ANTLER
+{
+  MSBetweenLaunches = 100
+
+  Run = MOOSDB             @ NewConsole = false
+  Run = uProcessWatch      @ NewConsole = false
+  Run = pShare             @ NewConsole = false
+  Run = pLogger            @ NewConsole = false
+  Run = pNodeReporter      @ NewConsole = false
+  Run = pMarinePID         @ NewConsole = false
+  Run = pHelmIvP           @ NewConsole = false
+  Run = pHostInfo          @ NewConsole = false
+  Run = uFldNodeBroker     @ NewConsole = false
+  Run = pRealm             @ NewConsole = false
+
+#ifdef XMODE SIM
+  Run = uSimMarineV22      @ NewConsole = false
+#elseifdef XMODE M300
+  Run = iM300X             @ NewConsole = false
+  Run = iM300Health        @ NewConsole = false
+#endif
+}
+
+#ifdef XMODE SIM
+  #include plugs.moos <uSimMarineV22>
+#elseifdef XMODE M300
+  //#include plugs.moos <iM300X>
+  #include plugs.moos <iM300Health>
+#endif
+
+#include plugs.moos <pShare>
+#include plugs.moos <pHostInfo>
+#include plugs.moos <uProcessWatch>
+
+//---------------------------------------
+// pHelmIvP Config Block
+
+ProcessConfig = pHelmIvP
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+	app_logging = true
+	
+  behaviors   = targ_$(VNAME).bhv
+  verbose     = false
+  domain      = course:0:359:360
+  domain      = speed:0:$(MAX_SPD):21
+
+	goals_mandatory = true
+}
+
+//--------------------------------------------------
+// pLogger Config Block
+	
+ProcessConfig = pLogger
+{
+  AppTick     = 10
+  CommsTick   = 10
+
+  File          = LOG_%(VNAME)
+  PATH          = ./
+  AsyncLog      = true
+  FileTimeStamp = true
+
+  Log = IVPHELM_LIFE_EVENT @ 0 nosync
+
+  // Log it all!!!!!
+  LogAuxSrc = true
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = *_ITER_GAP
+  WildCardOmitPattern = *_ITER_LEN
+  WildCardOmitPattern = *_OVER_GROUND
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardOmitPattern = APPCAST
+  WildCardOmitPattern = NAV_Z
+  WildCardOmitPattern = NAV_PITCH
+  WildCardOmitPattern = DB_QOS
+
+  //WildCardOmitPattern = BHV_IPF
+}
+
+//---------------------------------------
+// pNodeReporter Config Block
+	
+ProcessConfig = pNodeReporter
+{
+  AppTick     = 2
+  CommsTick   = 2
+
+	platform_color = $(COLOR)
+  vessel_type = kayak
+}
+
+//--------------------------------------------------
+// uFldNodeBroker Config Block
+
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+	app_logging = true
+	
+  try_shore_host = pshare_route=$(SHORE_IP):$(SHORE_PSHARE)
+
+	// Common locations worth trying
+	//try_shore_host = pshare_route=192.168.1.37:9200
+
+  bridge = src=VIEW_POLYGON
+  bridge = src=VIEW_POINT
+  bridge = src=VIEW_SEGLIST
+  bridge = src=VIEW_CIRCLE
+  bridge = src=VIEW_TEXTBOX
+  bridge = src=APPCAST
+  bridge = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  bridge = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+
+  bridge = src=LR_MODE_REPORT
+
+  bridge = src=LEG_SPDS_REP
+  bridge = src=FT_REPORT
+
+}
+
+//---------------------------------------
+// pMarinePID Config Block
+	
+ProcessConfig = pMarinePID
+{
+  AppTick    = 10
+  CommsTick  = 10
+
+	app_logging = true
+
+	deprecated = true
+	
+	deprecated_ok = true
+	
+  verbose       = true
+  depth_control = false
+  active_start  = true
+
+#ifdef XMODE SIM
+  yaw_pid_kp     = 1.2
+  yaw_pid_kd     = 0.0
+  yaw_pid_ki     = 0.3
+  yaw_pid_integral_limit = 0.07
+#elseifdef XMODE M300
+  // Yaw PID controller (Set for M300)
+  yaw_pid_kp             = 0.9 
+  yaw_pid_kd             = 0.6 
+  yaw_pid_ki             = 0.3  
+  yaw_pid_integral_limit = 0.3 
+#endif
+
+  // Speed PID controller BETA
+  //speed_pid_kp           = 0.9
+  //speed_pid_kd           = 0.5
+  //speed_pid_ki           = 0.05
+  //speed_pid_integral_limit = 0.07
+
+  // Speed PID controller Nov0323
+  speed_pid_kp           = 0.7
+  speed_pid_kd           = 0.4
+  speed_pid_ki           = 0.05
+  speed_pid_integral_limit = 0.07
+
+  // Speed PID controller DEFAULT
+  //speed_pid_kp           = 1.0
+  //speed_pid_kd           = 0.0
+  //speed_pid_ki           = 0.0
+  //speed_pid_integral_limit = 0.07
+
+  // Maximums
+  maxrudder  = 100 // 100
+  maxthrust  = 100
+
+  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
+  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
+  //SPEED_FACTOR = 20
+}
+
+
+<tag><iM300X>
+//--------------------------------------------------------
+// iM300X Config Block
+	
+ProcessConfig = iM300X
+{
+  AppTick    = 10
+  CommsTick  = 10
+
+	app_logging = true
+	
+	// Specific to iM300X
+	min_thrust = -100
+	rfactor    = 1.0
+	max_rudder = 50
+	
+	// iM300 needs to know the IP address of the M300 front seat
+	// computer, from the perspective of the PABLO. This is different
+	// than the IP of the front seat computer for users logging in from
+	// outside the vehicle.
+#ifdef VNAME abe
+	ip_addr    = 192.168.1.173
+#elseifdef VNAME ben
+	ip_addr    = 192.168.1.174
+#elseifdef VNAME cal
+	ip_addr    = 192.168.1.169
+#elseifdef VNAME deb
+	ip_addr    = 192.168.1.168
+#elseifdef VNAME eve
+	ip_addr    = 192.168.1.167
+#elseifdef VNAME fin
+	ip_addr    = 192.168.1.149
+#elseifdef VNAME max
+	ip_addr    = 192.168.1.148
+#elseifdef VNAME ned
+	ip_addr    = 192.168.1.147
+#elseifdef VNAME oak
+	ip_addr    = 192.168.1.146
+#endif
+
+	comms_type = client
+  port       = 29500
+	ip_addr    = $(FSEAT_IP)
+
+  warn_bad_nmea_len  = false   
+  warn_bad_nmea_form = false   
+	
+	stale_thresh = 15
+	
+	max_rudder  = 50
+	max_thrust  = 100
+	drive_mode  = normal
+	ignore_msg  = $GPGLL, $GPGSV, $GPVTG, $GPZDA, $CPALT, $CPIMU, $CPNVR
+	ignore_msg  = $GPGST, $CPRCM, $GNGLL, $GNGSV, $GNVTG, $GNZDA, $GLGSV, 
+	ignore_msg  = $GNGSA, $GNTXT
+	ignore_checksum_errors = true
+
+	max_appcast_events       = 8
+  // max_appcast_run_warnings = 10
+
+	// heading_source options are gps, imu, or auto where auto uses imu
+	// when available and not timed out as defined in the
+	// stale_nave_msg_thresh parameter
+  heading_source = auto    
+
+	// threshold in seconds, default is 1.5
+	stale_gps_msg_thresh = 3
+	
+	nav_prefix 			= NAV
+	gps_prefix			= GPS
+	compass_prefix	= COMPASS
+}
+
