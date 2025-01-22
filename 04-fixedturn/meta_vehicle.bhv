@@ -1,0 +1,222 @@
+//*******************************************************
+// Vehicle behavior configuration file
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+initialize   STATION_KEEP = false
+initialize   LEG_RUN = false
+initialize   ATURN = false
+initialize   FIX_TURN = false
+initialize   FULL_STOP = false
+	
+set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+set MODE = STATION_KEEPING {
+  MODE = ACTIVE
+  STATION_KEEP = true
+}
+
+set MODE = RETURNING {
+  MODE = ACTIVE
+  RETURN = true
+}
+
+set MODE = FULL_STOPPING {
+  MODE = ACTIVE
+  FULL_STOP = true
+}
+
+set MODE = FIX_TURNING {
+  MODE = ACTIVE
+  FIX_TURN = true
+}
+	
+set MODE = ATURNING {
+  MODE = ACTIVE
+  ATURN = true
+}
+	
+set MODE = LEG_RUNNING {
+  MODE = ACTIVE
+  LEG_RUN = true
+} 
+
+//----------------------------------------------
+Behavior = BHV_FullStop
+{ 
+  name      = fstop
+  pwt       = 100
+  condition = MODE==FULL_STOPPING
+	endflag   = FULL_STOP = false
+
+  updates   = FSTOP_UPDATE
+  perpetual = true
+
+	delay_complete = 15
+	mark_duration = 2
+	stop_thresh   = 0.1
+
+	mark_flag   = SAY_MOOS=stopping
+	unmark_flag = SAY_MOOS=halted
+
+	endflag = STOPPING_TIME = $[STOP_TIME]
+	endflag = STOPPING_DIST = $[STOP_DIST]
+}
+
+//----------------------------------------------
+Behavior = BHV_LegRun
+{ 
+  name      = legs
+  pwt       = 100
+  condition = MODE == LEG_RUNNING
+  updates   = LEG_UPDATE
+  perpetual = true
+
+            lead = 5
+     lead_damper = 1
+           speed = 2.0
+    capture_line = true
+  capture_radius = 5
+     slip_radius = 15
+		    patience = 90
+	
+	       leg = x=7,y=-57,len=60,ang=64.64
+	turn1_bias = 100
+	turn2_bias = 100
+   turn1_dir = port
+	 turn2_dir = star
+    turn_ext = 4
+
+	leg_spds = 1.6,1.4,1.2,1.0,0.8,0.6,0.4
+
+	//init_leg_mode = far_turn
+	
+	      repeat = 3
+     turn1_rad = 8
+     turn2_rad = 8
+   mid_leg_pct = 50
+	mid_leg_flag = FIX_TURN=true
+	
+	// adjust_turn = false
+	
+	 	//legflag = PCT_TO_NEXT=$[PCT_NP]
+    //wptflag = LEG_RESULT="id=$[LEG_ID],dist=$[LEG_ODO],wraps=$[WRAPS]"
+	
+  visual_hints = nextpt_color=yellow
+  visual_hints = nextpt_vertex_size=8
+  visual_hints = nextpt_lcolor=gray70
+  visual_hints = vertex_color=dodger_blue, edge_color=white
+  visual_hints = vertex_size=6, edge_size=1
+  visual_hints = turn_edge_color=gray80
+  visual_hints = turn_vertex_color=green
+}
+
+//----------------------------------------------
+Behavior = BHV_FixedTurn
+{
+  name      = fturn
+  pwt       = 100
+  condition = MODE==FIX_TURNING
+  //endflag   = FIX_TURN = false
+
+  updates   = FTURN_UPDATE
+  perpetual = true
+
+  fix_turn  = 355
+  mod_hdg   = 25
+  turn_dir  = star
+  speed     = auto
+
+	inactive_flag = TINFO=hello
+	inactive_flag = TUTC=$[UTC]
+
+	runxflag = NOW_TIME=$[NOW]
+	
+	turn_delay = 0
+	
+  turn_spec = spd=auto, mhdg=10, fix=355, turn=auto, flag=FIX_TURN=false
+  turn_spec = spd=-1, mhdg=30, fix=355, turn=port, flag=FIX_TURN=false
+  turn_spec = spd=-1, mhdg=30, fix=355, turn=star, flag=FIX_TURN=false
+  turn_spec = spd=-1, mhdg=30, fix=355, turn=port, flag=FIX_TURN=false
+  //turn_spec = spd=1.5, mhdg=30, fix=355, turn=star, flag=FIX_TURN=false
+  //turn_spec = spd=1.5, mhdg=30, fix=355, turn=port, flag=FIX_TURN=false
+  //turn_spec = spd=1.0, mhdg=30, fix=355, turn=star, flag=FIX_TURN=false
+  //turn_spec = spd=1.0, mhdg=30, fix=355, turn=port, flag=FIX_TURN=false
+
+  schedule_repeat = true
+
+  stale_nav_thresh = 5
+
+  endflag = TURNING_TIME = $[TURN_TIME]
+  endflag = TURNING_DIST = $[TURN_DIST]
+}
+
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  condition  = MODE==RETURNING
+  perpetual  = true
+  updates    = RETURN_UPDATE
+  endflag    = RETURN = false
+  endflag    = DEPLOY = false
+  endflag    = MISSION = complete
+ 
+            lead = 8
+     lead_damper = 1
+   lead_to_start = true
+           speed = 0.8
+  capture_radius = 2.0
+     slip_radius = 8.0
+
+           point = 21,-1
+}
+
+//---------------------------------------------- 
+Behavior = BHV_StationKeep
+{
+  name         = station-keep
+  pwt          = 100
+  condition    = MODE==STATION_KEEPING
+
+     center_activate = true
+        inner_radius = 5
+        outer_radius = 10
+         outer_speed = 1.0
+
+       transit_speed = 1.3
+          swing_time = 7
+        visual_hints = vertex_size=0, edge_color=gray50
+}
+
+//----------------------------------------------
+Behavior = BHV_OpRegionV24
+{
+  name         = recover
+  pwt          = 300
+	condition    = DEPLOY = true
+  updates      = RECOVER_UPDATES
+  activeflag   = RECOVER = true
+  inactiveflag = RECOVER = false
+
+	// pav60 explicitly:
+  // polygon = pts={60,10:-30.36,-32.84:-4.66,-87.05:85.7,-44.22}
+
+	// pav90 explicitly
+  core_poly = pts={60,10:-75.54,-54.26:-36.99,-135.58:98.55,-71.32}
+
+	save_dist = 5
+	halt_dist = 12
+	
+	trigger_entry_time = 1
+  trigger_exit_time  = 1
+
+	visual_hints = save_edge_color = gray30
+  visual_hints = halt_edge_color = gray40
+	visual_hints = save_label_color = off
+	visual_hints = halt_label_color = off
+}

@@ -1,0 +1,176 @@
+//*******************************************************
+// ShoreSide Configuration File
+
+ServerHost = localhost
+ServerPort = $(MOOS_PORT)
+Community  = shoreside
+
+#include plugs.moos <origin_warp>
+
+//--------------------------------------------------------
+Processconfig = ANTLER
+{
+  MSBetweenLaunches = 100
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pRealm          @ NewConsole = false
+  Run = pMarineViewer   @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldShoreBroker @ NewConsole = false
+  Run = uProcessWatch   @ NewConsole = false
+  Run = uFldNodeComms   @ NewConsole = false
+}
+
+#include plugs.moos <pShare>
+#include plugs.moos <pHostInfo>
+#include plugs.moos <uProcessWatch>
+
+//--------------------------------------------------
+// uFldNodeComms Config Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  comms_range      = 5000
+  critical_range   = 25
+
+  min_msg_interval = 0
+  max_msg_length   = 10000
+  groups           = false
+
+  view_node_rpt_pulses = false
+}
+
+//--------------------------------------------------
+// uFldShoreBroker Config Block
+
+ProcessConfig = uFldShoreBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE
+  qbridge  = MOOS_MANUAL_OVERRIDE, APPCAST_REQ, AVOID
+  qbridge  = SAY_MOOS, LEG_RUN, ZIGGING, LEG_UPDATE, IM300_UPDATE
+  qbridge  = ATURN, ATURN_ENGAGE, FSTOP_UPDATE, OPREGION_RESET
+
+	bridge   = src=HEARTBEAT
+	bridge   = src=DRIFT_VECTOR_ADD
+	bridge   = src=DRIFT_VECTOR
+	
+  bridge   = src=HELM_MAP_CLEAR, alias=HELM_MAP_CLEAR
+}
+
+//--------------------------------------------------
+// pLogger Config Block
+
+ProcessConfig = pLogger
+{
+  AppTick       = 10
+  CommsTick     = 10
+
+  File          = XLOG_SHORESIDE
+  PATH          = ./
+  AsyncLog      = true
+  FileTimeStamp = true
+  LogAuxSrc     = true
+
+	Log = VIEW_SEGLIST @ 0 NOSYNC
+	Log = VIEW_POINT @ 0 NOSYNC
+	
+  // Log it all!!!!!
+  WildCardLogging = true
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = *_ITER_GAP
+  WildCardOmitPattern = *_ITER_LEN
+  WildCardOmitPattern = PSHARE_INPUT_SUMMARY
+  WildCardOmitPattern = PSHARE_OUTPUT_SUMMARY
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+}
+
+//--------------------------------------------------
+// pMarineViewer Config Block
+
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  set_pan_x  = 30
+  set_pan_y  = -290
+  zoom       = 1.5
+
+  //tiff_file = forrest19.tif
+  tiff_file  = MIT_SP.tif
+  tiff_file  = mit_sp_osm18.tif
+  tiff_file  = mit_sp_goo18.tif
+
+  vehicles_shape_scale = 1.0
+  vehicles_name_mode   = names
+
+	show_title_user  = true
+	show_title_mhash = true
+	show_title_ip    = true
+	
+  circle_viewable_all = true
+	point_viewable_labels = false
+	
+	beat_flag = HEARTBEAT=true
+	//mission_hash_var = off
+	
+  appcast_viewable = true
+  appcast_color_scheme = indigo
+
+  left_context[station] = STATION_KEEP_$[UP_VNAME_CLOSEST] = true 
+  left_context[return]  = RETURN_$[UP_VNAME_CLOSEST] = true 
+  left_context[move_ctr] = LEG_UPDATE_$[UP_VNAME_CLOSEST] = shift_pt = $[XPOS],$[YPOS]
+	
+  scope  = FT_REPORT
+
+  action = STATION_KEEP_ALL = false
+  action = STATION_KEEP_ALL = true
+
+	action = DRIFT_VECTOR_ADD=150,0.2
+	action = DRIFT_VECTOR_ADD=15,0.2
+	action = DRIFT_VECTOR=0,0
+	
+  button_1 = DEPLOY  # DEPLOY_ALL=true
+  button_1 = MOOS_MANUAL_OVERRIDE_ALL=false
+  button_1 = RETURN_ALL=false # STATION_KEEP_ALL=false
+  button_1 = LEG_RUN_ALL=true
+
+  button_2 = RETURN  # RETURN_ALL=true
+  button_2 = RETURN  # STATION_KEEP_ALL=false
+
+	button_3 = ALLSTOP # DEPLOY_ALL=false
+	button_4 = STATION # STATION_KEEP_ALL=true	
+
+	button_5 = LEN_MORE # LEG_UPDATE_ALL=leg_length_mod=2
+	button_6 = LEN_LESS # LEG_UPDATE_ALL=leg_length_mod=-2
+
+	button_7 = RAD_MORE # LEG_UPDATE_ALL=turn_rad_mod=0.25
+	button_8 = RAD_LESS # LEG_UPDATE_ALL=turn_rad_mod=-0.25
+
+	button_9  = ANG_MORE # LEG_UPDATE_ALL=leg_angle_mod=2
+	button_10 = ANG_LESS # LEG_UPDATE_ALL=leg_angle_mod=-2
+
+	button_11 = OPR_RESET # OPREGION_RESET_ALL=true
+	button_12 = RFact1p0 # IM300_UPDATE_ALL=rfactor=1
+
+	button_13 = RFact1p5 # IM300_UPDATE_ALL=rfactor=1.5
+	button_14 = RFact2p0 # IM300_UPDATE_ALL=rfactor=2.0
+
+	button_15 = RFact2p5 # IM300_UPDATE_ALL=rfactor=2.5
+	button_16 = RFact3p0 # IM300_UPDATE_ALL=rfactor=3.0
+
+	button_17 = LEGV_1p4 # LEG_UPDATE_ALL=speed=1.4
+	button_18 = LEGV_1p2 # LEG_UPDATE_ALL=speed=1.2
+
+	button_19 = LEGV_1p0 # LEG_UPDATE_ALL=speed=1.0
+	button_20 = LEGV_0p8 # LEG_UPDATE_ALL=speed=0.8
+}
