@@ -62,13 +62,14 @@ ProcessConfig = pMissionEval
   result_flag   = MISSION_EVALUATED = true
 	mission_form  = 01-colavd
 
-	report_column = m_form=$[MISSION_FORM]
-	report_column = $(MIN_UTIL_CPA)
-	report_column = $[ENCOUNTER]
+	report_column = form=$[MISSION_FORM]
+	report_column = min_util_cpa=$(MIN_UTIL_CPA)
+	report_column = encounter_cpa=$[ENCOUNTER]
 	report_column = mhash=$[MHASH_SHORT]
 	report_column = utc=$[MHASH_UTC]
 	report_column = wall=$[WALL_TIME]
 
+	column_format = csp
 	report_file   = results.log
 }
 
