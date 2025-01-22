@@ -28,8 +28,8 @@ Behavior = BHV_Waypoint
   condition = MODE==TRANSITING
 
   endflag   = ARRIVED = true	
-	wptflag   = WC_FLAG = $[CTR1]
 
+	wptflag   = WPT_FLAG = $[CTR1]
   endflag   = EFLAG = $[CTR2]
   cycleflag = CFLAG = $[CTR3]
 
