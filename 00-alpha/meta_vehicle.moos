@@ -63,38 +63,6 @@ ProcessConfig = pNodeReporter
 	//coord_policy_global = true
 }
 
-//--------------------------------------------------------
-// pContactMgrV20 Config Block
-
-ProcessConfig = pContactMgrV20
-{
-  AppTick   = 2
-  CommsTick = 2
-
-  decay = 30,60
-
-	app_logging = true
-	
-  alert_verbose = true
-
-	contact_local_coords = force_lat_lon
-	
-  contact_max_age  = 35
-  display_radii    = true
-	display_radii_id = avd
-
-	//match_region = pts = {60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40}
-	//match_type = kayak, uuv
-
-	post_closest_range = true
-	
-  display_radii     = true
-  alert_range_color = gray70
-  cpa_range_color   = gray30
-
-  hold_alerts_for_helm = true
-}
-
 //--------------------------------------------------
 // uFldNodeBroker Config Block
 
@@ -111,13 +79,14 @@ ProcessConfig = uFldNodeBroker
   bridge = src=VIEW_CIRCLE
   bridge = src=VIEW_POINT
   bridge = src=VIEW_SEGLIST
-  bridge = src=ARRIVED
-  bridge = src=MISSION_EVALUATED
-  bridge = src=MISSION_SUCCESS
-  bridge = src=WC_FLAG
-  bridge = src=EFLAG
-  bridge = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+	bridge = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
   bridge = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+
+  bridge = src=ARRIVED
+  bridge = src=WPT_FLAG
+  bridge = src=CYCLES
+  bridge = src=RETURNED
+  bridge = src=STATION_KEEP
 }
 
 //--------------------------------------------------
