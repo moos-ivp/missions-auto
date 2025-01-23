@@ -5,10 +5,13 @@
 #   Author: M.Benjamin
 #   LastEd: Jun 07 2024
 #------------------------------------------------------------
-#  Part 1: A convenience function for producing terminal
-#          debugging/status output depending on verbosity.
+#  Part 1: Set convenience functions for producing terminal
+#          debugging output, and catching SIGINT (ctrl-c).
 #------------------------------------------------------------
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
+on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
+trap on_exit SIGINT
+trap on_exit SIGTERM
 
 #------------------------------------------------------------
 #  Part 2: Declare global var defaults
@@ -26,6 +29,7 @@ MOOS_PORT="9001"
 PSHARE_PORT="9201"
 SHORE_IP="localhost"
 SHORE_PSHARE="9200"
+MMOD=""
 
 VNAME="abe"
 COLOR="yellow"
@@ -56,12 +60,13 @@ for ARGI; do
 	echo "  --pshare=<9201>        Veh pShare listen port  "
 	echo "  --shore=<localhost>    Shoreside IP to try     "
 	echo "  --shore_pshare=<9200>  Shoreside pShare port   "
+        echo "  --mmod=<mod>           Mission variation/mod   "
 	echo "                                                 "
 	echo "  --vname=<abe>          Veh name given          "
 	echo "  --color=<yellow>       Veh color given         "
 	echo "  --sim, -s              Sim, not fld vehicle    "
 	echo "  --start_pos=<X,Y,Hdg>  Sim start pos/hdg       "
-	echo "  --stock_spd=<m/s>      Sim cruise speed        "
+	echo "  --stock_spd=<m/s>      Default vehicle speed   "
 	echo "  --max_spd=<m/s>        Max Sim and Helm speed  "
 	echo "                                                 "
 	echo "Options (custom):                                "
@@ -87,6 +92,8 @@ for ARGI; do
         SHORE_IP="${ARGI#--shore=*}"
     elif [ "${ARGI:0:15}" = "--shore_pshare=" ]; then
         SHORE_PSHARE="${ARGI#--shore_pshare=*}"
+    elif [ "${ARGI:0:7}" = "--mmod=" ]; then
+        MMOD="${ARGI#--mmod=*}"
 
     elif [ "${ARGI:0:8}" = "--vname=" ]; then
         VNAME="${ARGI#--vname=*}"
@@ -140,6 +147,7 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "PSHARE_PORT =   [${PSHARE_PORT}]  "
     echo "SHORE_IP =      [${SHORE_IP}]     "
     echo "SHORE_PSHARE =  [${SHORE_PSHARE}] "
+    echo "MMOD =          [${MMOD}]         "
     echo "----------------------------------"
     echo "VNAME =         [${VNAME}]        "
     echo "COLOR =         [${COLOR}]        "
@@ -177,11 +185,12 @@ nsplug meta_vehicle.moos targ_$VNAME.moos $NSFLAGS WARP=$TIME_WARP \
        SHORE_PSHARE=$SHORE_PSHARE   VNAME=$VNAME         \
        COLOR=$COLOR                 XMODE=$XMODE         \
        START_POS=$START_POS         MAX_SPD=$MAX_SPD     \
+       MMOD=$MMOD                                        \
        FSEAT_IP=$FSEAT_IP
 
 nsplug meta_vehicle.bhv targ_$VNAME.bhv $NSFLAGS         \
        START_POS=$START_POS         VNAME=$VNAME         \
-       STOCK_SPD=$STOCK_SPD
+       STOCK_SPD=$STOCK_SPD         MMOD=$MMOD           \
 
 if [ "${JUST_MAKE}" = "yes" ]; then
     echo "Targ files made; exiting without launch."
@@ -206,6 +215,5 @@ fi
 # Part 10: Launch uMAC until the mission is quit
 #------------------------------------------------------------
 uMAC targ_$VNAME.moos
+trap "" SIGINT
 kill -- -$$
-
-exit 0
