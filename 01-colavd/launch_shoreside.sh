@@ -1,12 +1,12 @@
 #!/bin/bash 
 #------------------------------------------------------------ 
 #   Script: launch_shoreside.sh    
-#  Mission: m2_berta
+#  Mission: 01-colavd
 #   Author: M.Benjamin   
-#   LastEd: May 2024
+#   LastEd: Jan 2025
 #------------------------------------------------------------ 
-#  Part 1: A convenience function for producing terminal
-#          debugging/status output depending on verbosity.
+#  Part 1: Set convenience functions for producing terminal
+#          debugging output, and catching SIGINT (ctrl-c).
 #------------------------------------------------------------ 
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
 on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
@@ -26,9 +26,9 @@ LAUNCH_GUI="yes"
 IP_ADDR="localhost"
 MOOS_PORT="9000"
 PSHARE_PORT="9200"
+MMOD=""
 
 VNAMES="abe:ben"
-MAX_TIME=100
 MIN_UTIL_CPA="5"
 MAX_UTIL_CPA="40"
 
@@ -50,8 +50,6 @@ for ARGI; do
         echo "    Will not launch uMAC as the final step.    "
         echo "  --nogui, -n                                  "
         echo "    Headless mode - no pMarineViewer etc       "
-	echo "  --max_time=<seconds>                         "
-        echo "    For headless missions using a timeout      "
 	echo "                                               "
 	echo "  --ip=<localhost>                             "
 	echo "    Force pHostInfo to use this IP Address     "
@@ -59,6 +57,9 @@ for ARGI; do
 	echo "    Port number of this vehicle's MOOSDB port  "
 	echo "  --pshare=<9200>                              "
 	echo "    Port number of this vehicle's pShare port  "
+        echo "  --mmod=<mod>                                 "
+        echo "    Identify a mission variation/mod           "
+	echo "                                               "
         echo "  --vnames=<vnames>                            "
         echo "    Colon-separate list of all vehicle names   "
 	echo "                                               "
@@ -76,8 +77,6 @@ for ARGI; do
         AUTO_LAUNCHED="yes"
     elif [ "${ARGI}" = "--nogui" -o "${ARGI}" = "-n" ]; then
         LAUNCH_GUI="no"
-    elif [ "${ARGI:0:11}" = "--max_time=" ]; then
-	MAX_TIME="${ARGI#--max_time=*}"
 
     elif [ "${ARGI:0:5}" = "--ip=" ]; then
         IP_ADDR="${ARGI#--ip=*}"
@@ -85,6 +84,9 @@ for ARGI; do
 	MOOS_PORT="${ARGI#--mport=*}"
     elif [ "${ARGI:0:9}" = "--pshare=" ]; then
         PSHARE_PORT="${ARGI#--pshare=*}"
+    elif [ "${ARGI:0:7}" = "--mmod=" ]; then
+        MMOD="${ARGI#--mmod=*}"
+
     elif [ "${ARGI:0:9}" = "--vnames=" ]; then
         VNAMES="${ARGI#--vnames=*}"
 
@@ -123,19 +125,19 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "TIME_WARP =     [${TIME_WARP}]    "
     echo "JUST_MAKE =     [${JUST_MAKE}]    "
     echo "AUTO_LAUNCHED = [${AUTO_LAUNCHED}]"
-    echo "MAX_TIE =       [${MAX_TIME}]     "
     echo "----------------------------------"
     echo "IP_ADDR =       [${IP_ADDR}]      "
     echo "MOOS_PORT =     [${MOOS_PORT}]    "
     echo "PSHARE_PORT =   [${PSHARE_PORT}]  "
     echo "LAUNCH_GUI =    [${LAUNCH_GUI}]   "
-    echo "------------Custom----------------"
+    echo "MMOD =          [${MMOD}]         "
+    echo "----------------------------------"
     echo "VNAMES =        [${VNAMES}]       "
     echo "MIN_UTIL_CPA =  [$MIN_UTIL_CPA]   "
     echo "MAX_UTIL_CPA =  [$MAX_UTIL_CPA]   "
     echo "----------------------------------"
     echo -n "Hit any key to continue launch "
-    read ANSWERxl
+    read ANSWER
 fi
 
 #------------------------------------------------------------ 
@@ -149,7 +151,7 @@ fi
 nsplug meta_shoreside.moos targ_shoreside.moos $NSFLAGS WARP=$TIME_WARP \
        IP_ADDR=$IP_ADDR             MOOS_PORT=$MOOS_PORT    \
        PSHARE_PORT=$PSHARE_PORT     LAUNCH_GUI=$LAUNCH_GUI  \
-       MAX_TIME=$MAX_TIME           VNAMES=$VNAMES          \
+       MMOD=$MMOD                   VNAMES=$VNAMES          \
        MIN_UTIL_CPA=$MIN_UTIL_CPA                           \
        MAX_UTIL_CPA=$MAX_UTIL_CPA
 
