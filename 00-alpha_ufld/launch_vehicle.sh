@@ -1,12 +1,12 @@
-#!/bin/bash -e
+#!/bin/bash
 #------------------------------------------------------------ 
 #   Script: launch_vehicle.sh
 #  Mission: m2_berta
 #   Author: M.Benjamin
 #   LastEd: May 2024
 #------------------------------------------------------------ 
-#  Part 1: A convenience function for producing terminal
-#          debugging/status output depending on verbosity.
+#  Part 1: Set convenience functions for producing terminal
+#          debugging output, and catching SIGINT (ctrl-c).
 #------------------------------------------------------------ 
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
 on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
@@ -82,7 +82,7 @@ for ARGI; do
         VERBOSE="yes"
     elif [ "${ARGI}" = "--just_make" -o "${ARGI}" = "-j" ]; then
 	JUST_MAKE="yes"
-    elif [ "${ARGI}" = "--logclean" -o "${ARGI}" = "-lc" ]; then
+    elif [ "${ARGI}" = "--log_clean" -o "${ARGI}" = "-lc" ]; then
 	LOG_CLEAN="yes"
     elif [ "${ARGI}" = "--auto" -o "${ARGI}" = "-a" ]; then
         AUTO_LAUNCHED="yes" 
@@ -237,5 +237,3 @@ fi
 uMAC targ_$VNAME.moos
 trap "" SIGINT
 kill -- -$$
-
-exit 0

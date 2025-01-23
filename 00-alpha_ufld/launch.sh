@@ -1,9 +1,9 @@
 #!/bin/bash -e
 #------------------------------------------------------------
 #   Script: launch.sh
-#  Mission: m2_berta
+#  Mission: alpha_ufld
 #   Author: M.Benjamin
-#   LastEd: May 2024
+#   LastEd: Jan 2025
 #------------------------------------------------------------
 #  Part 1: Set convenience functions for producing terminal
 #          debugging output, and catching SIGINT (ctrl-c).
@@ -11,7 +11,6 @@
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
 on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
 trap on_exit SIGINT
-trap on_exit SIGTERM
 
 #------------------------------------------------------------
 #  Part 2: Set global variable default values
@@ -31,7 +30,6 @@ MMOD=""
 # Monte
 XLAUNCHED="no"
 NOGUI=""
-MAX_TIME=30
 
 # Custom
 MIN_UTIL_CPA="5"
@@ -53,6 +51,7 @@ for ARGI; do
 	echo "  --amt=N            Num vehicles to launch    "
 	echo "  --rand, -r         Rand vehicle positions    "
 	echo "  --max_spd=N        Max helm/sim speed        "
+        echo "  --mmod=<mod>       Mission variation/mod     "
 	echo "                                               "
 	echo "Options (monte):                               "
 	echo "  --xlaunched, -x    Launched by xlaunch       "
@@ -103,7 +102,6 @@ done
 #  Part 4: Set starting positions, speeds, vnames, colors
 #------------------------------------------------------------
 INIT_VARS=" --amt=$VAMT $RAND_VPOS $VERBOSE "
-INIT_VARS+="" #custom
 ./init_field.sh $INIT_VARS
 
 VEHPOS=(`cat vpositions.txt`)
@@ -171,7 +169,7 @@ done
 #  Part 7: Launch the Shoreside mission file
 #------------------------------------------------------------
 SARGS=" --auto --mport=9000 --pshare=9200 $NOGUI --vnames=abe:ben "
-SARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE --max_time=$MAX_TIME"
+SARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE "
 SARGS+=" $MMOD "
 SARGS+=" --min_util_cpa=$MIN_UTIL_CPA "
 SARGS+=" --max_util_cpa=$MAX_UTIL_CPA "
@@ -189,6 +187,7 @@ fi
 if [ "${XLAUNCHED}" != "yes" ]; then
     uMAC --paused targ_shoreside.moos
     trap "" SIGINT
+    echo; echo "$ME: Halting all apps"
     kill -- -$$
 fi
 
