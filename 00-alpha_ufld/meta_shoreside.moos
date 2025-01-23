@@ -51,39 +51,11 @@ ProcessConfig = pAutoPoke
 //----------------------------------------------------
 // pMissionEval Config Block  
 
-ProcessConfig = pMissionEval
-{
-  AppTick    = 4
-  CommsTick  = 4
-
-	lead_condition = CYCLES = 1
-	pass_condition = WPT_FLAG = 5
-
-	lead_condition = ARRIVED = true
-	pass_condition = WPT_FLAG = 10
-	pass_condition = CYCLES = 2
-
-	lead_condition = RETURNED = true
-	pass_condition = STATION_KEEP = true
-
-	mission_form = alpha_ufld
-	
-	pass_flag = GRADE = pass
-	fail_flag = GRADE = fail
-	
-	report_file   = results.txt
-	report_column = form=$[MISSION_FORM]
-	report_column = grade=$[GRADE] 
-	
-  //lead_condition = ARRIVED=true
-  //pass_condition = WC_FLAG = 5
-  //pass_condition = EFLAG = 1
-
-	//fail_flag = MISSION_SUCCESS = false
-	//pass_flag = MISSION_SUCCESS = true
-
-	result_flag = MISSION_EVALUATED = true
-}
+#ifdef MMOD mod1
+	#include plugs_mod1.moos <pMissionEval>
+#elseifdef MMOD mod2
+	#include plugs_mod2.moos <pMissionEval>
+#endif
 
 //--------------------------------------------------
 // uFldShoreBroker Config Block

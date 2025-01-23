@@ -26,6 +26,7 @@ LAUNCH_GUI="yes"
 IP_ADDR="localhost"
 MOOS_PORT="9000"
 PSHARE_PORT="9200"
+MMOD=""
 
 VNAMES="abe:ben"
 MAX_TIME=100
@@ -59,6 +60,9 @@ for ARGI; do
 	echo "    Port number of this vehicle's MOOSDB port  "
 	echo "  --pshare=<9200>                              "
 	echo "    Port number of this vehicle's pShare port  "
+        echo "  --mmod=<mod>                                 "
+        echo "    Identify a mission variation/mod           "
+	echo "                                               "
         echo "  --vnames=<vnames>                            "
         echo "    Colon-separate list of all vehicle names   "
 	echo "                                               "
@@ -85,6 +89,9 @@ for ARGI; do
 	MOOS_PORT="${ARGI#--mport=*}"
     elif [ "${ARGI:0:9}" = "--pshare=" ]; then
         PSHARE_PORT="${ARGI#--pshare=*}"
+    elif [ "${ARGI:0:7}" = "--mmod=" ]; then
+        MMOD="${ARGI#--mmod=*}"
+
     elif [ "${ARGI:0:9}" = "--vnames=" ]; then
         VNAMES="${ARGI#--vnames=*}"
 
@@ -129,13 +136,14 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "MOOS_PORT =     [${MOOS_PORT}]    "
     echo "PSHARE_PORT =   [${PSHARE_PORT}]  "
     echo "LAUNCH_GUI =    [${LAUNCH_GUI}]   "
+    echo "MMOD =          [${MMOD}]         "
     echo "------------Custom----------------"
     echo "VNAMES =        [${VNAMES}]       "
     echo "MIN_UTIL_CPA =  [$MIN_UTIL_CPA]   "
     echo "MAX_UTIL_CPA =  [$MAX_UTIL_CPA]   "
     echo "----------------------------------"
     echo -n "Hit any key to continue launch "
-    read ANSWERxl
+    read ANSWER
 fi
 
 #------------------------------------------------------------ 
@@ -149,7 +157,8 @@ fi
 nsplug meta_shoreside.moos targ_shoreside.moos $NSFLAGS WARP=$TIME_WARP \
        IP_ADDR=$IP_ADDR             MOOS_PORT=$MOOS_PORT    \
        PSHARE_PORT=$PSHARE_PORT     LAUNCH_GUI=$LAUNCH_GUI  \
-       MAX_TIME=$MAX_TIME           VNAMES=$VNAMES          \
+       MAX_TIME=$MAX_TIME           MMOD=$MMOD              \
+       VNAMES=$VNAMES                                       \
        MIN_UTIL_CPA=$MIN_UTIL_CPA                           \
        MAX_UTIL_CPA=$MAX_UTIL_CPA
 
