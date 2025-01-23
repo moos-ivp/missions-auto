@@ -53,7 +53,6 @@ for ARGI; do
 	echo "  --amt=N            Num vehicles to launch    "
 	echo "  --rand, -r         Rand vehicle positions    "
 	echo "  --max_spd=N        Max helm/sim speed        "
-        echo "  --mmod=<mod>       Mission variation/mod     "
 	echo "                                               "
 	echo "Options (monte):                               "
 	echo "  --xlaunched, -x    Launched by xlaunch       "
@@ -148,7 +147,7 @@ fi
 #------------------------------------------------------------
 #  Part 6: Launch the Vehicles
 #------------------------------------------------------------
-VARGS=" --sim --auto --max_spd=$MAX_SPD $MMOD"
+VARGS=" --sim --auto --max_spd=$MAX_SPD $MMOD "
 VARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE "
 VARGS+=" --min_util_cpa=$MIN_UTIL_CPA "
 VARGS+=" --max_util_cpa=$MAX_UTIL_CPA "
