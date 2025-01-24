@@ -1,0 +1,137 @@
+<tag><origin_warp>
+MOOSTimeWarp = $(WARP)
+LatOrigin  = 42.358436
+LongOrigin = -71.087448
+
+
+<tag><pShare>
+//--------------------------------------------------
+// pShare Config Block
+
+ProcessConfig = pShare
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  input = route =  localhost:$(PSHARE_PORT)
+}
+
+<tag><pHostInfo>
+//--------------------------------------------------
+// pHostInfo Config block
+
+ProcessConfig = pHostInfo
+{
+  AppTick 	= 1
+  CommsTick = 1
+
+  default_hostip_force = localhost
+}
+
+<tag><uProcessWatch>
+//--------------------------------------------------
+// uProcessWatch Config Block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  allow_retractions = true
+  
+  watch_all = true      // default is true
+
+  nowatch = uXMS*
+  nowatch = uPokeDB*
+  nowatch = uQueryDB*
+  nowatch = uMAC*
+  nowatch = uMayFinish*
+
+  summary_wait = 12
+}
+
+<tag><uLoadWatch>
+//--------------------------------------------------
+// uLoadWatch Config block
+	
+ProcessConfig = uLoadWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  thresh = app=pHelmIvP,  gapthresh=3
+  thresh = app=pHostInfo, gapthresh=5
+  thresh = app=any,       gapthresh=2.0
+
+  breach_trigger = 5
+}
+
+<tag><uSimMarine>
+//------------------------------------------------------
+// uSimMarineV22 Config Block
+
+ProcessConfig = uSimMarineV22
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  start_pos = $(START_POS), 0
+  prefix    = NAV
+
+	//app_logging = true
+	max_speed   = $(MAX_SPD)
+	
+	turn_rate = 95
+	turn_spd_loss = 0.6
+
+	post_des_thrust = DESIRED_THRUSTX
+	post_des_rudder = DESIRED_RUDDERX
+
+	post_navpos_summary = true
+	
+  //rotate_speed = 0.012
+  //drift_x      = 0.0045
+
+  //thrust_map = -100:-2, 0:0, 20:1, 40:2, 60:3, 80:5, 100:5
+}
+
+<tag><iM300>
+//-------------------------------------------------------- 
+// iM300 Config Block
+
+ProcessConfig = iM300
+{
+  AppTick    = 10
+  CommsTick  = 10
+
+  comms_type = client
+  port       = 29500
+  ip_addr    = $(FSEAT_IP)
+
+  warn_bad_nmea_len  = false
+  warn_bad_nmea_form = false
+
+  stale_thresh = 15
+
+  max_rudder  = 50
+  max_thrust  = 100
+  drive_mode  = normal
+  ignore_msg  = $GPGLL, $GPGSV, $GPVTG, $GPZDA, $CPALT, $CPIMU
+  ignore_msg  = $CPNVR, $GPGST, $CPRCM, $GNGLL, $GNGSV, $GNVTG,
+  ignore_msg  = $GNZDA, $GLGSV, $GNGSA
+  ignore_checksum_errors = true
+
+  max_appcast_events       = 8
+  // max_appcast_run_warnings = 10 
+  // heading_source options are gps, imu, or auto where auto uses imu 
+  // when available and not timed out as defined in the
+  // stale_nave_msg_thresh parameter 
+  heading_source = auto
+
+  // threshold in seconds, default is 1.5 
+  stale_gps_msg_thresh = 3
+
+  nav_prefix      = NAV
+  gps_prefix      = GPS
+  compass_prefix  = COMPASS
+}
