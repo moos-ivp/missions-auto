@@ -1,0 +1,4 @@
+
+<tag><muster_regions>
+muster_region = format=radial, x=-56, y=-88, radius=30, pts=7, snap=1,label=one
+muster_region = format=radial, x=92, y=-27, radius=30, pts=7, snap=1,label=two

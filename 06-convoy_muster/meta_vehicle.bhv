@@ -1,0 +1,342 @@
+//---------------------------------------------------
+// Helm Behavior file 
+
+initialize   DEPLOY  = false
+initialize   MUSTER  = false
+initialize   RETURN  = false
+initialize   STATION = false
+initialize   LOITER  = false
+initialize   AVOID   = true
+initialize   COMMS_POLICY = lean
+
+set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+set MODE = STATIONING {
+  MODE = ACTIVE
+  STATION = true
+}                       
+
+set MODE = RETURNING {
+  MODE = ACTIVE
+  RETURN = true
+} 
+
+set MODE = MUSTERING {
+  MODE = ACTIVE
+  MUSTER = true
+}                       
+
+set MODE = CONVOYING {
+  MODE = ACTIVE
+  CONVOY = true
+} 
+
+set MODE = LOITERING {
+  MODE = ACTIVE
+  LOITER = true
+} 
+
+//----------------------------------------------
+Behavior = BHV_ConvoyV25
+{
+  name      = convoy
+  pwt       = 100
+  updates   = UP_CONVOY
+  condition = MODE==CONVOYING
+	contact   = unset_ok
+
+              patience = 65
+	        aft_patience = true
+
+	      holding_policy = curr_hdg
+	    //active_convoying = $(CONVOY_ACTIVE)
+    post_recap_verbose = true
+	 
+                 radius = 3
+            slip_radius = 15.0
+
+       inter_mark_range = 3
+        tail_length_max = 10
+
+ full_stop_convoy_range = 2
+
+    slower_convoy_range = 10
+    ideal_convoy_range = 15
+   faster_convoy_range = 20
+ full_lag_convoy_range = 35
+
+//  slower_convoy_range = 10
+//	   ideal_convoy_range = 15
+//	  faster_convoy_range = 25
+//  full_lag_convoy_range = 35		
+
+  lag_speed_delta = 0.8
+
+	convoy_flag = CONVOY_RNG=$[CONVOY_RNG]
+	convoy_flag = CONVOY_TAIL_RNG=$[TAIL_RNG]
+	convoy_flag = CONVOY_TAIL_ANG=$[TAIL_ANG]
+	convoy_flag = CONVOY_MARKER_BNG=$[MARKER_BNG]
+	convoy_flag = CONVOY_ALIGNMENT=$[ALIGNMENT]
+	convoy_flag = CONVOY_TRK_ERR=$[TRK_ERR]
+	
+	visual_hints = marker_size=3
+}
+
+//----------------------------------------------
+Behavior = BHV_StationKeep
+{
+  name      = station-keep
+  pwt       = 100
+  condition = MODE==STATIONING
+
+     center_activate = true
+        inner_radius = 5
+        outer_radius = 10 
+         outer_speed = 1.0
+       transit_speed = 1.3
+          swing_time = 20
+        visual_hints = vertex_size=0, edge_color=gray50
+        visual_hints = label_color=invisible
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  condition  = RETURN = true
+  condition  = DEPLOY = true
+  perpetual  = true
+  updates    = RETURN_UPDATE
+  endflag    = RETURN = false
+  endflag    = STATION = true
+
+      lead_condition = AVOIDING != active
+
+//                lead = 8
+//         lead_damper = 1
+//       lead_to_start = true
+
+           speed = $(STOCK_SPD)
+  capture_radius = 5.0
+     slip_radius = 12.0
+
+
+#ifdef VNAME abe
+	point = 52,9
+#elseifdef VNAME ben
+	point = 39,4
+#elseifdef VNAME cal
+	point = 29,0
+#elseifdef VNAME deb
+	point = 16,-6
+#elseifdef VNAME eve
+	point = 4,-11
+#elseifdef VNAME fin
+	point = 2,-15
+#elseifdef VNAME max
+	point = 26,-2
+#elseifdef VNAME ned
+	point = 12,-8
+#else
+	point = -2, -18
+#endif
+ }
+
+//---------------------------------------------- 
+Behavior = BHV_AvdColregsV22
+{
+  name         = avdcol_
+  pwt          = 200
+  condition    = AVOID = true
+  condition    = MODE==ACTIVE
+  condition    = MODE!=ACTIVE:STATION-KEEPING
+  updates      = CONTACT_INFO
+  //endflag      = CONTACT_RESOLVED = $[CONTACT]
+  templating   = spawn
+
+  activeflag   = AVOIDING = active
+  inactiveflag = AVOIDING = inactive
+  runflag      = AVOIDING = running
+  endflag      = AVOIDING = end
+
+            contact = to-be-set
+   on_no_contact_ok = true
+        extrapolate = true
+              decay = 30,60
+
+        headon_only = true
+    velocity_filter = min_spd=0.2, max_spd=1.0, pct=40
+       use_refinery = true
+
+#ifdef XMODE SIM
+	bearing_line_show = true
+#else
+	bearing_line_show = false
+#endif
+	
+     pwt_outer_dist = 20
+     pwt_inner_dist = 10
+     completed_dist = 25
+  min_util_cpa_dist = 10
+  max_util_cpa_dist = 15
+          pwt_grade = linear
+//   bearing_line_config = white:0, green:0.65, yellow:0.8, red:1.0
+}
+
+//----------------------------------------------
+Behavior = BHV_MusterX
+{ 
+  name      = musterx
+  pwt       = 100
+  condition = MODE==MUSTERING
+  updates   = UP_MUSTER
+  perpetual = true
+
+  // Endflags for proceeding directly to the next muster region
+	//endflag = UP_MUSTER = muster_region = toggle
+
+  // Endflags for holding auction at end 
+	endflag = MUSTER = false
+	endflag = CONVOY = false
+	endflag = MISSION_TASK = type=muster,id=mst_$[NEXT_REGION],region=$[NEXT_REGION]
+
+  // Parameters specific to this behavior
+  // ------------------------------------
+    capture_radius  = 3
+    activate_radius = 5          
+              speed = $(STOCK_SPD)         
+   stale_nav_thresh = 5
+
+     //capture_flag = SAY_MOOS="$[OWNSHIP] has arrived"
+	     capture_flag = SAY_MOOS=file=sounds/drip01.wav
+
+#include plugs.bhv <muster_regions>
+	
+  muster_region_label = one
+	
+	  setpt_method = centroid
+  //setpt_method = push_currpos
+  
+	  capture_flag = AVOID=false
+	    activeflag = AVOID=true
+
+   auto_complete = group_region
+
+	region_in_flag = SAY_MOOS=file=sounds/enter.wav
+
+	region_in_flag = #group MUSTER=true
+	region_in_flag = #group UP_MUSTER=muster_region=$[REGION]
+	
+	//	   post_prox_poly = abe
+
+	patience = 70
+	
+   visual_hints = setpt_size   = 5
+   visual_hints = setpt_color  = dodger_blue 
+   visual_hints = setpt_label_color = off 
+}
+
+
+//---------------------------------------------- 
+Behavior = BHV_OpRegionV24
+{
+  name    = opreg
+  pwt     = 300
+  updates = RECOVER_UPDATES
+
+  core_poly = pts={-112,-68:-78,-153:22,-144:77,-120:141,-48:105,35}
+
+  visual_hints = edge_size = 1
+
+  //visual_hints = save_edge_color = gray30
+  //visual_hints = halt_edge_color = gray40
+
+  visual_hints = save_edge_color = orange
+  visual_hints = halt_edge_color = pink
+
+  save_dist = 5.5
+  halt_dist = 10
+}
+
+
+//----------------------------------------------
+Behavior = BHV_TaskWaypoint
+{ 
+       name = twpt_
+    updates = TASK_WPT
+ templating = spawn
+
+         type = waypoint
+ max_bid_wins = false
+
+   team_range = 5000
+
+	team_by_group = true
+	
+  bidwonflag = TRANSIT = true
+  bidwonflag = STATION = false
+  bidwonflag = RETURN  = false
+  bidwonflag = CONVOY  = false
+	xbidwonflag = MISSION_TASK = type=convoy,id=convoy$[ID+1],contact=$[OWNSHIP],exempt=$[OWNSHIP],task_time=$[UTC]
+	
+	// Typically set/overridden upon spawning event
+	waypt_x = 0
+	waypt_y = 0
+	waypt   = 0,0
+}
+
+//----------------------------------------------
+Behavior = BHV_TaskConvoy
+{ 
+       name = tconvoy_
+    updates = TASK_CONVOY
+ templating = spawn
+
+         type = convoy
+ max_bid_wins = false
+
+   team_range = 5000
+	team_by_group = true
+	
+  bidwonflag = CONVOY  = true
+  bidwonflag = TRANSIT = false
+  bidwonflag = STATION = false
+  bidwonflag = UP_CONVOY = contact=$[CONTACT]
+
+//	xbidwonflag = MISSION_TASK = type=convoy,id=convoy$[ID+1],contact=$[OWNSHIP], exempt=$[OWNSHIP]:$[EXEMPT]
+
+	xbidwonflag = MISSION_TASK = type=convoy,id=follow_$[OWNSHIP],contact=$[OWNSHIP], exempt=$[OWNSHIP]:$[EXEMPT]
+
+
+}
+
+//----------------------------------------------
+Behavior = BHV_TaskMuster
+{ 
+       name = tuster_
+    updates = TASK_MUSTER
+ templating = spawn
+
+         type = muster
+ max_bid_wins = false
+
+   team_range = 5000
+
+	team_by_group = true
+
+#include plugs.bhv <muster_regions>
+
+  bidwonflag = UP_MUSTER  = muster_region=$[REGION]
+  bidwonflag = MUSTER  = true
+  bidwonflag = STATION = false
+  bidwonflag = RETURN  = false
+  bidwonflag = CONVOY  = false
+
+	bidwonflag = LAST_TASK=$[LAST_TASK]
+	//	xbidwonflag = MISSION_TASK = type=convoy,id=convoy$[ID+1],contact=$[OWNSHIP],exempt=$[OWNSHIP]
+	xbidwonflag = MISSION_TASK = type=convoy,id=follow_$[OWNSHIP],contact=$[OWNSHIP],exempt=$[OWNSHIP]
+}
+

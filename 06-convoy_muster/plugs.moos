@@ -1,0 +1,216 @@
+<tag><origin_warp>
+MOOSTimeWarp = $(WARP)
+
+// MIT Sailing Pavilion
+LatOrigin = 42.358436
+LongOrigin = -71.087448
+	
+<tag><pHostInfo>
+//--------------------------------------------------
+// pHostInfo Config Block
+
+ProcessConfig = pHostInfo
+{
+  AppTick 	= 1
+  CommsTick = 1
+
+#ifdef IP_ADDR
+  default_hostip_force = $(IP_ADDR)
+#endif
+}
+
+<tag><uSimMarine>
+//------------------------------------------------------
+// uSimMarineV22 Config Block
+
+ProcessConfig = uSimMarineV22
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  start_pos = $(START_POS)
+  prefix    = NAV
+	
+	thrust_map = 100:2
+	turn_rate  = 90
+}
+
+<tag><uProcessWatch>
+//--------------------------------------------------------
+// uProcessWatch Config Block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  allow_retractions = true
+  
+  watch_all = true      // default is true
+  nowatch   = uMAC*
+  nowatch   = uXMS*
+  nowatch   = uPokeDB*
+  nowatch   = uQueryDB*
+
+  summary_wait = 10
+}
+
+
+<tag><pShare>
+//---------------------------------------------------------
+// pShare Config Block  
+
+ProcessConfig = pShare
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  input = route =  $(IP_ADDR):$(PSHARE_PORT)
+}
+
+<tag><iM300>
+//--------------------------------------------------------
+// iM300 Config Block
+	
+ProcessConfig = iM300
+{
+  AppTick    = 10
+  CommsTick  = 10
+
+	comms_type = client
+  port       = 29500
+	ip_addr    = $(FSEAT_IP)
+
+	stale_thresh = 15
+
+  warn_bad_nmea_len  = false   
+  warn_bad_nmea_form = false   
+	
+	max_rudder  = 50
+	max_thrust  = 100
+	drive_mode  = normal
+	ignore_msg  = $GPGLL, $GPGSV, $GPVTG, $GPZDA, $CPALT, $CPIMU
+	ignore_msg  = $CPNVR, $GPGST, $CPRCM, $GNGLL, $GNGSV, $GNVTG
+	ignore_msg  = $GNZDA, $GLGSV, $GNGSA
+
+	ignore_checksum_errors = true
+
+	max_appcast_events       = 8
+//	max_appcast_run_warnings = 10
+	
+	// Set to 1 if you want to use IMU heading for NAV_HEADING
+	heading_source = auto
+
+	nav_prefix 			= NAV
+	gps_prefix			= GPS
+	compass_prefix	= COMPASS
+
+}
+
+<tag><iM300Health>
+//------------------------------------------------
+// iM300Health config block
+
+ProcessConfig = iM300Health
+{
+   AppTick   = 4
+   CommsTick = 4
+   
+   StaleTime = 3.0         //  Time until messages are considered stale
+   MaxHeadingDelta = 5.0   //  Max Delta allowable between IMU and GPS
+
+   LowBattThresh  = 13.0
+   FullBattThresh = 14.4
+
+   TimeAverageLength   = 2.0   // seconds
+   SpeedFaultThreshold = 0.3   // m/s
+ 
+}
+
+<tag><pLogger>
+//--------------------------------------------------
+// pLogger Configuration Block
+
+ProcessConfig = pLogger
+{
+  AppTick 	= 5
+  CommsTick = 5
+  
+  File          = LOG_%(VNAME)
+  PATH	        = ./
+  AsyncLog 	    = true
+  FileTimeStamp = true
+
+  Log = IVPHELM_LIFE_EVENT @ 0 nosync
+  Log = BCM_ALERT_REQUEST @ 0 nosync
+  Log = MUSTER_START @ 0 nosync
+  Log = MISSION_TASK @ 0 nosync
+  Log = APPCAST @ 0 nosync
+  Log = APP_LOG @ 0 nosync
+
+  LogAuxSrc = true
+
+  // Log it all!!!!!
+  WildCardLogging = true 
+  WildCardOmitPattern = *_STATUS
+  //WildCardOmitPattern = APPCAST
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+
+  WildCardOmitPattern = NAV_PITCH, NAV_YAW, NAV_Z
+  WildCardOmitPattern = NAV_LAT, NAV_LONG
+  WildCardOmitPattern = SIMULATION_MODE, TRUE_X, TRUE_Y
+  WildCardOmitPattern = NAV_DEPTH, NAV_SPEED_OVER_GROUND, DB_QOS
+  WildCardOmitPattern = NODE_BROKER_PING_0, 
+  WildCardOmitPattern = IVPHELM_ALLSTOP_DEBUG, *ITER_GAP, *ITER_LEN
+  WildCardOmitPattern = PHI_HOST*
+  //WildCardOmitPattern = NODE_REPORT_LOCAL
+}
+
+<tag><uLoadWatch>
+//--------------------------------------------------
+// uLoadWatch Config Block
+
+ProcessConfig = uLoadWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  thresh = app=pHelmIvP,  gapthresh=3
+  thresh = app=pHostInfo, gapthresh=5
+  thresh = app=any,       gapthresh=2.0
+  thresh = app=uMemWatch, gapthresh=50
+
+  breach_trigger = 5
+}
+
+<tag><uMemWatch>
+//--------------------------------------------------------
+// uMemWatch Config Block
+
+ProcessConfig = uMemWatch
+{
+  AppTick   = 0.4
+  CommsTick = 0.4
+
+  absolute_time_gap = 2
+  watch_only = pHelmIvP
+}
+
+
+<tag><uSimMarineV22>
+//------------------------------------------------------
+// uSimMarineV22 Config Block
+
+ProcessConfig = uSimMarineV22
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  start_pos = $(START_POS)
+  prefix    = NAV
+	
+	thrust_map = 100:2
+	turn_rate = 90
+}
+

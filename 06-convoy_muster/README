@@ -1,0 +1,13 @@
+
+To launch:
+
+$ ./launch.sh --amt=4 15    (4 vehicles, timewarp 15)
+
+(1) Hit the DEPLOY button and the vehicles will head to the muster region
+    and wait there.
+
+During the transit you can directly send the vehicles to the other muster
+region, or they will auto switch to the other muster region after all
+arriving in the current muster region.
+
+
