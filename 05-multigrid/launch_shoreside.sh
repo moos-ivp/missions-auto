@@ -141,7 +141,7 @@ nsplug meta_shoreside.moos targ_shoreside.moos $NSFLAGS WARP=$TIME_WARP \
        MMOD=$MMOD                   VNAMES=$VNAMES          \
 
 if [ "${JUST_MAKE}" = "yes" ]; then
-    echo "Targ files made; exiting without launch."
+    echo "$ME: Targ files made; exiting without launch."
     exit 0
 fi
 

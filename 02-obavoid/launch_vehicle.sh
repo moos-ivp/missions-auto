@@ -1,16 +1,17 @@
-#!/bin/bash -e
+#!/bin/bash
 #------------------------------------------------------------ 
 #   Script: launch_vehicle.sh
 #  Mission: obavoid
 #   Author: M.Benjamin
-#   LastEd: Oct 2024
+#   LastEd: Jan 27 2025
 #------------------------------------------------------------
 #  Part 1: Set convenience functions for producing terminal
 #          debugging output, and catching SIGINT (ctrl-c).
 #------------------------------------------------------------
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
-on_exit() { echo; echo "Halting all apps"; kill -- -$$; }
+on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
 trap on_exit SIGINT
+trap on_exit SIGTERM
 
 #------------------------------------------------------------
 #  Part 2: Declare global var defaults
@@ -28,11 +29,12 @@ MOOS_PORT="9001"
 PSHARE_PORT="9201"
 SHORE_IP="localhost"
 SHORE_PSHARE="9200"
+MMOD=""
 
 VNAME="abe"
 COLOR="yellow"
 XMODE="M300"
-START_POS="x=0,y=0"  
+START_POS="x=0,y=0,heading=0"  
 STOCK_SPD="1.4"
 MAX_SPD="2"
 
@@ -59,12 +61,13 @@ for ARGI; do
 	echo "  --pshare=<9201>        Veh pShare listen port  "
 	echo "  --shore=<localhost>    Shoreside IP to try     "
 	echo "  --shore_pshare=<9200>  Shoreside pShare port   "
+        echo "  --mmod=<mod>           Mission variation/mod   "
 	echo "                                                 "
 	echo "  --vname=<abe>          Veh name given          "
 	echo "  --color=<yellow>       Veh color given         "
 	echo "  --sim, -s              Sim, not fld vehicle    "
-	echo "  --start_pos=<X,Y>      Sim start position      "
-	echo "  --stock_spd=<m/s>      Sim cruise speed        "
+	echo "  --start_pos=<X,Y,Hdg>  Sim start pos/hdg       "
+	echo "  --stock_spd=<m/s>      Default vehicle speed   "
 	echo "  --max_spd=<m/s>        Max Sim and Helm speed  "
 	echo "                                                 "
 	echo "Options (custom):                                "
@@ -76,7 +79,7 @@ for ARGI; do
         VERBOSE="yes"
     elif [ "${ARGI}" = "--just_make" -o "${ARGI}" = "-j" ]; then
 	JUST_MAKE="yes"
-    elif [ "${ARGI}" = "--logclean" -o "${ARGI}" = "-lc" ]; then
+    elif [ "${ARGI}" = "--log_clean" -o "${ARGI}" = "-lc" ]; then
 	LOG_CLEAN="yes"
     elif [ "${ARGI}" = "--auto" -o "${ARGI}" = "-a" ]; then
         AUTO_LAUNCHED="yes" 
@@ -91,7 +94,9 @@ for ARGI; do
         SHORE_IP="${ARGI#--shore=*}"
     elif [ "${ARGI:0:15}" = "--shore_pshare=" ]; then
         SHORE_PSHARE="${ARGI#--shore_pshare=*}"
-
+    elif [ "${ARGI:0:7}" = "--mmod=" ]; then
+        MMOD="${ARGI#--mmod=*}"
+	
     elif [ "${ARGI:0:8}" = "--vname=" ]; then
         VNAME="${ARGI#--vname=*}"
     elif [ "${ARGI:0:8}" = "--color=" ]; then
@@ -147,6 +152,7 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "PSHARE_PORT =   [${PSHARE_PORT}]  "
     echo "SHORE_IP =      [${SHORE_IP}]     "
     echo "SHORE_PSHARE =  [${SHORE_PSHARE}] "
+    echo "MMOD =          [${MMOD}]         "
     echo "----------------------------------"
     echo "VNAME =         [${VNAME}]        "
     echo "COLOR =         [${COLOR}]        "
@@ -179,7 +185,6 @@ NSFLAGS="--strict --force"
 if [ "${AUTO_LAUNCHED}" = "no" ]; then
     NSFLAGS="--interactive --force"
 fi
-NSFLAGS+=" --macros=fld_base.opf "
 
 nsplug meta_vehicle.moos targ_$VNAME.moos $NSFLAGS WARP=$TIME_WARP \
        IP_ADDR=$IP_ADDR             MOOS_PORT=$MOOS_PORT \
@@ -187,12 +192,13 @@ nsplug meta_vehicle.moos targ_$VNAME.moos $NSFLAGS WARP=$TIME_WARP \
        SHORE_PSHARE=$SHORE_PSHARE   VNAME=$VNAME         \
        COLOR=$COLOR                 XMODE=$XMODE         \
        START_POS=$START_POS         MAX_SPD=$MAX_SPD     \
-       FSEAT_IP=$FSEAT_IP                                \
-       MODEL_RAD=$MODEL_RAD
+       MMOD=$MMOD                                        \
+       MODEL_RAD=$MODEL_RAD                              \
+       FSEAT_IP=$FSEAT_IP
 
 nsplug meta_vehicle.bhv targ_$VNAME.bhv $NSFLAGS  \
-       START_POS=$START_POS   VNAME=$VNAME        \
-       STOCK_SPD=$STOCK_SPD
+       START_POS=$START_POS         VNAME=$VNAME         \
+       STOCK_SPD=$STOCK_SPD         MMOD=$MMOD           \
 
 if [ "${JUST_MAKE}" = "yes" ]; then
     echo "$ME: Targ files made; exiting without launch."

@@ -3,14 +3,15 @@
 #   Script: launch_shoreside.sh    
 #  Mission: obavoid
 #   Author: M.Benjamin
-#   LastEd: May 26 2024
+#   LastEd: Jan 27 2025
 #------------------------------------------------------------
 #  Part 1: Set convenience functions for producing terminal
 #          debugging output, and catching SIGINT (ctrl-c).
 #------------------------------------------------------------
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
-on_exit() { echo; echo "Halting all apps"; kill -- -$$; }
+on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
 trap on_exit SIGINT
+trap on_exit SIGTERM
 
 #------------------------------------------------------------ 
 #  Part 2: Set global variable default values
@@ -26,6 +27,7 @@ LAUNCH_GUI="yes"
 IP_ADDR="localhost"
 MOOS_PORT="9000"
 PSHARE_PORT="9200"
+MMOD=""
 
 VNAMES=""
 
@@ -40,7 +42,6 @@ ENC="25"
 #  Part 3: Check for and handle command-line arguments
 #------------------------------------------------------------ 
 for ARGI; do
-    echo $ARGI
     CMD_ARGS+="${ARGI} "
     if [ "${ARGI}" = "--help" -o "${ARGI}" = "-h" ]; then
 	echo "$ME: [OPTIONS] [time_warp]                     " 
@@ -62,6 +63,9 @@ for ARGI; do
 	echo "    Port number of this vehicle's MOOSDB port  "
 	echo "  --pshare=<9200>                              "
 	echo "    Port number of this vehicle's pShare port  "
+        echo "  --mmod=<mod>                                 "
+        echo "    Identify a mission variation/mod           "
+	echo "                                               "
         echo "  --vnames=<vnames>                            "
         echo "    Colon-separate list of all vehicle names   "
 	echo "                                               "
@@ -94,6 +98,9 @@ for ARGI; do
 	MOOS_PORT="${ARGI#--mport=*}"
     elif [ "${ARGI:0:9}" = "--pshare=" ]; then
         PSHARE_PORT="${ARGI#--pshare=*}"
+    elif [ "${ARGI:0:7}" = "--mmod=" ]; then
+        MMOD="${ARGI#--mmod=*}"
+
     elif [ "${ARGI:0:9}" = "--vnames=" ]; then
         VNAMES="${ARGI#--vnames=*}"
 
@@ -141,6 +148,7 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "MOOS_PORT =     [${MOOS_PORT}]    "
     echo "PSHARE_PORT =   [${PSHARE_PORT}]  "
     echo "LAUNCH_GUI =    [${LAUNCH_GUI}]   "
+    echo "MMOD =          [${MMOD}]         "
     echo "----------------------------------"
     echo "VNAMES =        [${VNAMES}]       "
     echo "--------------------------(Custom)"
@@ -163,7 +171,7 @@ fi
 nsplug meta_shoreside.moos targ_shoreside.moos $NSFLAGS WARP=$TIME_WARP \
        IP_ADDR=$IP_ADDR             MOOS_PORT=$MOOS_PORT    \
        PSHARE_PORT=$PSHARE_PORT     LAUNCH_GUI=$LAUNCH_GUI  \
-       VNAMES=$VNAMES                                       \
+       MMOD=$MMOD                   VNAMES=$VNAMES          \
        DRESET=$DRESET               TEST_ENCOUNTERS=$ENC    \
        POINTS=$POINTS               SEP=$SEP
 

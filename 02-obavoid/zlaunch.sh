@@ -39,11 +39,11 @@ for ARGI; do
     fi
 done
 
-if [ ${VERBOSE} = "" ]; then
+if [ "${VERBOSE}" = "" ]; then
     FLOW_DOWN_ARGS+=" --quiet "
 fi
 
-FLOW_DOWN_ARGS+="${TIME_WARP} --com=alpha "
+FLOW_DOWN_ARGS+="${TIME_WARP} "
 echo "zlaunch.sh FLOW_DOWN_ARGS:[$FLOW_DOWN_ARGS]"
 
 # ENC: Number of encounters in a headless mission

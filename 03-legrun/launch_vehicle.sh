@@ -193,7 +193,7 @@ nsplug meta_vehicle.bhv targ_$VNAME.bhv $NSFLAGS         \
        STOCK_SPD=$STOCK_SPD         MMOD=$MMOD           \
 
 if [ "${JUST_MAKE}" = "yes" ]; then
-    echo "Targ files made; exiting without launch."
+    echo "$ME: Targ files made; exiting without launch."
     exit 0
 fi
 
