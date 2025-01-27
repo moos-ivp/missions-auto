@@ -9,8 +9,9 @@
 #          debugging output, and catching SIGINT (ctrl-c).
 #------------------------------------------------------------
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
-on_exit() { echo; echo "Halting all apps"; kill -- -$$; }
+on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
 trap on_exit SIGINT
+trap on_exit SIGTERM
 
 #------------------------------------------------------------
 #  Part 2: Set global variable default values
@@ -25,6 +26,7 @@ VAMT="1"
 MAX_VAMT="1"
 RAND_VPOS=""
 MAX_SPD="2"
+MMOD=""
 
 # Monte
 XLAUNCHED="no"
@@ -54,6 +56,7 @@ for ARGI; do
 	echo "  --amt=N            Num vehicles to launch    "
 	echo "  --rand, -r         Rand vehicle positions    "
 	echo "  --max_spd=N        Max helm/sim speed        "
+        echo "  --mmod=<mod>       Mission variation/mod     "
 	echo "                                               "
 	echo "Options (monte):                               "
 	echo "  --xlaunched, -x    Launched by xlaunch       "
@@ -74,7 +77,7 @@ for ARGI; do
 	echo "    in the obstacle simulator                  "
 	echo "  --model_radius=<dist>                        "
 	echo "    Adjust radius of turn model (Default 5).   "
-	exit 0;
+	exit 0
     elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then 
         TIME_WARP=$ARGI
     elif [ "${ARGI}" = "--verbose" -o "${ARGI}" = "-v" ]; then
@@ -93,6 +96,8 @@ for ARGI; do
         RAND_VPOS=$ARGI
     elif [ "${ARGI:0:10}" = "--max_spd=" ]; then
         MAX_SPD="${ARGI#--max_spd=*}"
+    elif [ "${ARGI:0:7}" = "--mmod=" ]; then
+        MMOD=$ARGI
 
     elif [ "${ARGI}" = "--xlaunched" -o "${ARGI}" = "-x" ]; then
 	XLAUNCHED="yes"
@@ -113,7 +118,7 @@ for ARGI; do
         MODEL_RADIUS="${ARGI#--model_radius=*}"
 
     else 
-	echo "$ME: Bad Arg: $ARGI. Exit Code 1."
+	echo "$ME: Bad arg:" $ARGI "Exit Code 1."
 	exit 1
     fi
 done
@@ -145,6 +150,7 @@ if [ "${VERBOSE}" != "" ]; then
     echo "MAX_VAMT =      [${MAX_VAMT}]               "
     echo "RAND_VPOS =     [${RAND_VPOS}]              "
     echo "MAX_SPD =       [${MAX_SPD}]                "
+    echo "MMOD =          [${MMOD}]                   "
     echo "--------------------------------(VProps)----"
     echo "VNAMES =        [${VNAMES[*]}]              "
     echo "VCOLORS =       [${VCOLOR[*]}]              "
@@ -167,7 +173,7 @@ fi
 #------------------------------------------------------------
 #  Part 6: Launch the Vehicles
 #------------------------------------------------------------
-VARGS=" --sim --auto --max_spd=$MAX_SPD "
+VARGS=" --sim --auto --max_spd=$MAX_SPD $MMOD "
 VARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE "
 for IX in `seq 1 $VAMT`;
 do
@@ -191,6 +197,7 @@ done
 #------------------------------------------------------------
 SARGS=" --auto --mport=9000 --pshare=9200 $NOGUI --vnames=abe:ben "
 SARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE "
+SARGS+=" $MMOD "
 # custom
 SARGS+=" $POINTS $DRESET "
 SARGS+=" --sep=$SEP --enc=$TEST_ENCOUNTERS "
@@ -209,6 +216,7 @@ fi
 if [ "${XLAUNCHED}" != "yes" ]; then
     uMAC --paused targ_shoreside.moos
     trap "" SIGINT
+    echo; echo "$ME: Halting all apps"
     kill -- -$$
 fi
 

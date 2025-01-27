@@ -59,7 +59,6 @@ done
 #------------------------------------------------------------
 #  Part 4: Source local coordinate grid if it exits
 #------------------------------------------------------------
-source fld_base.opf
 
 #------------------------------------------------------------
 #  Part 5: Set starting positions, speeds, vnames, colors
@@ -77,7 +76,7 @@ pickpos --amt=$VEHICLE_AMT --spd=2:2 > vspeeds.txt
 #  Part 6: Set other aspects of the field, e.g., obstacles
 #------------------------------------------------------------
 echo "obstacle file generated" > obstacles.txt
-gen_obstacles --poly=$BHT:$HHT:$HPT:$BPT  \
+gen_obstacles --poly=-43.3,-37.1:-17.6,-91.3:54.7,-57.1:29,-2.8 \
 	      --min_size=5 --max_size=8   \
 	      --amt=$OBSTACLE_AMT         \
 	      --min_range=$OBSTACLE_SEP >> obstacles.txt

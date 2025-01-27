@@ -33,15 +33,9 @@ fi
 
 rm -rf  $VERBOSE   MOOSLog_* XLOG_* LOG_* \#*
 rm -f   $VERBOSE   *~  *.moos++ *.tar tmp_*
-rm -f   $VERBOSE   targ_* results.*
+rm -f   $VERBOSE   targ_* results.* vnames.txt
+rm -f   $VERBOSE   vpositions.txt vspeeds.txt 
+rm -f   $VERBOSE   vcolors.txt vheadings.txt 
+rm -f   $VERBOSE   obstacles.txt 
 rm -f   $VERBOSE   .LastOpenedMOOSLogDirectory
 
-# removed any MHASH group folders
-for file in *; do
-    if [ -d $file ]; then
-	if [ -f "$file/mission.mhi" ]; then
-	    rm -rf $VERBOSE $file
-	    continue
-	fi
-    fi
-done

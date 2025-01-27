@@ -53,7 +53,7 @@ Behavior = BHV_Waypoint
     capture_line = true
   capture_radius = 5
      slip_radius = 15
-         polygon = oval: $(EL), rad=15, len=160, ang=64
+         polygon = oval: x=5.7,y=-47.1, rad=15, len=160, ang=64
            order = reverse
           repeat = 10000
 

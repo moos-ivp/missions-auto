@@ -22,7 +22,6 @@ Processconfig = ANTLER
   Run = uFldNodeComms    @ NewConsole = false
   Run = uFldObstacleSim  @ NewConsole = false
   Run = uFldCollObDetect @ NewConsole = false
-	Run = pMapMarkers      @ NewConsole = false
   //Run = pMissionEval	   @ NewConsole = false
 #ifdef LAUNCH_GUI yes
   Run = pMarineViewer	   @ NewConsole = false
@@ -75,21 +74,6 @@ ProcessConfig = pMissionEval
 	report_column = $[OB_TOTAL_ENCOUNTERS]
 	report_column = $[MHASH]
 	report_file = results.log
-}
-
-//------------------------------------------------------
-// pMapMarkers Config Block 
-
-ProcessConfig = pMapMarkers
-{
-  AppTick       = 2
-  CommsTick     = 2
-
-  //app_logging = true
-  show_markers = false
-  opfile = fld_base.opf
-
-  marker_color  = gray40
 }
 
 //------------------------------------------------------
