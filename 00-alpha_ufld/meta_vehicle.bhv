@@ -30,8 +30,8 @@ Behavior = BHV_Waypoint
   endflag   = ARRIVED = true	
   endflag   = RETURN  = true	
 
-	wptflag   = WPT_FLAG = $[CTR1]
-  cycleflag = CYCLES = $[CTR2]
+	wptflag   = WPT_FLAG   = $[CTR1]
+  cycleflag = CYCLE_FLAG = $[CTR2]
 
   updates   = WPT_UPDATE
   perpetual = false

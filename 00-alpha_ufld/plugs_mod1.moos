@@ -5,21 +5,24 @@ ProcessConfig = pMissionEval
   AppTick    = 4
   CommsTick  = 4
 
-	lead_condition = CYCLES = 1
+	lead_condition = CYCLE_FLAG = 1
 	pass_condition = WPT_FLAG = 5
 
 	lead_condition = ARRIVED = true
 	pass_condition = WPT_FLAG = 10
-	pass_condition = CYCLES = 2
+	pass_condition = CYCLE_FLAG = 2
 
-	lead_condition = RETURNED = true
-	pass_condition = STATION_KEEP = true
+	//lead_condition = RETURNED = true
+	//pass_condition = STATION_KEEP = true
 
 	mission_form  = alpha_ufld
+	mission_mod   = mod1
 	report_file   = results.txt
 	report_column = grade=$[GRADE] 
 	report_column = form=$[MISSION_FORM]
 	report_column = mmod=$[MMOD] 
+	report_column = mhash_short=$[MHASH_SHORT] 
+	report_column = lshort_short=$[MHASH_LSHORT] 
 	
 	result_flag = MISSION_EVALUATED = true
 }

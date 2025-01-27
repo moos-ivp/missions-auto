@@ -1,0 +1,314 @@
+//*******************************************************
+// ShoreSide Configuration File
+
+ServerHost = localhost
+ServerPort = $(MOOS_PORT)
+Community  = shoreside
+
+#include plugs.moos <origin_warp>
+  
+//------------------------------------------------------
+Processconfig = ANTLER
+{
+  MSBetweenLaunches = 100
+
+  Run = MOOSDB           @ NewConsole = false
+  Run = pRealm           @ NewConsole = false
+  Run = pLogger          @ NewConsole = false
+  Run = uProcessWatch    @ NewConsole = false
+  Run = pShare           @ NewConsole = false
+  Run = pHostInfo        @ NewConsole = false
+  Run = uFldShoreBroker  @ NewConsole = false
+  Run = uFldNodeComms    @ NewConsole = false
+  Run = uFldObstacleSim  @ NewConsole = false
+  Run = uFldCollObDetect @ NewConsole = false
+	Run = pMapMarkers      @ NewConsole = false
+  //Run = pMissionEval	   @ NewConsole = false
+#ifdef LAUNCH_GUI yes
+  Run = pMarineViewer	   @ NewConsole = false
+#else
+  Run = pMissionHash     @ NewConsole = false
+#endif
+}
+
+#include plugs.moos <pShare>
+
+//----------------------------------------------------
+// uQueryDB Config Block
+
+ProcessConfig = uQueryDB
+{
+	halt_max_time  = $(MAX_TIME=0)
+  pass_condition = (MISSION_EVALUATED = true)
+
+  check_var = OB_TOTAL_ENCOUNTERS
+}
+
+//----------------------------------------------------
+// uPokeDB Config Block
+
+ProcessConfig = uPokeDB
+{
+	poke = MOOS_MANUAL_OVERRIDE_ALL=false 
+	poke = DEPLOY_ALL=true
+  poke = RETURN_ALL=false
+	poke = STATION_ALL=false
+}
+
+//----------------------------------------------------
+// pMissionEval Config Block  
+
+ProcessConfig = pMissionEval
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  lead_condition = (OB_TOTAL_ENCOUNTERS > $(TEST_ENCOUNTERS=15))
+  //pass_condition = ARRIVED=true
+
+  result_flag = MISSION_EVALUATED = true
+  result_flag = SAY_MOOS=done
+
+	report_column = $(SEP)
+	report_column = $[OB_TOTAL_COLLISIONS]
+	report_column = $[OB_TOTAL_NEAR_MISSES]
+	report_column = $[OB_TOTAL_ENCOUNTERS]
+	report_column = $[MHASH]
+	report_file = results.log
+}
+
+//------------------------------------------------------
+// pMapMarkers Config Block 
+
+ProcessConfig = pMapMarkers
+{
+  AppTick       = 2
+  CommsTick     = 2
+
+  //app_logging = true
+  show_markers = false
+  opfile = fld_base.opf
+
+  marker_color  = gray40
+}
+
+//------------------------------------------------------
+// uFldCollObDetect Config Block
+
+ProcessConfig = uFldCollObDetect
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  collision_dist = 0.5
+  near_miss_dist = 1.5
+  encounter_dist = 10
+
+	bin_min_val = 0
+	bin_delta = 0.5
+
+  encounter_flag = OB_TOTAL_ENCOUNTERS=$ENC_CNT
+  encounter_flag = OB_TOTAL_NEAR_MISSES=$MISS_CNT
+  encounter_flag = OB_TOTAL_COLLISIONS=$COLL_CNT
+  encounter_flag = OB_ENCOUNTER = $DIST
+  near_miss_flag = OB_NEAR_MISS = $DIST
+  collision_flag = OB_COLLISION = $DIST
+  near_miss_flag = OB_NEAR_MISS_FULL = vname=$VNAME,ob=$ID,dist=$DIST
+  collision_flag = OB_COLLISION_FULL = vname=$VNAME,ob=$ID,dist=$DIST
+}
+
+//--------------------------------------------------
+// uFldObstacleSim Configuration Block
+
+ProcessConfig = uFldObstacleSim
+{
+  AppTick       = 1
+  CommsTick     = 1
+
+  obstacle_file = obstacles.txt
+
+	draw_region = true
+	region_edge_color = gray50
+
+	poly_fill_color = off      // default is white
+	poly_vert_color = off      // default is gray50
+	poly_edge_color = gray80   // default is gray50
+	poly_vert_size  = 0        // default is 1
+	poly_edge_size  = 1        // default is 1
+	
+
+	min_duration = 400
+  max_duration = 500
+	refresh_interval = 200
+
+	post_points = $(POINTS)
+	point_size  = 4
+	
+	reuse_ids = true
+	
+#ifdef DRESET true
+	reset_interval = 250
+	reset_range    = 10
+#endif
+	
+}
+
+//--------------------------------------------------
+// uMAC Configuration Block
+
+ProcessConfig = uMAC
+{
+  AppTick       = 1
+  CommsTick     = 1
+}
+
+//--------------------------------------------------
+// uFldShoreBroker Configuration Block
+
+ProcessConfig = uFldShoreBroker
+{
+  AppTick       = 1
+  CommsTick     = 1
+
+  // Note: [QBRIDGE = FOO]  is shorthand for                    
+  //       [BRIDGE = src=FOO_$V,  alias=FOO] and                
+  //       [BRIDGE = src=FOO_ALL, alias=FOO]
+
+  qbridge  = DEPLOY, RETURN, STATION, NODE_REPORT, NODE_MESSAGE
+  qbridge  = MOOS_MANUAL_OVERRIDE, APPCAST_REQ, TRANSIT
+  qbridge  = RETURN_UPDATES
+  qbridge  = TRACKED_FEATURE
+
+  bridge   = src=GIVEN_OBSTACLE
+  bridge   = src=DRIFT_VECTOR_ADD, alias=DRIFT_VECTOR_ADD
+  bridge   = src=HELM_MAP_CLEAR, alias=HELM_MAP_CLEAR
+}
+
+//--------------------------------------------------
+// uFldNodeComms Configuration Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  comms_range      = 500
+  critical_range   = 25
+  min_msg_interval = 15
+  max_msg_length   = 1000
+  groups           = true
+
+  view_node_rpt_pulses = false
+}
+
+//--------------------------------------------------
+// pHostInfo configuration block from plugin
+
+ProcessConfig = pHostInfo
+{
+  AppTick    = 1
+  CommsTick  = 1
+}
+
+//--------------------------------------------------
+// pLogger Configuration Block
+
+ProcessConfig = pLogger
+{
+  AppTick       = 10
+  CommsTick     = 10
+  
+  File          = XLOG_SHORESIDE
+  PATH          = ./
+  SyncLog       = true @ 0.2
+  AsyncLog      = true
+  FileTimeStamp = true
+
+  LogAuxSrc     = true
+
+  // Log it all!!!!!
+  WildCardLogging = true 
+
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+}
+
+
+//--------------------------------------------------------
+// pMarineViewer Config Block
+
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  tiff_file            = MIT_SP.tif
+  set_pan_x            = 30
+  set_pan_y            = -340
+  zoom                 = 1.5
+  vehicles_shape_scale = 1.5
+  vehicles_name_mode   = names
+
+  circle_viewable_all = false
+  
+	polygon_viewable_labels = false
+
+  appcast_viewable = true
+  appcast_color_scheme = indigo
+
+  scope = MISSION_EVALUATED
+
+  nodes_font_size = xlarge
+	procs_font_size = large
+	appcast_font_size = large
+	
+  action = STATION_ALL = false
+  action = STATION_ALL = true
+
+  left_context[return_point] = RETURN_$[UP_VNAME_CLOSEST] = true
+  left_context[return_point] = RETURN_UPDATES_$[UP_VNAME_CLOSEST] = points=$[XPOS],$[YPOS]
+  left_context[station]      = STATION_$[UP_VNAME_CLOSEST] = true
+
+  cmd = label=DEPLOY, var=DEPLOY,  sval=true,  receivers=all:$(VNAMES)
+  cmd = label=DEPLOY, var=MOOS_MANUAL_OVERRIDE,  sval=false,  receivers=all:$(VNAMES)
+  cmd = label=DEPLOY, var=AVOID,  sval=true,  receivers=all:$(VNAMES)
+  cmd = label=DEPLOY, var=RETURN,  sval=false,  receivers=all:$(VNAMES)
+  cmd = label=DEPLOY, var=STATION_KEEP,  sval=false,  receivers=all:$(VNAMES)
+
+  cmd = label=RETURN, var=RETURN, sval=true, receivers=all:$(VNAMES)
+  cmd = label=RETURN, var=STATION_KEEP, sval=false, receivers=all:$(VNAMES)
+
+  cmd = label=STATION, var=STATION,  sval=true,  receivers=all:$(VNAMES), color=pink
+
+  button_one   = DEPLOY  # DEPLOY_ALL=true 
+  button_one   = MOOS_MANUAL_OVERRIDE_ALL=false 
+  button_one   = RETURN_ALL=false # STATION_ALL=false
+
+  button_two   = RETURN  # RETURN_ALL=true
+  button_two   = RETURN  # STATION_ALL=false
+  button_four  = STATION   # STATION_ALL=true
+
+  button_5 = MARKERS:T # MAP_MARKERS=true
+  button_6 = MARKERS:F # MAP_MARKERS=false
+	}
+
+
+//--------------------------------------------------------
+// uProcessWatch Config Block
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  allow_retractions = true
+  
+  watch_all = true      // default is true
+
+  nowatch = uXMS*
+  nowatch = uPokeDB*
+  nowatch = uQueryDB*
+
+  summary_wait = 12
+}

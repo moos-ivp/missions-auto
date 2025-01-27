@@ -1,0 +1,139 @@
+//---------------------------------------------------
+// Helm Behavior file 
+
+initialize   DEPLOY  = false
+initialize   RETURN  = false
+initialize   STATION = false
+initialize   TRANSIT = true
+
+set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+set MODE = SKEEPING {
+  MODE = ACTIVE
+  STATION = true
+}                       
+
+set MODE = RETURNING {
+  MODE = ACTIVE
+  RETURN = true
+} 
+
+set MODE = TRANSITING {
+  MODE = ACTIVE
+  TRANSIT = true
+} 
+
+//----------------------------------------------
+Behavior = BHV_PModelView
+{
+  name      = pmview
+  pwt       = 100
+  condition = ((MODE==TRANSITING) or (MODE==RETURNING))
+  updates   = UP_PMVIEW
+}
+
+	
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{
+  name      = wpt_transit
+  pwt       = 100
+
+  condition = MODE==TRANSITING
+  updates   = WPT_UPDATE
+  perpetual = true
+
+//            lead = 8
+//     lead_damper = 1
+           speed = $(STOCK_SPD:=1)  // meters per second
+
+	draw_path_loop = true
+    capture_line = true
+  capture_radius = 5
+     slip_radius = 15
+         polygon = oval: $(EL), rad=15, len=160, ang=64
+           order = reverse
+          repeat = 10000
+
+//       cycleflag = AAA_FOOBAR=true
+       cycleflag = UFOS_RESET=true
+       cycleflag = WPT_CYCLES=$[CTR]
+       cycleflag = WPT_HASH=$[HASH]
+	
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=light_green, edge_color=gray50
+    visual_hints = vertex_size=5, edge_size=1
+
+    visual_hints = trackpt_vertex_size=5
+	  visual_hints = trackpt_vertex_color=yellow
+	  visual_hints = trackpt_lcolor=off
+}
+
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{
+  name      = waypt_return
+  pwt       = 100
+  updates   = RETURN_UPDATES
+  condition = MODE==RETURNING
+  endflag   = TRANSIT = true
+  endflag   = RETURN = false
+	spawnx_flag = RETURN_UPDATES=point=$[OSX],$[OSY]
+
+  wpt_dist_to_next = DIST_TO_NEXT
+  wpt_dist_to_prev = DIST_TO_PREV
+
+	perpetual = true
+      speed = 1.2
+     radius = 5.0
+  nm_radius = 15.0
+      point = 0,0
+     repeat = 0
+       lead = 8
+}
+
+//----------------------------------------------
+Behavior = BHV_StationKeep
+{
+  name         = station-keep
+  pwt          = 100
+  condition    = MODE==SKEEPING
+
+     center_activate = true
+        inner_radius = 5
+        outer_radius = 10 
+         outer_speed = 1.0
+
+       transit_speed = 1.3
+          swing_time = 7
+        visual_hints = vertex_size=0, edge_color=gray50
+}
+
+//----------------------------------------------
+Behavior=BHV_AvoidObstacleV24
+{
+  name       = avdobs24_
+  pwt        = 1000
+  condition  = DEPLOY = true
+	templating = spawn
+  updates    = OBSTACLE_ALERT
+
+       use_refinery = true
+      allowable_ttc = 5 
+	min_util_cpa_dist = 2.5
+	max_util_cpa_dist = 5
+     pwt_outer_dist = 15
+     pwt_inner_dist = 5
+     completed_dist = 15
+
+	rng_flag = <50 RANGE = $[RNG]
+	rng_flag = <40 MIDRANGE = $[RNG]
+	rng_flag = <40 PW = $[PWT]
+	
+	visual_hints = gut_poly_vertex_color = off
+	visual_hints = gut_poly_edge_color = yellow
+}
