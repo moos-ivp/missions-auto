@@ -22,7 +22,8 @@ Processconfig = ANTLER
   Run = uFldNodeComms    @ NewConsole = false
   Run = uFldObstacleSim  @ NewConsole = false
   Run = uFldCollObDetect @ NewConsole = false
-  //Run = pMissionEval	   @ NewConsole = false
+  Run = pMissionEval	   @ NewConsole = false
+	Run = pAutoPoke        @ NewConsole = false
 #ifdef LAUNCH_GUI yes
   Run = pMarineViewer	   @ NewConsole = false
 #else
@@ -33,25 +34,17 @@ Processconfig = ANTLER
 #include plugs.moos <pShare>
 
 //----------------------------------------------------
-// uQueryDB Config Block
+// pAutoPoke Config Block  
 
-ProcessConfig = uQueryDB
+ProcessConfig = pAutoPoke
 {
-	halt_max_time  = $(MAX_TIME=0)
-  pass_condition = (MISSION_EVALUATED = true)
+  AppTick    = 2
+  CommsTick  = 2
 
-  check_var = OB_TOTAL_ENCOUNTERS
-}
+  flag = DEPLOY_ALL=true 
+  flag = MOOS_MANUAL_OVERRIDE_ALL=false
 
-//----------------------------------------------------
-// uPokeDB Config Block
-
-ProcessConfig = uPokeDB
-{
-	poke = MOOS_MANUAL_OVERRIDE_ALL=false 
-	poke = DEPLOY_ALL=true
-  poke = RETURN_ALL=false
-	poke = STATION_ALL=false
+	required_nodes = 1
 }
 
 //----------------------------------------------------
@@ -62,17 +55,17 @@ ProcessConfig = pMissionEval
   AppTick    = 4
   CommsTick  = 4
 
-  lead_condition = (OB_TOTAL_ENCOUNTERS > $(TEST_ENCOUNTERS=15))
+  lead_condition = (OB_TOTAL_ENCOUNTERS > $(TEST_ENCOUNTERS))
   //pass_condition = ARRIVED=true
 
   result_flag = MISSION_EVALUATED = true
   result_flag = SAY_MOOS=done
 
-	report_column = $(SEP)
-	report_column = $[OB_TOTAL_COLLISIONS]
-	report_column = $[OB_TOTAL_NEAR_MISSES]
-	report_column = $[OB_TOTAL_ENCOUNTERS]
-	report_column = $[MHASH]
+	report_column = min_sep=$(SEP)
+	report_column = collisions=$[OB_TOTAL_COLLISIONS]
+	report_column = near_misses=$[OB_TOTAL_NEAR_MISSES]
+	report_column = encounters=$[OB_TOTAL_ENCOUNTERS]
+	report_column = mhash=$[MHASH]
 	report_file = results.log
 }
 

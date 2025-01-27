@@ -200,7 +200,7 @@ SARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE "
 SARGS+=" $MMOD "
 # custom
 SARGS+=" $POINTS $DRESET "
-SARGS+=" --sep=$SEP --enc=$TEST_ENCOUNTERS "
+SARGS+=" --sep=$SEP --enc=$ENC "
 
 vecho "Launching shoreside: $SARGS"
 ./launch_shoreside.sh $SARGS 

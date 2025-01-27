@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 #----------------------------------------------------------
 #  Script: zlaunch.sh
 #  Author: Michael Benjamin
@@ -39,22 +39,32 @@ for ARGI; do
     fi
 done
 
-if [ "${VERBOSE}" = "" ]; then
-    FLOW_DOWN_ARGS+=" --quiet "
-fi
-
-FLOW_DOWN_ARGS+="${TIME_WARP} "
+FLOW_DOWN_ARGS+="${TIME_WARP} ${VERBOSE} "
 echo "zlaunch.sh FLOW_DOWN_ARGS:[$FLOW_DOWN_ARGS]"
 
 # ENC: Number of encounters in a headless mission
-ENC=20
+ENC=10
 
-xlaunch.sh $FLOW_DOWN_ARGS --sep=10 --enc=$ENC --com=shoreside --nogui
-xlaunch.sh $FLOW_DOWN_ARGS --sep=9  --enc=$ENC --com=shoreside --nogui
-xlaunch.sh $FLOW_DOWN_ARGS --sep=8  --enc=$ENC --com=shoreside --nogui
-xlaunch.sh $FLOW_DOWN_ARGS --sep=7  --enc=$ENC --com=shoreside --nogui
-xlaunch.sh $FLOW_DOWN_ARGS --sep=6  --enc=$ENC --com=shoreside --nogui
-xlaunch.sh $FLOW_DOWN_ARGS --sep=4  --enc=$ENC --com=shoreside --nogui
+echo 111: $?
+xlaunch.sh $FLOW_DOWN_ARGS --sep=10 --enc=$ENC  --nogui -v
+echo 222: $?
+
+xlaunch.sh $FLOW_DOWN_ARGS --sep=9  --enc=$ENC  --nogui -v
+echo 333: $?
+
+xlaunch.sh $FLOW_DOWN_ARGS --sep=8  --enc=$ENC  --nogui -v
+echo 444: $?
+
+xlaunch.sh $FLOW_DOWN_ARGS --sep=7  --enc=$ENC  --nogui -v
+echo 555: $?
+
+xlaunch.sh $FLOW_DOWN_ARGS --sep=6  --enc=$ENC  --nogui -v
+echo 666: $?
+
+xlaunch.sh $FLOW_DOWN_ARGS --sep=4  --enc=$ENC  --nogui -v
+echo 777: $?
+
+exit
 
 mhash_archive_grp.sh --send --dir=exp/obavoid $VERBOSE
 
