@@ -263,28 +263,3 @@ ProcessConfig = uFldCollisionDetect
 }                        
 
 
-//--------------------------------------------------                                             
-// uPokeDB Config Block 
-
-ProcessConfig = uPokeDB
-{                                                               
-  AppTick   = 4                                                 
-  CommsTick = 4                                                 
-                                                                
-  poke = DEPLOY_ALL=true                                        
-  poke = MOOS_MANUAL_OVERRIDE_ALL=false                         
-}                      
-	
-//--------------------------------------------------                                             
-// uQueryDB Config Block 
-
-ProcessConfig = uQueryDB
-{
-  AppTick   = 4
-  CommsTick = 4
-
-  max_wait_time  = 5
-  max_dbup_time  = $(MAX_TIME)
-
-  pass_condition = (MISSION_EVALUATED = true)
-}
