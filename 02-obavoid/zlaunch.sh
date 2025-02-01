@@ -6,6 +6,8 @@
 #----------------------------------------------------------
 #  Part 1: Set global var defaults
 #----------------------------------------------------------
+trap "echo received sigterm" SIGTERM
+
 ME=`basename "$0"`
 TIME_WARP=1
 VERBOSE=""
@@ -21,6 +23,7 @@ for ARGI; do
         echo "  --verbose, -v   Enable verbose mode                  "
 	echo "  --res, -r       Tell xlaunch to generate report      " 
 	echo "  --send, -s      Tell xlaunch to gen and send report  " 
+	echo "  --archive, -a   Tell xlaunch to archive post-mission " 
 	echo "  --silent        Run silently, no iSay                " 
 	exit 0;
     elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then 
@@ -30,6 +33,8 @@ for ARGI; do
     elif [ "${ARGI}" = "--res" -o "${ARGI}" = "-r" ]; then
         FLOW_DOWN_ARGS+="${ARGI} "
     elif [ "${ARGI}" = "--send" -o "${ARGI}" = "-s" ]; then
+        FLOW_DOWN_ARGS+="${ARGI} "
+    elif [ "${ARGI}" = "--archive" -o "${ARGI}" = "-a" ]; then
         FLOW_DOWN_ARGS+="${ARGI} "
     elif [ "${ARGI}" = "--silent" ]; then
         FLOW_DOWN_ARGS+="${ARGI} "
@@ -43,26 +48,14 @@ FLOW_DOWN_ARGS+="${TIME_WARP} ${VERBOSE} "
 echo "zlaunch.sh FLOW_DOWN_ARGS:[$FLOW_DOWN_ARGS]"
 
 # ENC: Number of encounters in a headless mission
-ENC=10
+ENC=6
 
-echo 111: $?
-xlaunch.sh $FLOW_DOWN_ARGS --sep=10 --enc=$ENC  --nogui -v
-echo 222: $?
-
-xlaunch.sh $FLOW_DOWN_ARGS --sep=9  --enc=$ENC  --nogui -v
-echo 333: $?
-
-xlaunch.sh $FLOW_DOWN_ARGS --sep=8  --enc=$ENC  --nogui -v
-echo 444: $?
-
-xlaunch.sh $FLOW_DOWN_ARGS --sep=7  --enc=$ENC  --nogui -v
-echo 555: $?
-
-xlaunch.sh $FLOW_DOWN_ARGS --sep=6  --enc=$ENC  --nogui -v
-echo 666: $?
-
-xlaunch.sh $FLOW_DOWN_ARGS --sep=4  --enc=$ENC  --nogui -v
-echo 777: $?
+qlaunch.sh $FLOW_DOWN_ARGS --sep=10 --enc=$ENC  --nogui 
+qlaunch.sh $FLOW_DOWN_ARGS --sep=9  --enc=$ENC  --nogui 
+qlaunch.sh $FLOW_DOWN_ARGS --sep=8  --enc=$ENC  --nogui 
+qlaunch.sh $FLOW_DOWN_ARGS --sep=7  --enc=$ENC  --nogui 
+qlaunch.sh $FLOW_DOWN_ARGS --sep=6  --enc=$ENC  --nogui 
+qlaunch.sh $FLOW_DOWN_ARGS --sep=4  --enc=$ENC  --nogui 
 
 exit
 

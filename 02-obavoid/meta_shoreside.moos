@@ -56,16 +56,20 @@ ProcessConfig = pMissionEval
   CommsTick  = 4
 
   lead_condition = (OB_TOTAL_ENCOUNTERS > $(TEST_ENCOUNTERS))
-  //pass_condition = ARRIVED=true
+  pass_condition = OB_TOTAL_COLLISIONS = 0
 
   result_flag = MISSION_EVALUATED = true
   result_flag = SAY_MOOS=done
 
+	report_column = form=obavoid
 	report_column = min_sep=$(SEP)
+	report_column = grade=$[GRADE]
 	report_column = collisions=$[OB_TOTAL_COLLISIONS]
 	report_column = near_misses=$[OB_TOTAL_NEAR_MISSES]
 	report_column = encounters=$[OB_TOTAL_ENCOUNTERS]
-	report_column = mhash=$[MHASH]
+	report_column = mhash=$[MHASH_LSHORT]
+	report_column = date=$[DATE]
+	report_column = time=$[TIME]
 	report_file = results.log
 }
 
