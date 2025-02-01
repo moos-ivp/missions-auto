@@ -6,6 +6,7 @@ author  = M.Benjamin
 org     = MIT Marine Autonomy Lab
 email   = mikerb@mit.edu
 location = forest_lake
+vehamt  = 2 (fixed=2)
 
 synopsis = A two vehicle collision avoidance mission, testing the 
 synopsis = functionality of the contact manager early warning.
