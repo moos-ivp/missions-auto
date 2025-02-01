@@ -1,0 +1,16 @@
+name    = alpha_ufld
+thumb   = The basic alpha mission using the uField structure
+doc_url = MIS.Alpha
+git_url = https://github.com/mikerb/missions-auto/tree/main/00-alpha_ufld
+author  = M.Benjamin
+org     = MIT Marine Autonomy Lab
+email   = mikerb@mit.edu
+location = forrest_lake
+
+//autotest = The cyleflag and wptflags are verified by checking anticipated
+//values at the waypoint traversal end, when endflags are posted.
+
+synopsis = In the alpha_ufld mission a vehicle traverses a set of five
+synopsis = waypoints a set amount of times, before returning home.
+
+
