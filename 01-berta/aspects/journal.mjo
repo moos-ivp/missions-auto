@@ -1,0 +1,29 @@
+name    = berta
+thumb   = Simple one-on-one collision avoidance mission with randomization
+doc_url = MIS.01Berta
+git_url = https://github.com/mikerb/missions-auto/tree/main/01-berta
+author  = M.Benjamin
+org     = MIT Marine Autonomy Lab
+email   = mikerb@mit.edu
+location = forest_lake
+vehamt  = 2 (max=2)
+gif     = berta.gif
+maploc  = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
+
+//1 (fixed=1)
+//2 (fixed=2)
+//2 (max=2)
+//1 (max=10)
+
+//autotest = The cyleflag and wptflags are verified by checking anticipated
+//values at the waypoint traversal end, when endflags are posted.
+
+synopsis = In the berta mission two vehicles loiter in opposite east-west
+synopsis = locations and then periodically traverse to the opposited location, 
+synopsis = creating a collision avoidance situation as they pass. The loiter
+synopsis = locations are randomly adjusted in the north-south direction to 
+synopsis = create slighly different angles on each crossing approache. The 
+synopsis = mission can be run with basic collision avoidance or COLREGS
+synopsis = collision avoidance with a command-line switch.
+
+
