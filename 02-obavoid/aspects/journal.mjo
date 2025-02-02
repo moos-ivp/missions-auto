@@ -1,4 +1,4 @@
-name    = berta
+name    = obavoid
 thumb   = Obstacle avoidance through a randomly generated obstacle field.
 doc_url = MIS.02ObAvoid
 git_url = https://github.com/mikerb/missions-auto/tree/main/02-obavoid
@@ -8,7 +8,7 @@ email   = mikerb@mit.edu
 location = mit_pavlab
 vehamt  = 1 (max=1)
 gif     = obavoid.gif
-maploc  = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
+maploc  = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
 
 //1 (fixed=1)
 //2 (fixed=2)
@@ -18,12 +18,11 @@ maploc  = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
 //autotest = The cyleflag and wptflags are verified by checking anticipated
 //values at the waypoint traversal end, when endflags are posted.
 
-synopsis = In the berta mission two vehicles loiter in opposite east-west
-synopsis = locations and then periodically traverse to the opposite location, 
-synopsis = creating a collision avoidance situation as they pass. The loiter
-synopsis = locations are randomly adjusted in the north-south direction to 
-synopsis = create slighly different angles on each crossing approach. The 
-synopsis = mission can be run with basic collision avoidance or COLREGS
-synopsis = collision avoidance with a command-line switch.
-
-
+synopsis = In the obavoid mission, a single vehicle repeatedly traverses a 
+synopsis = racetrack pattern with the middle part comprising a randomly 
+synopsis = generated obstacle field. The field is re-generated on each loop
+synopsis = of the pattern while the vehicle is outside the field. The number,
+synopsis = size, and separation of the obstacles can be configured. The vehicle
+synopsis = uses the obstacle simulator, and has a mode to simulate lidar returns
+synopsis = on nearby obstacles. The uFldCollObDetect app is run in the shoreside
+synopsis = to keep track of CPA distance on each encounter with an obstacle.
