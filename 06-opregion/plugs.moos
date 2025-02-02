@@ -1,0 +1,99 @@
+<tag><origin_warp>
+MOOSTimeWarp = $(WARP)
+
+#ifdef REGION pavlab
+// MIT Sailing Pavilion (PavLab)
+LatOrigin = 42.358436
+LongOrigin = -71.087448
+#else
+// Forest Lake Maine
+LatOrigin  = 43.825300 
+LongOrigin = -70.330400 
+#endif
+
+<tag><uProcessWatch>
+//--------------------------------------------------------
+// uProcessWatch Config Block
+	
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  allow_retractions = true
+
+  watch_all = true // default is true
+
+  nowatch = uMAC*
+  nowatch = uXMS*
+  nowatch = uPokeDB*
+  nowatch = uQueryDB*
+
+  summary_wait  = 12
+}
+
+<tag><pHostInfo>
+//--------------------------------------------------
+// pHostInfo config block
+
+ProcessConfig = pHostInfo
+{
+  AppTick 	= 1
+  CommsTick = 1
+
+  default_hostip_force = $(IP_ADDR)
+}
+
+<tag><pShare>
+//---------------------------------------------------------
+// pShare Config Block
+
+ProcessConfig = pShare
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  input = route =  $(IP_ADDR):$(PSHARE_PORT)
+}
+
+
+<tag><iM300Health>
+//------------------------------------------------
+// iM300Health config block
+
+ProcessConfig = iM300Health
+{
+   AppTick   = 4
+   CommsTick = 4
+   
+   StaleTime = 3.0         //  Time until messages are considered stale
+   MaxHeadingDelta = 5.0   //  Max Delta allowable between IMU and GPS
+
+   LowBattThresh  = 13.0
+   FullBattThresh = 14.4
+ 
+}
+
+<tag> <uSimMarineV22>
+//------------------------------------------------------
+// uSimMarineV22 Config Block
+
+ProcessConfig = uSimMarineV22
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  start_pos = $(START_POS)
+  prefix    = NAV
+
+	turn_rate = 99
+	max_speed = $(MAX_SPD)
+	
+	max_deceleration = 0.1
+	
+  //rotate_speed = 0.012
+  //drift_x      = 0.0045
+
+  thrust_map = 0:0, 20:0.4, 40:0.8, 60:1.2, 80:1.6, 100:2.0
+  //thrust_map = -100:-2, 0:0, 20:1, 40:2, 60:3, 80:5, 100:5
+}

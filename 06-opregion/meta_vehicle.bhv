@@ -1,0 +1,40 @@
+//--------    FILE: abe.bhv   -------------
+
+initialize   DEPLOY = false
+
+//----------------------------------------------
+Behavior = BHV_OpRegionV24
+{
+  name = opreg
+  pwt  = 300
+
+	core_poly = pts={-70.4,-50:56.1,10:90.4,-62.3:-36.11,-122.25}
+
+	visual_hints = edge_size = 2 
+
+	endflag = TEST1=true
+	inactiveflag = TEST2=true
+	
+	save_dist = 5
+	halt_dist = 14
+
+	save_flag  = FOOBER=hello
+	save_flag  = VAL1=$[DIST_TO_HALT]
+	savex_flag = VAL2=$[DIST_TO_HALT]
+	savex_flag = VAL3=$[TRAJ_DIST_TO_HALT]
+	savex_flag = VAL4=$[SECS_OUT_SAVE_POLY]
+}
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt
+  pwt        = 100
+  condition  = DEPLOY = true
+
+           speed = 2.0
+  capture_radius = 2.0
+     slip_radius = 5.0
+          point = 100,-20
+ }
+

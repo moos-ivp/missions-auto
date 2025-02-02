@@ -1,0 +1,30 @@
+name    = opregion
+thumb   = A simple mission demonstrating/testing the OpRegionV24 behavior
+doc_url = MIS.06OpRegion
+git_url = https://github.com/mikerb/missions-auto/tree/main/06-opregion
+author  = M.Benjamin
+org     = MIT Marine Autonomy Lab
+email   = mikerb@mit.edu
+location = mit_pavlab
+vehamt  = 1 (max=1)
+gif     = opregion.gif
+maploc  = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
+
+//1 (fixed=1)
+//2 (fixed=2)
+//2 (max=2)
+//1 (max=10)
+
+//autotest = The cyleflag and wptflags are verified by checking anticipated
+//values at the waypoint traversal end, when endflags are posted.
+
+synopsis = The OpRegionV24 behavior is a safety behavior ensure that a vehicle 
+synopsis = stays within a specified operation area given by a convex polygon. 
+synopsis = Once a vehicle is outside the region by a certain distance, the 
+synopsis = behavior will begin to be ative (produce an objective function) to 
+synopsis = bring the vehicle back inside the polygon. If the vehicle goes outside
+synopsis = the region by a certain larger distance, the behavior will post an 
+synopsis = all-stop message. This mission begins with the vehicle inside the
+synopsis = region and drives toward a waypoint outside the polygon.
+
+
