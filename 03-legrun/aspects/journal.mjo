@@ -18,7 +18,7 @@ maploc  = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
 //autotest = The cyleflag and wptflags are verified by checking anticipated
 //values at the waypoint traversal end, when endflags are posted.
 
-synopsis = The legrun behavior is a simple mission demonstrating the LegRun
+synopsis = A simple mission demonstrating the LegRun
 synopsis = behavior. This behavior is characterized by two waypoints (the leg)
 synopsis = with a Williamson turn at either end. The direction and size of the 
 synopsis = Williamson. During a mission, The leg can be rotated, lengthened
