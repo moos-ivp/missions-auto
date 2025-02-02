@@ -22,6 +22,8 @@ synopsis = The FixedTurn behavior is meant to turn the vehicle in a given direct
 synopsis = with a steady delta heading command, for a given number of degrees before
 synopsis = completion. In this mission, the behavior is commenced during the leg 
 synopsis = portion of a LegRun behavior, using the midflag capability of the latter.
+synopsis = The FixedTurn behavior is able to estimate the vehicle turn radius by
+synopsis = by averaging the distance of points on the trajectory that are 180 degrees apart.
 synopsis = This kind of mission can be used for automating the in-field test of a 
 synopsis = vehicle to determine its turning radius capabilities at different speeds.
 
