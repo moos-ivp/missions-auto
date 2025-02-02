@@ -1,7 +1,7 @@
 <tag><origin_warp>
 MOOSTimeWarp = $(WARP)
-LatOrigin = 42.360264
-LongOrigin= 42.35415
+LatOrigin = 42.358456
+LongOrigin= -71.087589
 
 <tag><pShare>
 //--------------------------------------------------
