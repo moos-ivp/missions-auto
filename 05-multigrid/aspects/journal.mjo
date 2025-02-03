@@ -1,0 +1,27 @@
+name    = multigrid
+thumb   = A two-vehicle mission using XYGrid for tracking regional visit time
+doc_url = MIS.05MultiGrid
+git_url = https://github.com/mikerb/missions-auto/tree/main/05-multigrid
+author  = M.Benjamin
+org     = MIT Marine Autonomy Lab
+email   = mikerb@mit.edu
+location = forest_lake
+vehamt  = 4 (max=4)
+gif     = multigrid.gif
+maploc  = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
+
+
+//1 (fixed=1)
+//2 (fixed=2)
+//2 (max=2)
+//1 (max=10)
+
+//autotest = The cyleflag and wptflags are verified by checking anticipated
+//values at the waypoint traversal end, when endflags are posted.
+
+synopsis = Four vehicles are deployed in a region to four separate loiter locations.
+synopsis = Their locations are periodically re-assigned, creating collision avoidance
+synopsis = challenges as they move to the new locations. The XYGrid data structure
+synopsis = is used in the pSearchGrid app, to note and store the collective time spent
+synopsis = in any of the grid cell locations. This information is not acted on in
+synopsis = this mission, but only serves as a demonstration.
