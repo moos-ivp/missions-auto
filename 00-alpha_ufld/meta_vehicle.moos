@@ -84,7 +84,7 @@ ProcessConfig = uFldNodeBroker
 
   bridge = src=ARRIVED
   bridge = src=WPT_FLAG
-  bridge = src=CYCLES
+  bridge = src=CYCLE_FLAG
   bridge = src=RETURNED
   bridge = src=STATION_KEEP
 }

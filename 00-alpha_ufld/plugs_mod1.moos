@@ -22,7 +22,7 @@ ProcessConfig = pMissionEval
 	report_column = form=$[MISSION_FORM]
 	report_column = mmod=$[MMOD] 
 	report_column = mhash_short=$[MHASH_SHORT] 
-	report_column = lshort_short=$[MHASH_LSHORT] 
+	report_column = mhash_lshort=$[MHASH_LSHORT] 
 	
 	result_flag = MISSION_EVALUATED = true
 }
