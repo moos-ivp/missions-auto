@@ -15,6 +15,7 @@ II. What is a "good" mission
     b. For ALL in-water missions we want the ability to easily sim
     c. A mission should be stand-alone, no dependencies on files external to
        the mission folder.
+
     d. For multi-vehicle mission, unless specifically designed to be say a 2
     vehicle mission, the number of vehicles should be selectable on the command line
     to be any arbrarily large number of vehicles
@@ -28,7 +29,7 @@ III. What is a good "auto-enabled" mission
     a. able to launch on the command line with auto-poke and headless options
 
 
-
+Further notes:
 
 Structure of a mission.
 
