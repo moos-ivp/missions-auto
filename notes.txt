@@ -1,4 +1,4 @@
-Overview of objectives
+Overview of objectives::
 
 I. Why we want to auto-test:
 
