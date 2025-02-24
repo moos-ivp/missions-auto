@@ -1,7 +1,7 @@
 name    = opregion
 thumb   = A simple mission demonstrating/testing the OpRegionV24 behavior
 doc_url = MIS.06OpRegion
-git_url = https://github.com/mikerb/missions-auto/tree/main/06-opregion
+git_url = https://github.com/moos-ivp/missions-auto/tree/main/06-opregion
 author  = M.Benjamin
 org     = MIT Marine Autonomy Lab
 email   = mikerb@mit.edu

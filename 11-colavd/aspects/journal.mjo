@@ -1,7 +1,7 @@
 name    = colavd
 thumb   = Two-vehicle collision avoidance
 doc_url = MIS.ColAvd
-git_url = https://github.com/mikerb/missions-auto/tree/main/01-colavd
+git_url = https://github.com/moos-ivp/missions-auto/tree/main/01-colavd
 author  = M.Benjamin
 org     = MIT Marine Autonomy Lab
 email   = mikerb@mit.edu

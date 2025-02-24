@@ -1,7 +1,7 @@
 name    = fixed_turn
 thumb   = A simple mission using the FixedTurn within the LegRun behavior
 doc_url = MIS.04FixedTurn
-git_url = https://github.com/mikerb/missions-auto/tree/main/03-fixed_turn
+git_url = https://github.com/moos-ivp/missions-auto/tree/main/03-fixed_turn
 author  = M.Benjamin
 org     = MIT Marine Autonomy Lab
 email   = mikerb@mit.edu

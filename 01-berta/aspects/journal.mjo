@@ -1,7 +1,7 @@
 name    = berta
 thumb   = Simple one-on-one collision avoidance mission with randomization
 doc_url = MIS.01Berta
-git_url = https://github.com/mikerb/missions-auto/tree/main/01-berta
+git_url = https://github.com/moos-ivp/missions-auto/tree/main/01-berta
 author  = M.Benjamin
 org     = MIT Marine Autonomy Lab
 email   = mikerb@mit.edu
