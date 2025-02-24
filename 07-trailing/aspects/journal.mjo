@@ -1,7 +1,7 @@
 name    = trailing
 thumb   = A two vehicle mission, one vehicle trails the other with the Trail behavior.
 doc_url = MIS.07Trailing
-git_url = https://github.com/moos-ivp/missions-auto/tree/main/07-trail
+git_url = https://github.com/moos-ivp/missions-auto/tree/main/07-trailing
 author  = M.Benjamin
 org     = MIT Marine Autonomy Lab
 email   = mikerb@mit.edu
