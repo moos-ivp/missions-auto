@@ -64,7 +64,7 @@ done
 #  Part 5: Set starting positions, speeds, vnames, colors
 #------------------------------------------------------------
 if [ "${RAND_VPOS}" = "yes" -o  ! -f "vpositions.txt" ]; then
-    pickpos --poly="29,4,: 52,17 : 60,0 : 34,-7" \
+    pickpos --poly="29,4: 52,17 : 60,0 : 34,-7" \
             --amt=$VEHICLE_AMT --hdg="-48,-57,0" > vpositions.txt
 fi
 

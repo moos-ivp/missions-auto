@@ -11,7 +11,6 @@
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
 on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
 trap on_exit SIGINT
-trap on_exit SIGTERM
 
 #------------------------------------------------------------
 #  Part 2: Declare global var defaults
