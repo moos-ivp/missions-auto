@@ -70,7 +70,7 @@ ProcessConfig = pMissionEval
 	report_column = mhash=$[MHASH_LSHORT]
 	report_column = date=$[DATE]
 	report_column = time=$[TIME]
-	report_file = results.log
+	report_file = results.txt
 }
 
 //------------------------------------------------------
