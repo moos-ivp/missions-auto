@@ -1,0 +1,59 @@
+Mission for testing the handling of filtering out contact behaviors based on the
+vsource information associated with the contact. The "vsource" indicates the
+source of the contact information, e.g., AIS, ARPA, Radar and so on. For testing
+purposes this is set in the pNodeReporter configuration, vsource=ais. Normally
+we would not be setting this field in pNodeReporter, and if we did, it would
+either be blank, or "ownship".
+
+The mission launches with abe as ownship, and four additional contacts, ben, cal,
+deb and eve. Two contacts have a vsource of AIS. They all have a speed of zero,
+so nothing moves when the mission is started. 
+
+When the DEPLOY button is hit, abe's helm will have four active collision avoidance
+behaviors.
+
+In appcasting if you select abe/pHelmIvP, you should see the four active behaviors:
+
+Behaviors Spawnable: --------- (2)
+  BHV_AvdColregsV22::avdcol_ (Spawned:4/4)
+  BHV_AvdColregsV22::avdcol2_ (Spawned:0/0)
+Behaviors Active: ---------- (5)
+  waypt_transit [45.95] (pwt=100) (pcs=8) (cpu=0.85) (upd=0/0)
+  avdcol_ben [45.44] (pwt=54.2605) (pcs=75) (cpu=0.85) (upd=1/1)
+  avdcol_cal [45.44] (pwt=72.52451) (pcs=840) (cpu=0.85) (upd=1/1)
+  avdcol_deb [45.44] (pwt=72.52451) (pcs=840) (cpu=0.86) (upd=1/1)
+  avdcol_eve [45.44] (pwt=54.2262) (pcs=81) (cpu=0.86) (upd=1/1)
+Behaviors Running: --------- (0)
+Behaviors Disabled: --------- (0)
+Behaviors Idle: ------------ (2)
+  waypt_return[45.95], station-keep[4
+
+
+If you click the AIS-OFF button, it sends a message to abe's contact manager,
+XYZ_DISABLE_TARGET=action=disable,vsource=ais
+
+This will be received by abe's contact manager with a resulting message to the helm
+to disable any behaviors with ais as the vsource for it's contact. You should see
+the abe/pHelmIvP appcasting output change to the below:
+
+Behaviors Spawnable: --------- (2)
+  BHV_AvdColregsV22::avdcol_ (Spawned:4/4)
+  BHV_AvdColregsV22::avdcol2_ (Spawned:0/0)
+Behaviors Active: ---------- (3)
+  waypt_transit [402.80] (pwt=100) (pcs=8) (cpu=8.42) (upd=0/0)
+  avdcol_cal [402.29] (pwt=72.52451) (pcs=840) (cpu=8.42) (upd=1/1)
+  avdcol_deb [402.29] (pwt=72.52451) (pcs=840) (cpu=8.42) (upd=1/1)
+Behaviors Running: --------- (0)
+Behaviors Disabled: --------- (2)
+  avdcol_ben [5.10]
+  avdcol_eve [5.10]
+Behaviors Idle: ------------ (2)
+  waypt_return[402.80], station-keep[402.80]
+Behaviors Completed: ------- (0)
+
+Clicking on the AIS-ON button button should revert to all behaviors being active.
+
+
+
+
+
