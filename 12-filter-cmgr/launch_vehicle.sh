@@ -11,7 +11,6 @@
 vecho() { if [ "$VERBOSE" != "" ]; then echo "$ME: $1"; fi }
 on_exit() { echo; echo "$ME: Halting all apps"; kill -- -$$; }
 trap on_exit SIGINT
-trap on_exit SIGTERM
 
 #------------------------------------------------------------
 #  Part 2: Declare global var defaults
@@ -169,7 +168,7 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "FSEAT_IP =      [${FSEAT_IP}]     "
     echo "------------Custom----------------"
     echo "DEST_POS =      [${DEST_POS}]     "
-    echo "VSOURXE =       [${VSOURCE}]      "
+    echo "VSOURCE =       [${VSOURCE}]      "
     echo -n "Hit any key to continue launching $VNAME "
     read ANSWER
 fi

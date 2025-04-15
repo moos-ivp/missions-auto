@@ -25,6 +25,7 @@ Processconfig = ANTLER
   Run = uLoadWatch     @ NewConsole = false
   Run = uMemWatch      @ NewConsole = false
   Run = pContactMgrV20 @ NewConsole = false
+  Run = pObstacleMgr   @ NewConsole = false
   Run = pRealm         @ NewConsole = false
 
 #ifdef XMODE SIM
@@ -59,7 +60,9 @@ ProcessConfig = pHelmIvP
 
 	app_logging = true
 	
-	hold_on_apps = pContactMgrV20
+	hold_on_apps = pContactMgrV20, pObstacleMgr
+
+	pmgen = alg=dubins # radius=5 # degs=10
 }
 	
 //----------------------------------------------------
@@ -78,6 +81,38 @@ ProcessConfig = pNodeReporter
 	
 	coord_policy_global = true
 }
+
+//--------------------------------------------------------
+// pObstacleMgr Config Block
+
+ProcessConfig = pObstacleMgr                                    
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+                                                                
+  //given_obstacle = pts={90.2,-80.4:...:85.4,-80.4},label=ob_23  
+                                                                
+  post_dist_to_polys = true  // true, false or (close)          
+  post_view_polys = true     // (true) or false or              
+  obstacles_color = green    // default is blue                 
+                                                                
+  //max_pts_per_cluster = 20   // default is 20                   
+  //max_age_per_point   = 20   // (secs)  default is 20           
+                                                                
+  //alert_range  = 20          // (meters) default is 20          
+  //ignore_range = -1          // (meters) default is -1, (off)   
+                                                                
+  //lasso = true               // default is false                
+  //lasso_points = 6           // default is 6                    
+  //lasso_radius = 5           // (meters) default is 5           
+                                                                
+  given_max_duration = off    // default is 60 seconds           
+                                                                
+  //general_alert = update_var=GEN_ALERT, alert_range=800         
+                                                                
+  app_logging = true  // {true or file} By default disabled     
+}
+
 
 //--------------------------------------------------------
 // pContactMgrV20 Config Block

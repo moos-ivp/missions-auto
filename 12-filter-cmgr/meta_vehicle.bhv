@@ -28,6 +28,33 @@ set MODE = TRANSITING {
 } 
 
 //----------------------------------------------
+Behavior = BHV_AvoidObstacleV24
+{
+  name       = avdobs24_
+  pwt        = 1000
+  condition  = DEPLOY = true
+  templating = spawn
+  updates    = OBSTACLE_ALERT
+
+       use_refinery = true
+      allowable_ttc = 5
+  min_util_cpa_dist = 1
+  max_util_cpa_dist = 3
+     pwt_outer_dist = 75
+     pwt_inner_dist = 30
+     completed_dist = 100
+
+  visual_hints = gut_poly_vertex_color = off
+  visual_hints = gut_poly_edge_color = yellow
+  visual_hints = gut_poly_label_color = off
+  visual_hints = label_color = off
+  visual_hints = buff_min_label_color = off
+  visual_hints = buff_max_label_color = off
+  visual_hints = buff_min_fill_color = grey80
+  visual_hints = buff_max_fill_color = grey80
+}
+
+//----------------------------------------------
 Behavior = BHV_Waypoint
 { 
   name      = waypt_transit

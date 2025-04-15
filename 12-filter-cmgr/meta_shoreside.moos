@@ -22,9 +22,22 @@ Processconfig = ANTLER
   Run = pHostInfo       @ NewConsole = false
   Run = uFldShoreBroker @ NewConsole = false
   Run = uFldNodeComms   @ NewConsole = false
-  //Run = pSpoofNode      @ NewConsole = false
+	Run = uFldObstacleSim @ NewConsole = false
+  Run = pSpoofNode      @ NewConsole = false
 }
 
+//--------------------------------------------------
+ProcessConfig = uFldObstacleSim
+{                                                               
+  obstacle_file = obstacles.txt                                   
+
+	poly_fill_color = off
+	poly_label_color = white
+
+	refresh_interval = 5
+	draw_region = false
+}  
+	
 #include plugs.moos <pHostInfo>
 #include plugs.moos <pShare>	
 #include plugs.moos <uProcessWatch>
@@ -67,9 +80,10 @@ ProcessConfig = uFldShoreBroker
   qbridge  = MOOS_MANUAL_OVERRIDE, AVOID, UP_LOITER
   qbridge  = RETURN_UPDATES, BCM_DISPLAY_RADII
   qbridge  = CONTACT_INFO, NODE_GROUP_UPDATE
-  qbridge  = BHV_ABLE_FILTER 
+  qbridge  = BHV_ABLE_FILTER
   qbridge  = XYZ_DISABLE_TARGET, XYZ_ENABLE_TARGET
 
+	bridge   = src=GIVEN_OBSTACLE, alias=GIVEN_OBSTACLE
   bridge   = src=UP_LOITER_$N, alias=UP_LOITER
   bridge   = src=DRIFT_VECTOR_ADD, alias=DRIFT_VECTOR_ADD
   bridge   = src=HELM_MAP_CLEAR, alias=HELM_MAP_CLEAR
