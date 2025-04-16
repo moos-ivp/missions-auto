@@ -95,7 +95,10 @@ ProcessConfig = pObstacleMgr
   post_dist_to_polys = true  // true, false or (close)          
   post_view_polys = true     // (true) or false or              
   obstacles_color = green    // default is blue                 
-                                                                
+
+  disable_var = XYZ_DISABLE_TARGET
+  enable_var  = XYZ_ENABLE_TARGET
+
   //max_pts_per_cluster = 20   // default is 20                   
   //max_age_per_point   = 20   // (secs)  default is 20           
                                                                 

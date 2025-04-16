@@ -44,6 +44,8 @@ Behavior = BHV_AvoidObstacleV24
      pwt_inner_dist = 30
      completed_dist = 100
 
+	can_disable = true
+	
   visual_hints = gut_poly_vertex_color = off
   visual_hints = gut_poly_edge_color = yellow
   visual_hints = gut_poly_label_color = off

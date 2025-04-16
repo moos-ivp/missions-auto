@@ -36,6 +36,10 @@ ProcessConfig = uFldObstacleSim
 
 	refresh_interval = 5
 	draw_region = false
+
+	post_points = true
+	
+	app_logging = true
 }  
 	
 #include plugs.moos <pHostInfo>
@@ -80,7 +84,7 @@ ProcessConfig = uFldShoreBroker
   qbridge  = MOOS_MANUAL_OVERRIDE, AVOID, UP_LOITER
   qbridge  = RETURN_UPDATES, BCM_DISPLAY_RADII
   qbridge  = CONTACT_INFO, NODE_GROUP_UPDATE
-  qbridge  = BHV_ABLE_FILTER
+  qbridge  = BHV_ABLE_FILTER, TRACKED_FEATURE
   qbridge  = XYZ_DISABLE_TARGET, XYZ_ENABLE_TARGET
 
 	bridge   = src=GIVEN_OBSTACLE, alias=GIVEN_OBSTACLE
@@ -218,5 +222,11 @@ ProcessConfig = pMarineViewer
 
   button_7 = AIS-OFF-D # BHV_ABLE_FILTER_ABE=action=disable, vsource=ais
   button_8 = AIS-ON-D  # BHV_ABLE_FILTER_ABE=action=enable, vsource=ais
+
+  button_9  = BEN-OFF # XYZ_DISABLE_TARGET_ABE=action=disable, contact=ben
+  button_10 = BEN-ON  # XYZ_ENABLE_TARGET_ABE=action=enable, contact=ben
+
+  button_11 = BEN-OFFX # XYZ_DISABLE_TARGET_ABE=ben
+  button_12 = BEN-ONX  # XYZ_ENABLE_TARGET_ABE=ben
 }
 
