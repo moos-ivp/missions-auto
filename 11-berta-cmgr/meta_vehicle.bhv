@@ -74,9 +74,9 @@ Behavior = BHV_AvdColregsV22
      post_per_contact_info = true
 	
               use_refinery = true
-            pwt_outer_dist = 30
-		        pwt_inner_dist = 20
-            completed_dist = 35
+            pwt_outer_dist = 20
+		        pwt_inner_dist = 10
+            completed_dist = 22
 
          min_util_cpa_dist = 12
          max_util_cpa_dist = 18
@@ -106,9 +106,9 @@ Behavior = BHV_AvdColregsV22
      post_per_contact_info = true
 	
               use_refinery = true
-            pwt_outer_dist = 24
+            pwt_outer_dist = 35
 		        pwt_inner_dist = 20
-            completed_dist = 25
+            completed_dist = 37
 
          min_util_cpa_dist = 7
          max_util_cpa_dist = 10
