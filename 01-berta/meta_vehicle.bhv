@@ -72,6 +72,10 @@ Behavior = BHV_AvdColregsV22
 	       //match_group = alpha
         //  match_type = mokai
 
+	activeflag = FOO=124
+	run_flag = FOO=345
+	runx_flag = FOO=789
+	
 	can_disable = true
 	
 	exit_on_filter_group = true

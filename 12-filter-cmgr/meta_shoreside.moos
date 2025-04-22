@@ -37,7 +37,7 @@ ProcessConfig = uFldObstacleSim
 	refresh_interval = 5
 	draw_region = false
 
-	post_points = true
+	//post_points = true
 	
 	app_logging = true
 }  

@@ -154,9 +154,10 @@ ProcessConfig = pObstacleMgr
 
   point_var = TRACKED_FEATURE 
 
+	app_logging = true
 	
 	//obstacles_color = $(VCOLOR)
-	obstacles_color = invisible
+	obstacles_color = green
 
 	post_view_polys = false
 	
