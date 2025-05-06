@@ -36,6 +36,8 @@ ProcessConfig = uProcessWatch
   AppTick   = 1
   CommsTick = 1
 
+	app_logging = true
+	
   allow_retractions = true
   
   watch_all = true      // default is true

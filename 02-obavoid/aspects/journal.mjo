@@ -1,14 +1,16 @@
-name    = obavoid
-thumb   = Obstacle avoidance through a randomly generated obstacle field.
-doc_url = MIS.02ObAvoid
-git_url = https://github.com/moos-ivp/missions-auto/tree/main/02-obavoid
-author  = M.Benjamin
-org     = MIT Marine Autonomy Lab
-email   = mikerb@mit.edu
+name     = obavoid
+thumb    = Obstacle avoidance through a randomly generated obstacle field.
+doc_url  = MIS.02ObAvoid
+git_url  = https://github.com/moos-ivp/missions-auto/tree/main/02-obavoid
+git_repo = git@github.com:moos-ivp/missions-auto.git
+author   = M.Benjamin
+org      = MIT Marine Autonomy Lab
+email    = mikerb@mit.edu
 location = mit_pavlab
-vehamt  = 1 (max=1)
-gif     = obavoid.gif
-maploc  = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
+vehamt   = 1 (max=1)
+lau_cmd  = ./launch.sh 15   (1 vehicle, 15x real time)
+gif      = obavoid.gif
+maploc   = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
 
 //1 (fixed=1)
 //2 (fixed=2)

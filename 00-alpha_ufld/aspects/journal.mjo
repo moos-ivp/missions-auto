@@ -1,14 +1,16 @@
-name    = alpha_ufld
-thumb   = The basic alpha mission using the uField structure
-doc_url = MIS.00AlphaUfld
-git_url = https://github.com/moos-ivp/missions-auto/tree/main/00-alpha_ufld
-author  = M.Benjamin
-org     = MIT Marine Autonomy Lab
-email   = mikerb@mit.edu
+name     = alpha_ufld
+thumb    = The basic alpha mission using the uField structure
+doc_url  = MIS.00AlphaUfld
+git_url  = https://github.com/moos-ivp/missions-auto/tree/main/00-alpha_ufld
+git_repo = git@github.com:moos-ivp/missions-auto.git
+author   = M.Benjamin
+org      = MIT Marine Autonomy Lab
+email    = mikerb@mit.edu
 location = forest_lake
-vehamt  = 1 (max=1)
-gif     = alpha.gif
-maploc  = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
+vehamt   = 1 (max=1)
+lau_cmd  = ./launch.sh 15   (1 vehicle, 15x real time)
+gif      = alpha.gif
+maploc   = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
 
 //1 (fixed=1)
 //2 (fixed=2)

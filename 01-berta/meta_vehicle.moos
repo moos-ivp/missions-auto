@@ -227,7 +227,8 @@ ProcessConfig = pLogger
   WildCardOmitPattern = SIMULATION_MODE, TRUE_X, TRUE_Y
   WildCardOmitPattern = NAV_DEPTH, NAV_SPEED_OVER_GROUND, DB_QOS
   //WildCardOmitPattern = NODE_BROKER_PING_0, PSHARE*
-  WildCardOmitPattern = IVPHELM_ALLSTOP_DEBUG, *ITER_GAP, *ITER_LEN
+  WildCardOmitPattern = IVPHELM_ALLSTOP_DEBUG
+//  WildCardOmitPattern = *ITER_GAP, *ITER_LEN
   WildCardOmitPattern = PHI_HOST*
 
   // WildCardOmitPattern = DB_CLIENTS

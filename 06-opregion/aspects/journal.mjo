@@ -1,14 +1,16 @@
-name    = opregion
-thumb   = A simple mission demonstrating/testing the OpRegionV24 behavior
-doc_url = MIS.06OpRegion
-git_url = https://github.com/moos-ivp/missions-auto/tree/main/06-opregion
-author  = M.Benjamin
-org     = MIT Marine Autonomy Lab
-email   = mikerb@mit.edu
+name     = opregion
+thumb    = A simple mission demonstrating/testing the OpRegionV24 behavior
+doc_url  = MIS.06OpRegion
+git_url  = https://github.com/moos-ivp/missions-auto/tree/main/06-opregion
+git_repo = git@github.com:moos-ivp/missions-auto.git
+author   = M.Benjamin
+org      = MIT Marine Autonomy Lab
+email    = mikerb@mit.edu
 location = mit_pavlab
-vehamt  = 1 (max=1)
-gif     = opregion.gif
-maploc  = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
+vehamt   = 1 (max=1)
+lau_cmd  = ./launch.sh 10   (1 vehicle, 10x real time)
+gif      = opregion.gif
+maploc   = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
 
 //1 (fixed=1)
 //2 (fixed=2)

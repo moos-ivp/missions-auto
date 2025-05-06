@@ -1,14 +1,16 @@
-name    = trailing
-thumb   = A two vehicle mission, one vehicle trails the other with the Trail behavior.
-doc_url = MIS.07Trailing
-git_url = https://github.com/moos-ivp/missions-auto/tree/main/07-trailing
-author  = M.Benjamin
-org     = MIT Marine Autonomy Lab
-email   = mikerb@mit.edu
+name     = trailing
+thumb    = A two vehicle mission, one vehicle trails the other with the Trail behavior.
+doc_url  = MIS.07Trailing
+git_url  = https://github.com/moos-ivp/missions-auto/tree/main/07-trailing
+git_repo = git@github.com:moos-ivp/missions-auto.git
+author   = M.Benjamin
+org      = MIT Marine Autonomy Lab
+email    = mikerb@mit.edu
 location = mit_pavlab
-vehamt  = 1 (max=1)
-gif     = trailing.gif
-maploc  = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
+vehamt   = 2 (max=2)
+lau_cmd  = ./launch.sh --amt=2 15   (2 vehicles, 15x real time)
+gif      = trailing.gif
+maploc   = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
 
 //1 (fixed=1)
 //2 (fixed=2)

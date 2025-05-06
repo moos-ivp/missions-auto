@@ -1,14 +1,16 @@
-name    = berta
-thumb   = Simple one-on-one collision avoidance mission with randomization
-doc_url = MIS.01Berta
-git_url = https://github.com/moos-ivp/missions-auto/tree/main/01-berta
-author  = M.Benjamin
-org     = MIT Marine Autonomy Lab
-email   = mikerb@mit.edu
+name     = berta
+thumb    = Simple one-on-one collision avoidance mission with randomization
+doc_url  = MIS.01Berta
+git_url  = https://github.com/moos-ivp/missions-auto/tree/main/01-berta
+git_repo = git@github.com:moos-ivp/missions-auto.git
+author   = M.Benjamin
+org      = MIT Marine Autonomy Lab
+email    = mikerb@mit.edu
 location = forest_lake
-vehamt  = 2 (max=2)
-gif     = berta.gif
-maploc  = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
+vehamt   = 2 (max=2)
+lau_cmd  = ./launch.sh 15   (2 vehicles, 15x real time)
+gif      = berta.gif
+maploc   = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
 
 //1 (fixed=1)
 //2 (fixed=2)
