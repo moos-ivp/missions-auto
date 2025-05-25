@@ -1,0 +1,25 @@
+name     = swarm_defend
+thumb    = N vehicles defend a high-value asset at the center of a region
+doc_url  = MIS.S50SwarmDefend
+git_url  = https://github.com/pavlab-mit/missions-swarm/tree/main/S50-swarm_defend
+git_repo = git@github.com:pavlab-mit/missions-swarm.git
+author   = M.Benjamin
+org      = MIT Marine Autonomy Lab
+email    = mikerb@mit.edu
+location = mit_pavlat
+vehamt   = 7 (max=12)
+lau_cmd  = ./launch.sh --amt=7 15  (7 vehicles, 15x realtime)
+gif      = swarm_defend.gif
+maploc   = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
+
+synopsis = A group of N=7 vehicles are deployed to a circular region and 
+synopsis = repeatedly traverse from one side of the circle to the other. 
+synopsis = The purpose of this mission is to test the COLREGS collision
+synopsis = avoidance behavior and its supported variants. Each vehicle will
+synopsis = exit the circle and perform a Williamson turn, adjusting its speed
+synopsis = to increase the variance in re-entry time across vehicles. The 
+synopsis = synchronization enhances the collision avoidance complexity by 
+synopsis = creating a high close-in contact density, thereby challending
+synopsis = the collision avoidance behaviors. 
+
+

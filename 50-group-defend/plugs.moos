@@ -1,0 +1,77 @@
+
+<tag><origin_warp>
+MOOSTimeWarp = $(WARP)
+LatOrigin  = 43.825300 
+LongOrigin = -70.330400 
+
+<tag><pHostInfoV2>
+//---------------------------------------------------------
+// pHostInfo Config Block
+
+ProcessConfig = pHostInfoV2
+{
+  AppTick 	= 1
+  CommsTick	= 1
+
+  backup_hostip = localhost
+  prefer_hostip = 192.168.7.62
+}
+
+<tag> <pHostInfo>
+//---------------------------------------------------------
+// pHostInfo Config Block
+
+ProcessConfig = pHostInfo
+{
+  AppTick 	= 1
+  CommsTick = 1
+
+	default_hostip_force = $(IP_ADDR)
+}
+
+
+<tag> <pShare>
+//---------------------------------------------------------
+// pShare Config Block
+
+ProcessConfig = pShare
+{
+  AppTick    = 5
+  CommsTick  = 5
+
+  input = route =  $(IP_ADDR):$(PSHARE_PORT)
+}
+
+<tag> <uLoadWatch>
+//---------------------------------------------------------
+// uLoadWatch Config Block
+
+ProcessConfig = uLoadWatch                                      
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+                                                                
+  thresh = app=pHelmIvP,  gapthresh=1.5
+  thresh = app=pHostInfo, gapthresh=100
+  thresh = app=any,       gapthresh=2.0  
+	}
+
+<tag> <uProcessWatch>
+//--------------------------------------------------------
+// uProcessWatch Config Block 
+
+ProcessConfig = uProcessWatch
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  nowatch = uMAC*  
+  nowatch = uXMS*
+  nowatch = uQueryDB
+  
+  watch  = uSimMarine*
+  watch  = pShare*
+  watch  = pLogger
+  watch  = pNodeReporter
+  watch  = pHelmIvP
+}
