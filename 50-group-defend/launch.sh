@@ -36,7 +36,7 @@ SHORE_IP="localhost"
 MTASC_USE="no"
 MTASC_SUBNET="192.168.7"
 MTASC_USE_CACHE=""
-MTASC_MISSION="group-defend"
+MTASC_MISSION="50-group-defend"
 
 # Custom
 
@@ -74,6 +74,11 @@ for ARGI; do
 	echo "                                               "
 	echo "Options (custom):                              "
 	echo "  --clock, -c        Encircle clockwise        "
+	echo "                                               "
+	echo "Examples:                                      "
+	echo "  $ ./launch.sh --amt=5 10                     "
+	echo "  $ ./launch.sh --mtasc --cache --amt=3 10     "
+	echo "  $ ./launch.sh -m -c --amt=3 10               "
 	exit 0;
     elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then 
         TIME_WARP=$ARGI

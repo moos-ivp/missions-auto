@@ -1,10 +1,9 @@
 //--------    FILE: alpha.bhv  -------------
 
-initialize   DEPLOY = false
-initialize   RETURN = false
-initialize   LOITER = false
-initialize   FOLLOW = false
-initialize   AVOID  = true
+initialize  DEPLOY = false
+initialize  RETURN = false
+initialize  LOITER = false
+initialize  AVOID  = true
   
 set MODE = ACTIVE {
   DEPLOY = true
@@ -14,12 +13,6 @@ set MODE = STATION-KEEPING {
   MODE = ACTIVE
   STATION_KEEP = true
 }                       
-
-set MODE = FOLLOWING {
-  MODE = ACTIVE
-  FOLLOW = true
-  RETURN != true
-} 
 
 set MODE = LOITERING {
   MODE = ACTIVE
@@ -31,40 +24,6 @@ set MODE = RETURNING {
   MODE = ACTIVE
   RETURN = true
 } 
-
-//----------------------------------------------
-Behavior = BHV_TaskWaypoint
-{ 
-       name = twpt_
-    updates = TASK_WPT
- templating = spawn
-  condition = MODE==LOITERING
-
-         type = waypoint
- max_bid_wins = false
-
-   bidwonflag = RETURN = true
-   bidwonflag = RETURN_UPDATE = point=$[PTX],$[PTY]
-   //xbidwonflag = MISSION_TASK = type=follow,range=30,id=$[ID+1],contact=$[OWNSHIP],exempt=$[OWNSHIP]
-
-}
-
-//----------------------------------------------
-Behavior = BHV_TaskConvoy
-{ 
-       name = tconvoy_
-    updates = TASK_CONVOY
- templating = spawn
-  condition = MODE==LOITERING
-
-         type = convoy
- max_bid_wins = false
-
-   bidwonflag = RETURN = true
-   bidwonflag = RETURN_UPDATE = point=$[PTX],$[PTY]
-   //xbidwonflag = MISSION_TASK = type=follow,range=30,id=$[ID+1],contact=$[OWNSHIP],exempt=$[OWNSHIP]
-
-}
 
 //----------------------------------------------
 Behavior = BHV_StationKeep
@@ -85,7 +44,6 @@ Behavior = BHV_StationKeep
         visual_hints = vertex_size=0, edge_color=gray50
 }
 
-
 //----------------------------------------------
 Behavior = BHV_AvoidCollision
 {
@@ -98,21 +56,21 @@ Behavior = BHV_AvoidCollision
   endflag    = CONTACT_RESOLVED = $[CONTACT]
   templating = spawn
 
-             contact = to-be-set
-    on_no_contact_ok = true
-         extrapolate = true
-               decay = 30,60
+              contact = to-be-set
+     on_no_contact_ok = true
+          extrapolate = true
+                decay = 30,60
 
          use_refinery = true
 
-        pwt_outer_dist = 35
-        pwt_inner_dist = 10
-        completed_dist = 40
-     min_util_cpa_dist = 10
-     max_util_cpa_dist = 18
-             pwt_grade = linear
+       pwt_outer_dist = 35
+       pwt_inner_dist = 10
+       completed_dist = 40
+    min_util_cpa_dist = 10
+    max_util_cpa_dist = 18
+            pwt_grade = linear
 //   bearing_line_config = white:0, green:0.65, yellow:0.8, red:1.0
-   bearing_line_config = white:0, gray20:0.2, gray40:0.4, gray60:0.6, gray80:0.8, gray90:0.9, red:1.0
+  bearing_line_config = white:0, gray20:0.2, gray40:0.4, gray60:0.6, gray80:0.8, red:1.0
 }
 
 //----------------------------------------------
@@ -126,10 +84,6 @@ Behavior = BHV_Loiter
 
   endflag   = LOITER=false
   endflag   = RETURN=true
-  //slingshot = 235
-  //slingshot = 595
-
-  activeflag = ENCIRCLE_POSITION=x=75,y=-95,radius=45
 
   // Parameters specific to this behavior
   // ------------------------------------

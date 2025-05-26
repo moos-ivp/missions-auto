@@ -18,8 +18,8 @@ Processconfig = ANTLER
   Run = uProcessWatch      @ NewConsole = false
   Run = pContactMgrV20     @ NewConsole = false
   Run = pShare             @ NewConsole = false
-  Run = pHostInfoV2        @ NewConsole = false
-  //Run = pHostInfo          @ NewConsole = false
+  //Run = pHostInfoV2        @ NewConsole = false
+  Run = pHostInfo          @ NewConsole = false
 
   Run = uFldNodeBroker     @ NewConsole = false
   Run = uLoadWatch         @ NewConsole = false
