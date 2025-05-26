@@ -29,7 +29,6 @@ ProcessConfig = pHostInfo
 	default_hostip_force = $(IP_ADDR)
 }
 
-
 <tag> <pShare>
 //---------------------------------------------------------
 // pShare Config Block

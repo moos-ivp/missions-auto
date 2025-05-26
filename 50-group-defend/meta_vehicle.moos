@@ -7,20 +7,17 @@ Community  = $(VNAME)
 //------------------------------------------------------------
 Processconfig = ANTLER
 {
-  MSBetweenLaunches = 50
+  MSBetweenLaunches = 100
    
   Run = MOOSDB             @ NewConsole = false
   Run = uSimMarineV22      @ NewConsole = false
   Run = pLogger            @ NewConsole = false
   Run = pNodeReporter      @ NewConsole = false
-
   Run = pHelmIvP           @ NewConsole = false
   Run = uProcessWatch      @ NewConsole = false
   Run = pContactMgrV20     @ NewConsole = false
   Run = pShare             @ NewConsole = false
-  //Run = pHostInfoV2        @ NewConsole = false
   Run = pHostInfo          @ NewConsole = false
-
   Run = uFldNodeBroker     @ NewConsole = false
   Run = uLoadWatch         @ NewConsole = false
   Run = pRealm             @ NewConsole = false
@@ -28,7 +25,7 @@ Processconfig = ANTLER
   
 #include plugs.moos <uLoadWatch>
 #include plugs.moos <pShare>
-#include plugs.moos <pHostInfoV2>
+#include plugs.moos <pHostInfo>
 #include plugs.moos <uProcessWatch>
 
 //------------------------------------------
