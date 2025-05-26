@@ -4,19 +4,6 @@ MOOSTimeWarp = $(WARP)
 LatOrigin  = 43.825300 
 LongOrigin = -70.330400 
 
-<tag><pHostInfoV2>
-//---------------------------------------------------------
-// pHostInfo Config Block
-
-ProcessConfig = pHostInfoV2
-{
-  AppTick 	= 1
-  CommsTick	= 1
-
-  backup_hostip = localhost
-  prefer_hostip = 192.168.7.62
-}
-
 <tag> <pHostInfo>
 //---------------------------------------------------------
 // pHostInfo Config Block

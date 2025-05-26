@@ -88,10 +88,10 @@ ProcessConfig = uSimMarineV22
 
   start_pos = $(START_POS)
   prefix    = NAV
-
+  turn_rate = 99
+	
   // Below Parameters for embedded PID control. All params
   // similar to those for pMarinePID
-  
   depth_control = false
   //active_start  = true
   

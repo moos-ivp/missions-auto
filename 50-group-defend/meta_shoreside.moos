@@ -5,8 +5,6 @@ ServerHost = localhost
 ServerPort = 9000
 Community  = shoreside
 
-TERM_REPORTING = true
-
 #include plugs.moos <origin_warp>
 
 	
@@ -54,12 +52,8 @@ ProcessConfig = uFldShoreBroker
   AppTick   = 1
   CommsTick = 1
 
-  qbridge = DEPLOY, NODE_REPORT, NODE_MESSAGE, ENCIRCLE_ACTIVE
-  qbridge = STATION_KEEP, APPCAST_REQ
+  qbridge = DEPLOY, NODE_REPORT, STATION_KEEP
   qbridge = MOOS_MANUAL_OVERIDE, LOITER, WPT_UPDATE, LOITER_UPDATE
-  qbridge = MISSION_TASK, FOLLOW
-  
-  bridge  = src=AVOID, alias=AVOID
  
   bridge  = src=RETURN_ALL, alias=RETURN
   bridge  = src=RETURN_$V,  alias=RETURN
@@ -126,13 +120,13 @@ ProcessConfig = pMarineViewer
 
   scope = DEPLOY_ALL
 
-  button_one   = DEPLOY  # DEPLOY_ALL=true 
-  button_one   = DEPLOY  # MOOS_MANUAL_OVERIDE_ALL=false 
-  button_one   = RETURN_ALL=false # LOITER_ALL=true
-  button_one   = STATION_KEEP_ALL=false # FOLLOW_ALL=false
+  button_1 = DEPLOY  # DEPLOY_ALL=true 
+  button_1 = DEPLOY  # MOOS_MANUAL_OVERIDE_ALL=false 
+  button_1 = RETURN_ALL=false # LOITER_ALL=true
+  button_1 = STATION_KEEP_ALL=false # FOLLOW_ALL=false
+  button_2 = RETURN  # RETURN_ALL=true # LOITER_ALL=false
 
-  button_two   = ENCIRCLE:Y  # ENCIRCLE_ACTIVE_ALL=true
-  button_four  = ENCIRCLE:N  # ENCIRCLE_ACTIVE_ALL=false
-  button_three = RETURN  # RETURN_ALL=true # LOITER_ALL=false
+  button_3 = STATION  # STATION_KEEP_ALL=true # LOITER_ALL=false
+	
 }
 
