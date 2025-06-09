@@ -1,9 +1,9 @@
 #!/bin/bash
 #------------------------------------------------------------
 #   Script: launch_vehicle.sh
-#  Mission: swarm_encircle
+#  Mission: group_fence
 #   Author: M.Benjamin
-#   LastEd: May 2024
+#   LastEd: May 2025
 #------------------------------------------------------------
 #  Part 1: Set convenience functions for producing terminal
 #          debugging output, and catching SIGINT (ctrl-c).

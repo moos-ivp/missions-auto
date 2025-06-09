@@ -29,19 +29,6 @@ Processconfig = ANTLER
 #include plugs.moos <uProcessWatch>
 
 //------------------------------------------
-// pRealm Config Block
-
-ProcessConfig = pRealm
-{
-  AppTick   = 4
-  CommsTick = 4
-
-	hist_var = MISSION_TASK
-	hist_var = NODE_MESSAGE
-	scope_set = name=msgs, vars=NODE_MESSAGE:NODE_MESSAGE_LOCAL
-}
-
-//------------------------------------------
 // pHelmIvP Config Block 
 
 ProcessConfig = pHelmIvP
@@ -54,7 +41,7 @@ ProcessConfig = pHelmIvP
   behaviors = targ_$(VNAME).bhv  
   verbose   = false
   domain    = course:0:359:360
-  domain    = speed:0:$(MAX_SPD):51
+  domain    = speed:0:$(MAX_SPD):21
 
   hold_on_app = pContactMgrV20
 }
@@ -115,7 +102,7 @@ ProcessConfig = uSimMarineV22
 	
   // A non-zero SPEED_FACTOR overrides use of SPEED_PID
   // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
-  speed_factor = 20
+  //speed_factor = 20
 	
 	thrust_map = 100:$(MAX_SPD)
 }
@@ -125,8 +112,8 @@ ProcessConfig = uSimMarineV22
 
 ProcessConfig = pNodeReporter
 {
-  AppTick     = 6
-  CommsTick   = 6
+  AppTick     = 3
+  CommsTick   = 3
   
   platform_type = KAYAK
 	platform_color = dodgerblue
@@ -169,10 +156,6 @@ ProcessConfig = pLogger
   FileTimeStamp = true
 
   Log = IVPHELM_LIFE_EVENT @ 0 nosync
-  Log = TEAM_ROSTER_DEBUG @ 0 nosync
-  Log = TSK_DEBUG @ 0 nosync
-  Log = TASK_DEBUG @ 0 nosync
-  Log = H_DEBUG @ 0 nosync
 
   // Log it all!!!!!
   LogAuxSrc = true

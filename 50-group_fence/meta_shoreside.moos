@@ -6,7 +6,6 @@ ServerPort = 9000
 Community  = shoreside
 
 #include plugs.moos <origin_warp>
-
 	
 //--------------------------------------------------------
 // pAntler Config Block

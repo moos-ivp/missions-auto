@@ -1,9 +1,9 @@
 #!/bin/bash -e
 #------------------------------------------------------------
 #   Script: launch.sh
-#  Mission: swarm_encircle
+#  Mission: group_fence
 #   Author: M.Benjamin
-#   LastEd: May 2024
+#   LastEd: May 2025
 #------------------------------------------------------------
 #  Part 1: Set convenience functions for producing terminal
 #          debugging output, and catching SIGINT (ctrl-c).
@@ -36,7 +36,7 @@ SHORE_IP="localhost"
 MTASC_USE="no"
 MTASC_SUBNET="192.168.7"
 MTASC_USE_CACHE=""
-MTASC_MISSION="50-group_defence"
+MTASC_MISSION="50-group_fence"
 
 # Custom
 
