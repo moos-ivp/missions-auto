@@ -36,7 +36,7 @@ SHORE_IP="localhost"
 MTASC_USE="no"
 MTASC_SUBNET="192.168.7"
 MTASC_USE_CACHE=""
-MTASC_MISSION="50-group_fence"
+MTASC_MISSION="51-group_converge"
 
 # Custom
 
