@@ -1,0 +1,25 @@
+name     = group_converge
+thumb    = N vehicles encircle and synchronously converge to the center
+doc_url  = MIS.51GroupConverge
+git_url  = https://github.com/pavlab-mit/missions-auto/tree/main/51-group_converge
+git_repo = git@github.com:pavlab-mit/missions-auto.git
+author   = M.Benjamin
+org      = MIT Marine Autonomy Lab
+email    = mikerb@mit.edu
+location = forest_lake
+vehamt   = 7 (max=12)
+lau_cmd  = ./launch.sh --amt=7 15  (7 vehicles, 15x realtime)
+gif      = group_fence.gif
+maploc   = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
+
+synopsis = A number of vehicles are deployed to surround a object of 
+synopsis = interest at a given location. Each vehicle is given (a) the location,
+synopsis = (b) the standoff radius, and (c) the direction clockwise or not.
+synopsis = The vehicles each approach the region while periodically sharing
+synopsis = position information. Ordering is based on arrival time and all
+synopsis = vehicles use a version of the COLREGS collision avoidance behavior
+synopsis = to maintain safe separation. Vehicles await a prompt and then 
+synopsis = switch modes to converge synchronously to the center.
+
+
+

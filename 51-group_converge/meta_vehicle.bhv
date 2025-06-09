@@ -1,0 +1,182 @@
+initialize  DEPLOY = false
+initialize  RETURN = false
+initialize  LOITER = false
+initialize  FOLLOW = false
+initialize  AVOID  = true
+initialize  STAGE  = false
+initialize  ATTACK = false
+  
+set MODE = ACTIVE {
+  DEPLOY = true
+} INACTIVE
+
+set MODE = STATION-KEEPING {
+  MODE = ACTIVE
+  STATION_KEEP = true
+}                       
+
+set MODE = LOITERING {
+  MODE = ACTIVE
+  RETURN != true
+  ATTACK != true
+  STAGE != true
+  LOITER = true
+} 
+
+set MODE = RETURNING {
+  MODE = ACTIVE
+  RETURN = true
+} 
+
+set MODE = ATTACKING {
+  MODE = ACTIVE
+  ATTACK = true
+} 
+
+set MODE = STAGING {
+  MODE = ACTIVE
+  STAGE = true
+} 
+
+//----------------------------------------------
+Behavior = BHV_FixedTurn
+{
+  name       = fturn
+  pwt        = 100
+  updates    = STAGE_UPDATE
+  condition  = MODE==STAGING
+  perpetual  = true
+  endflag    = ATTACK = true
+
+  fix_turn  = 260
+  mod_hdg   = 60
+  turn_dir  = star
+  speed     = 4
+}
+
+	
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{
+  name       = attack
+  pwt        = 100
+  updates    = ATTACK_UPDATE
+  condition  = MODE==ATTACKING
+  perpetual  = true
+	runflag    = AVOID = false
+  endflag    = DEPLOY = false
+  endflag    = OBSTACLE_HIT = true
+
+           speed = 5.0
+  capture_radius = 2.0
+     slip_radius = 25.0
+           point = 75,-95
+
+     visual_hints = vertex_size  = 4             // default
+     visual_hints = vertex_color = dodger_blue   // default
+}
+
+//----------------------------------------------
+Behavior = BHV_StationKeep
+{
+  name         = station-keep
+  pwt          = 100
+  condition    = MODE==STATION-KEEPING
+  inactiveflag = STATIONING = false
+  activeflag   = STATIONING = true
+
+     center_activate = true
+        inner_radius = 5
+        outer_radius = 10 
+         outer_speed = 1.0
+
+       transit_speed = 1.3
+          swing_time = 12
+        visual_hints = vertex_size=0, edge_color=gray50
+}
+
+//----------------------------------------------
+Behavior = BHV_AvoidCollision
+{
+  name       = avdcol_
+  pwt        = 350
+  condition  = MODE==ACTIVE
+  condition  = MODE!=ACTIVE:STATION-KEEPING
+  condition  = AVOID = true
+  updates    = CONTACT_INFO
+  endflag    = CONTACT_RESOLVED = $[CONTACT]
+  templating = spawn
+
+              contact = to-be-set
+     on_no_contact_ok = true
+          extrapolate = true
+                decay = 30,60
+
+         use_refinery = true
+
+       pwt_outer_dist = 35
+       pwt_inner_dist = 10
+       completed_dist = 40
+    min_util_cpa_dist = 10
+    max_util_cpa_dist = 18
+            pwt_grade = linear
+  bearing_line_config = white:0, gray20:0.2, gray40:0.4, gray60:0.6, gray80:0.8, red:1.0
+}
+
+//----------------------------------------------
+Behavior = BHV_Loiter
+{ 
+  name      = loiter
+  pwt       = 100
+  condition = MODE==LOITERING
+  UPDATES   = LOITER_UPDATE
+  perpetual = true
+
+  endflag   = LOITER=false
+  endflag   = RETURN=true
+
+  // Parameters specific to this behavior
+  // ------------------------------------
+     acquire_dist = 20               
+   capture_radius = 10 
+	center_activate = false            
+        clockwise = $(CLOCKWISE)
+      slip_radius = 15               
+            speed = $(STOCK_SPD)         
+        speed_alt = 1.2
+    spiral_factor = 20  
+       ipf_type = zaic_spd
+	
+         patience = 95
+          polygon = radial:: x=75,y=-95,radius=45,pts=16  // example
+
+     visual_hints = vertex_size  = 1             // default
+     visual_hints = edge_size    = 1             // default
+     visual_hints = vertex_color = dodger_blue   // default
+     visual_hints = edge_color   = white         // default
+     visual_hints = nextpt_color = yellow        // default
+     visual_hints = nextpt_lcolor = aqua         // default
+     visual_hints = nextpt_vertex_size = 5       // default
+     visual_hints = label        = zone3         // example
+}
+
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  updates    = RETURN_UPDATE
+  condition  = MODE==RETURNING
+  perpetual  = true
+  endflag    = RETURN = false
+  endflag    = LOITER = true
+	spawnflag  = RETURN_UPDATE=point=$[XPOS],$[YPOS]
+
+           speed = 2.0
+  capture_radius = 2.0
+     slip_radius = 25.0
+           point = start
+
+     visual_hints = vertex_size  = 4             // default
+     visual_hints = vertex_color = dodger_blue   // default
+}

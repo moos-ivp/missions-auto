@@ -1,0 +1,139 @@
+//*******************************************************
+// ShoreSide Configuration File
+
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
+
+#include plugs.moos <origin_warp>
+	
+//--------------------------------------------------------
+// pAntler Config Block
+
+Processconfig = ANTLER
+{
+  MSBetweenLaunches = 100
+
+  Run = MOOSDB              @ NewConsole = false
+  Run = pMarineViewer       @ NewConsole = false
+  Run = pLogger             @ NewConsole = false
+
+  Run = pShare              @ NewConsole = false
+  Run = pHostInfo           @ NewConsole = false
+  Run = uFldShoreBroker     @ NewConsole = false
+  Run = uFldNodeComms       @ NewConsole = false
+  Run = pRealm              @ NewConsole = false
+}
+
+#include plugs.moos <pHostInfo>
+#include plugs.moos <pShare>
+
+//--------------------------------------------------
+// uFldNodeComms Config Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  comms_range      = 500
+  critical_range   = 40
+  min_msg_interval = 0
+  max_msg_length   = 1000
+
+  view_node_rpt_pulses = false
+}
+
+//--------------------------------------------------
+// uFldShoreBroker Config Block
+
+ProcessConfig = uFldShoreBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  qbridge = DEPLOY, NODE_REPORT, STATION_KEEP
+  qbridge = MOOS_MANUAL_OVERIDE, LOITER, WPT_UPDATE, LOITER_UPDATE
+  qbridge = STAGE
+ 
+  bridge  = src=RETURN_ALL, alias=RETURN
+  bridge  = src=RETURN_$V,  alias=RETURN
+}
+
+//--------------------------------------------------
+// pLogger Config Block
+
+ProcessConfig = pLogger
+{
+  AppTick       = 10
+  CommsTick     = 10
+  
+  File          = XLOG_SHORESIDE
+  PATH          = ./
+  AsyncLog      = true
+  FileTimeStamp = true
+
+  // Log it all!!!!!
+  WildCardLogging = true 
+}
+
+//--------------------------------------------------------
+// pMarineViewer Config Block
+
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+	app_logging = true
+	
+  tiff_file            = forrest19.tif
+  set_pan_x            = 6
+  set_pan_y            = -80
+  zoom                 = 0.75
+  vehicles_shape_scale = 1.5
+  vehicles_name_mode   = names+shortmode
+
+	procs_font_size = large
+	nodes_font_size = large
+	infocast_font_size = large
+	
+  polygon_viewable_all    = true
+  polygon_viewable_labels = false
+  seglist_viewable_all    = false
+  seglist_viewable_labels = false
+  point_viewable_all      = true
+  point_viewable_labels   = false
+
+  appcast_viewable     = true
+  appcast_color_scheme = deep_indigo
+
+  action = AVOID="true"
+
+  comms_pulse_viewable_all = true
+  range_pulse_viewable_all = false
+  node_pulse_viewable_all  = false
+
+  vehicles_name_mode = names
+
+  stale_report_thresh = 2
+  stale_remove_thresh = 20000
+
+  scope = DEPLOY_ALL
+
+  button_1 = DEPLOY  # DEPLOY_ALL=true 
+  button_1 = DEPLOY  # MOOS_MANUAL_OVERIDE_ALL=false 
+  button_1 = RETURN_ALL=false # LOITER_ALL=true
+  button_1 = STATION_KEEP_ALL=false # FOLLOW_ALL=false
+  button_2 = RETURN  # RETURN_ALL=true # LOITER_ALL=false
+
+  button_3 = STATION  # STATION_KEEP_ALL=true # LOITER_ALL=false
+
+  button_4  = GO # RETURN_UPDATE_ALL = point=75,-95 
+  button_4  = STAGE_ALL = true
+
+	button_5 = BIGGER # LOITER_UPDATE_ALL = mod_poly_rad=5
+	button_6 = SMALLER # LOITER_UPDATE_ALL = mod_poly_rad=-5
+	
+}
+
