@@ -9,8 +9,8 @@ email    = mikerb@mit.edu
 location = mit_pavlat
 vehamt   = 7 (max=12)
 lau_cmd  = ./launch.sh --amt=7 15  (7 vehicles, 15x realtime)
-gif      = swarm_defend.gif
-maploc   = https://maps.app.goo.gl/gfjjzkShVjjtyqZK9
+gif      = group_fence.gif
+maploc   = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
 
 synopsis = A group of N=7 vehicles are deployed to a regular polygon region and 
 synopsis = repeatedly traverse the polygon, essentially forming a fence around
