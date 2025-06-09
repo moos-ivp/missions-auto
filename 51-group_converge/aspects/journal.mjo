@@ -9,7 +9,7 @@ email    = mikerb@mit.edu
 location = forest_lake
 vehamt   = 7 (max=12)
 lau_cmd  = ./launch.sh --amt=7 15  (7 vehicles, 15x realtime)
-gif      = group_fence.gif
+gif      = group_converge.gif
 maploc   = https://maps.app.goo.gl/iouQPfX7BWS9K4gt9
 
 synopsis = A number of vehicles are deployed to surround a object of 
