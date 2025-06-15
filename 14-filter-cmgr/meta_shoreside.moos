@@ -1,0 +1,314 @@
+//--------------------------------------------------------
+// Shoreside Config file
+// M. Benjamin, MIT	
+
+ServerHost = localhost
+ServerPort = 9000
+Community  = shoreside
+
+#include plugs.moos <origin_warp>
+  
+//--------------------------------------------------------
+Processconfig = ANTLER
+{
+  MSBetweenLaunches = 100
+
+  Run = MOOSDB          @ NewConsole = false
+  Run = pRealm          @ NewConsole = false
+	Run = pMarineViewer   @ NewConsole = false
+  Run = pLogger         @ NewConsole = false
+  Run = uProcessWatch   @ NewConsole = false
+  Run = pShare          @ NewConsole = false
+  Run = pHostInfo       @ NewConsole = false
+  Run = uFldShoreBroker @ NewConsole = false
+  Run = uFldNodeComms   @ NewConsole = false
+  Run = pSpoofNode      @ NewConsole = false
+#ifdef AUTO_LAUNCHED yesd
+  Run = uTimerScript    @ NewConsole = false
+  Run = pMissionEval    @ NewConsole = false	
+  Run = pAutoPoke       @ NewConsole = false	
+#endif
+	}
+	
+#include plugs.moos <pHostInfo>
+#include plugs.moos <pShare>	
+#include plugs.moos <uProcessWatch>
+
+#ifdef AUTO_LAUNCHED yes
+
+//--------------------------------------------------
+// pAutoPoke Config Block
+
+ProcessConfig = pAutoPoke                                       
+{                                                               
+  AppTick   = 2                                                 
+  CommsTick = 2                                                 
+                                                                
+  flag = MOOS_MANUAL_OVERRIDE_ALL = false
+  flag = DEPLOY_ALL = true
+                                                                
+  required_nodes = 2                                            
+}
+	
+//--------------------------------------------------
+// uTimerScript Config Block
+
+ProcessConfig = uTimerScript                                    
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+                                                                
+  // Logic condition that must be met for script to be unpaused 
+  condition = DEPLOY_ALL = true                            
+
+  // Seconds added to each event time, on each script pass      
+	delay_reset = 0                                            
+
+  // Event(s) are the key components of the script              
+  event = var=SPOOF, val="x=22,y=-52,vsource=ais,name=ID$[IDX],spd=0", time=2  
+  event = var=SPOOF, val="x=32,y=-62,vsource=ais,name=ID$[IDX],spd=0", time=4  
+  event = var=SPOOF, val="x=42,y=-72,vsource=ais,name=ID$[IDX],spd=0", time=6  
+  event = var=SPOOF, val="x=62,y=-82,vsource=ais,name=ID$[IDX],spd=0", time=8  
+  event = var=CHECK, val="1", time=10
+
+  event = var=XYZ_DISABLE_TARGET_ABE, val="contact=ID001, action=disable", time=12
+  event = var=CHECK, val="2", time=14
+
+  event = var=XYZ_DISABLE_TARGET_ABE, val="vsource=ais, action=disable", time=16
+  event = var=CHECK, val="3", time=18
+
+  event = var=XYZ_ENABLE_TARGET_ABE, val="vsource=ais, action=enable", time=20
+  event = var=CHECK, val="4", time=22
+
+  event = var=XYZ_EXPUNGE_TARGET_ABE, val="contact=ID003, action=expunge", time=24
+  event = var=CHECK, val="5", time=26
+
+  event = var=XYZ_ENABLE_TARGET_ABE, val="contact=ID003, action=enable", time=28
+  event = var=CHECK, val="6", time=30
+	}                                
+	
+//--------------------------------------------------
+// pMissionEval Config Block
+
+ProcessConfig = pMissionEval
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+
+	lead_condition = CHECK = 1
+	pass_condition = IVPHELM_BHV_DISABLED_CNT = 0
+	pass_condition = IVPHELM_BHV_ACTIVE_CNT = 6
+
+	lead_condition = CHECK = 2
+	pass_condition = IVPHELM_BHV_DISABLED_CNT = 1
+	pass_condition = IVPHELM_BHV_ACTIVE_CNT = 5
+
+	lead_condition = CHECK = 3
+	pass_condition = IVPHELM_BHV_DISABLED_CNT = 4
+	pass_condition = IVPHELM_BHV_ACTIVE_CNT = 2
+
+	lead_condition = CHECK = 4
+	pass_condition = IVPHELM_BHV_DISABLED_CNT = 0
+	pass_condition = IVPHELM_BHV_ACTIVE_CNT = 6
+
+	lead_condition = CHECK = 5
+	pass_condition = IVPHELM_BHV_DISABLED_CNT = 0
+	pass_condition = IVPHELM_BHV_ACTIVE_CNT = 5
+	pass_condition = IVPHELM_BHV_RUNNING_CNT = 0
+	pass_condition = IVPHELM_BHV_IDLE_CNT = 2
+	pass_condition = IVPHELM_BHV_CNT = 7
+
+	lead_condition = CHECK = 6
+	pass_condition = IVPHELM_BHV_DISABLED_CNT = 0
+	pass_condition = IVPHELM_BHV_ACTIVE_CNT = 5
+	pass_condition = IVPHELM_BHV_RUNNING_CNT = 0
+	pass_condition = IVPHELM_BHV_IDLE_CNT = 2
+	pass_condition = IVPHELM_BHV_CNT = 7
+
+	mission_form = cmgr_able
+
+	report_file = results.txt
+
+	prereport_column = form=$[MISSION_FORM]                       
+  prereport_column = mhash=$[MHASH_SHORT]                       
+                                                                
+  report_column = grade=$[GRADE]      
+}                                
+#endif
+	
+//--------------------------------------------------
+// pSpoofNode Config Block
+
+ProcessConfig = pSpoofNode
+{ 
+  AppTick    = 2
+  CommsTick  = 2
+
+	refresh_interval = 1     
+  default_length   = 5       
+  default_vtype    = kayak    
+  default_vsource  = ais    
+  default_color    = green    
+	default_duration = 200
+  
+  default_hdg = 45             // Degrees, default=45           
+  default_spd = 2              // M/sec, default=0 
+}
+
+	
+//--------------------------------------------------
+// uFldShoreBroker Config Block
+
+ProcessConfig = uFldShoreBroker
+{ 
+  AppTick       = 1
+  CommsTick     = 1
+
+  // Note: [QBRIDGE = FOO]  is shorthand for                    
+  //       [BRIDGE = src=FOO_$V,  alias=FOO] and                
+  //       [BRIDGE = src=FOO_ALL, alias=FOO]
+
+	auto_bridge_appcast = true
+	
+  qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE
+  qbridge  = MOOS_MANUAL_OVERRIDE, AVOID, UP_LOITER
+  qbridge  = RETURN_UPDATES, BCM_DISPLAY_RADII
+  qbridge  = CONTACT_INFO, NODE_GROUP_UPDATE
+  qbridge  = BHV_ABLE_FILTER, TRACKED_FEATURE
+  qbridge  = XYZ_DISABLE_TARGET, XYZ_ENABLE_TARGET, XYZ_EXPUNGE_TARGET
+
+	bridge   = src=AVD_RANGE_ABE, alias=AVD_RANGE
+
+	bridge   = src=GIVEN_OBSTACLE, alias=GIVEN_OBSTACLE
+  bridge   = src=UP_LOITER_$N, alias=UP_LOITER
+  bridge   = src=DRIFT_VECTOR_ADD, alias=DRIFT_VECTOR_ADD
+  bridge   = src=HELM_MAP_CLEAR, alias=HELM_MAP_CLEAR
+  bridge   = src=MISSION_HASH, alias=MISSION_HASH
+}
+
+//--------------------------------------------------
+// uFldNodeComms Config Block
+
+ProcessConfig = uFldNodeComms
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  comms_range      = 500
+  critical_range   = 25
+  min_msg_interval = 15
+  max_msg_length   = 1000
+  groups           = true
+
+	app_logging = true
+	
+  view_node_rpt_pulses = false
+}
+
+//--------------------------------------------------
+// pLogger Config Block
+
+ProcessConfig = pLogger
+{
+  AppTick       = 10
+  CommsTick     = 10
+  
+  File          = XLOG_SHORESIDE
+  PATH          = ./
+  SyncLog       = true @ 0.2
+  AsyncLog      = true
+  FileTimeStamp = true
+
+  LogAuxSrc     = true
+
+  // Log it all!!!!!
+  WildCardLogging = true 
+
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = DB_VARSUMMARY
+  WildCardOmitPattern = DB_RWSUMMARY
+  WildCardOmitPattern = *_ITER_GAP
+  WildCardOmitPattern = *_ITER_LEN
+}
+
+//--------------------------------------------------
+// uLoadWatch Config Block
+
+ProcessConfig = uLoadWatch
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  thresh = app=pHelmIvP,  gapthresh=3
+  thresh = app=pHostInfo, gapthresh=5
+  thresh = app=any,       gapthresh=2.0
+  thresh = app=uMemWatch, gapthresh=50
+
+  breach_trigger = 5
+}
+
+//--------------------------------------------------------
+ProcessConfig = pMarineViewer
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  watch_cluster = key=basic, vars=MISSION_HASH
+
+  tiff_file            = forrest19.tif
+  set_pan_x            = -90
+  set_pan_y            = -280
+  zoom                 = 0.65
+  vehicles_shape_scale = 1.5
+  vehicles_name_mode   = names
+
+	app_logging = true
+	
+	watch_cluster = key=mission_top, vars=DEPLOY:RETURN
+	watch_cluster = key=mission_top, vars=STATION_KEEP:LOITER:AVOID
+	
+ // circle_viewable_all = false
+
+	content_mode      = appcast       // or realmcast
+	realmcast_channel = mission_top
+	
+  appcast_color_scheme = indigo
+	appcast_font_size    = large
+  procs_font_size      = large
+  nodes_font_size      = large
+
+  stale_report_thresh = 10
+  stale_remove_thresh = 18
+
+	scope = CMGR_WARNING
+	
+  left_context[spoof_ais] = SPOOF = "x=$[XPOS],y=$[YPOS],vsource=ais,name=ID$[IX],spd=0"
+  left_context[spoof_aisx] = SPOOF = "x=$[XPOS],y=$[YPOS],vsource=ais,name=ID999,spd=0,dur=20"
+
+  left_context[spoof_cancel] = SPOOF_CANCEL = contact=$[UP_VNAME_CLOSEST]
+  left_context[spoof_cancel] = XYZ_EXPUNGE_TARGET_ABE = contact=$[UP_VNAME_CLOSEST], action=expunge
+
+	right_context[disable] = XYZ_DISABLE_TARGET_ABE = contact=$[UP_VNAME_CLOSEST], action=disable
+  right_context[enable]  = XYZ_ENABLE_TARGET_ABE = contact=$[UP_VNAME_CLOSEST], action=enable
+  right_context[expunge] = XYZ_EXPUNGE_TARGET_ABE = contact=$[UP_VNAME_CLOSEST], action=expunge
+
+  button_1 = DEPLOY  # DEPLOY_ALL=true 
+  button_1 = MOOS_MANUAL_OVERRIDE_ALL=false 
+  button_1 = AVOID_ALL=true
+  button_1 = RETURN_ALL=false # STATION_KEEP_ALL=false
+
+  button_2 = RETURN  # RETURN_ALL=true
+  button_2 = RETURN  # STATION_KEEP_ALL=false
+  button_3 = STATION:true # STATION_KEEP_ALL=true
+  button_4 = STATION:false # STATION_KEEP_ALL=false
+
+  button_5 = AIS-OFF # XYZ_DISABLE_TARGET_ABE=action=disable, vsource=ais
+  button_6 = AIS-ON  # XYZ_ENABLE_TARGET_ABE=action=enable, vsource=ais
+
+  button_7 = BEN-OFF # XYZ_DISABLE_TARGET_ABE=action=disable, contact=ben
+  button_8 = BEN-ON  # XYZ_ENABLE_TARGET_ABE=action=enable, contact=ben
+
+  button_9 = BEN-OFFX # XYZ_DISABLE_TARGET_ABE=ben
+  button_10 = BEN-ONX  # XYZ_ENABLE_TARGET_ABE=ben
+}
+

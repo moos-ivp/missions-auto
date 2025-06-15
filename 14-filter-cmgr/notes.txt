@@ -1,0 +1,14 @@
+
+BHV_Type       Disb  Idle  Rnng  Cmpl  Totl  Frsht
+-------------  ----  ----  ----  ----  ----  --------
+AvdColregsV22  -     4     2/2   18    24    avd_col_44830
+Waypoint       -     0     1/1   0     1     wpt_traverse
+Waypoint       -     0/0   0     1     1     wpt_return
+StationKeep    -     0/0   0     1     1     station
+
+
+Ledger:
+VNname   Age  VType  VGroup  VSource
+------   ---  -----  ------  -------
+abe      2.1  kayak  -       -
+
