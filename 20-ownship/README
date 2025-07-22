@@ -1,0 +1,16 @@
+
+Stem mission:
+
+A single vehicle abe transits from point A to B, very slowly (or zero)
+The zero-speed case may allow for flooding of contacts to test memory
+management. 
+
+pContactMgrV20 tests:
+
+1. A spoofed node cause a new entry in contact manager, an spawned
+   behavior, and when it goes out of range, the behavior is removed,
+   and the contact manager clears the contact
+
+- a spoofed nodes is disabled, and reenabled
+- a spoofed node is expunged
+- a spoofed node goes stale, check for cmgr/helm removal
