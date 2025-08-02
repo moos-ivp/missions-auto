@@ -20,7 +20,7 @@ set MODE = STATION-KEEPING {
 set MODE = RETURNING {
   MODE = ACTIVE
   RETURN = true
-} 
+}
 
 set MODE = LOITERING {
   MODE = ACTIVE

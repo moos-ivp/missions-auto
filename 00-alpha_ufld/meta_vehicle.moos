@@ -26,7 +26,8 @@ Processconfig = ANTLER
   Run = uMemWatch      @ NewConsole = false
   Run = pRealm         @ NewConsole = false
   Run = uSimMarineV22  @ NewConsole = false
-
+}
+	
 #include plugs.moos <uSimMarine>
 #include plugs.moos <pShare>
 #include plugs.moos <pHostInfo>
