@@ -28,7 +28,6 @@ MOOS_PORT="9001"
 PSHARE_PORT="9201"
 SHORE_IP="localhost"
 SHORE_PSHARE="9200"
-MMOD=""
 
 VNAME="abe"
 COLOR="yellow"
@@ -62,7 +61,6 @@ for ARGI; do
 	echo "  --pshare=<9201>        Veh pShare listen port  "
 	echo "  --shore=<localhost>    Shoreside IP to try     "
 	echo "  --shore_pshare=<9200>  Shoreside pShare port   "
-        echo "  --mmod=<mod>           Mission variation/mod   "
 	echo "                                                 "
 	echo "  --vname=<abe>          Veh name given          "
 	echo "  --color=<yellow>       Veh color given         "
@@ -97,8 +95,6 @@ for ARGI; do
         SHORE_IP="${ARGI#--shore=*}"
     elif [ "${ARGI:0:15}" = "--shore_pshare=" ]; then
         SHORE_PSHARE="${ARGI#--shore_pshare=*}"
-    elif [ "${ARGI:0:7}" = "--mmod=" ]; then
-        MMOD="${ARGI#--mmod=*}"
 
     elif [ "${ARGI:0:8}" = "--vname=" ]; then
         VNAME="${ARGI#--vname=*}"
@@ -160,7 +156,6 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "PSHARE_PORT =   [${PSHARE_PORT}]  "
     echo "SHORE_IP =      [${SHORE_IP}]     "
     echo "SHORE_PSHARE =  [${SHORE_PSHARE}] "
-    echo "MMOD =          [${MMOD}]         "
     echo "----------------------------------"
     echo "VNAME =         [${VNAME}]        "
     echo "COLOR =         [${COLOR}]        "
@@ -202,12 +197,11 @@ nsplug meta_vehicle.moos targ_$VNAME.moos $NSFLAGS WARP=$TIME_WARP \
        SHORE_PSHARE=$SHORE_PSHARE   VNAME=$VNAME         \
        COLOR=$COLOR                 XMODE=$XMODE         \
        START_POS=$START_POS         MAX_SPD=$MAX_SPD     \
-       MMOD=$MMOD                                        \
        FSEAT_IP=$FSEAT_IP
 
 nsplug meta_vehicle.bhv targ_$VNAME.bhv $NSFLAGS  \
        START_POS=$START_POS         VNAME=$VNAME  \
-       STOCK_SPD=$STOCK_SPD         MMOD=$MMOD    \
+       STOCK_SPD=$STOCK_SPD                       \
        VDEST_POS=$VDEST_POS                       \
        MIN_UTIL_CPA=$MIN_UTIL_CPA                 \
        MAX_UTIL_CPA=$MAX_UTIL_CPA
