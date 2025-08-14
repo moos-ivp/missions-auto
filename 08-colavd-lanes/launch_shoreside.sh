@@ -1,9 +1,9 @@
 #!/bin/bash 
 #------------------------------------------------------------ 
 #   Script: launch_shoreside.sh    
-#  Mission: 00-alpha_ufld
+#  Mission: 08-colavd-lanes
 #   Author: M.Benjamin   
-#   LastEd: May 2024
+#   LastEd: Aug 2025
 #------------------------------------------------------------ 
 #  Part 1: Set convenience functions for producing terminal
 #          debugging output, and catching SIGINT (ctrl-c).
@@ -28,9 +28,6 @@ MOOS_PORT="9000"
 PSHARE_PORT="9200"
 
 VNAMES=""
-
-MIN_UTIL_CPA="5"
-MAX_UTIL_CPA="40"
 
 #------------------------------------------------------------ 
 #  Part 3: Check for and handle command-line arguments
@@ -60,10 +57,6 @@ for ARGI; do
 	echo "                                               "
         echo "  --vnames=<vnames>                            "
         echo "    Colon-separate list of all vehicle names   "
-	echo "                                               "
-	echo "Options (custom):                              "
-	echo "  --min_util_cpa=N       min_util_cpa          " 
-	echo "  --max_util_cpa=N       max_util_cpa          " 
 	exit 0
     elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then 
         TIME_WARP=$ARGI
@@ -85,12 +78,6 @@ for ARGI; do
 
     elif [ "${ARGI:0:9}" = "--vnames=" ]; then
         VNAMES="${ARGI#--vnames=*}"
-
-    elif [ "${ARGI:0:15}" = "--min_util_cpa=" ]; then
-        MIN_UTIL_CPA="${ARGI#--min_util_cpa=*}"
-    elif [ "${ARGI:0:15}" = "--max_util_cpa=" ]; then
-        MAX_UTIL_CPA="${ARGI#--max_util_cpa=*}"
-
     else
 	echo "$ME: Bad Arg:[$ARGI]. Exit Code 1."
 	exit 1
@@ -99,7 +86,7 @@ done
 
 #------------------------------------------------------------ 
 #  Part 4: If not auto_launched (likely running in the field),
-#          and the IP_ADDR has not been explicitly set, try
+#          and the IP_ADDR has not been explicitly set, try 
 #          to get it using the ipaddrs.sh script. 
 #------------------------------------------------------------ 
 if [ "${AUTO_LAUNCHED}" = "no" -a "${IP_ADDR}" = "localhost" ]; then
@@ -128,8 +115,6 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "LAUNCH_GUI =    [${LAUNCH_GUI}]   "
     echo "----------------------------------"
     echo "VNAMES =        [${VNAMES}]       "
-    echo "MIN_UTIL_CPA =  [$MIN_UTIL_CPA]   "
-    echo "MAX_UTIL_CPA =  [$MAX_UTIL_CPA]   "
     echo "----------------------------------"
     echo -n "Hit any key to continue launch "
     read ANSWER
@@ -138,22 +123,21 @@ fi
 #------------------------------------------------------------ 
 #  Part 6: Create the shoreside mission file
 #------------------------------------------------------------ 
-NSFLAGS="--strict --force -x "
+NSFLAGS="--strict --force"
 if [ "${AUTO_LAUNCHED}" = "no" ]; then
-    NSFLAGS="--interactive --force -x "
+    NSFLAGS="--interactive --force"
 fi
 
 nsplug meta_shoreside.moos targ_shoreside.moos $NSFLAGS WARP=$TIME_WARP \
        IP_ADDR=$IP_ADDR             MOOS_PORT=$MOOS_PORT    \
        PSHARE_PORT=$PSHARE_PORT     LAUNCH_GUI=$LAUNCH_GUI  \
        VNAMES=$VNAMES                                       \
-       MIN_UTIL_CPA=$MIN_UTIL_CPA                           \
-       MAX_UTIL_CPA=$MAX_UTIL_CPA
 
 if [ "${JUST_MAKE}" = "yes" ]; then
     echo "$ME: Targ files made; exiting without launch."
     exit 0
 fi
+
 
 #------------------------------------------------------------ 
 #  Part 7: Launch the shoreside MOOS community
@@ -175,3 +159,4 @@ fi
 uMAC targ_shoreside.moos
 trap "" SIGINT
 kill -- -$$
+

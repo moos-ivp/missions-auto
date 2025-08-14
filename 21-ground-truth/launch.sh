@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #------------------------------------------------------------
 #   Script: launch.sh
-#  Mission: 00-alpha_ufld
+#  Mission: alpha_ufld
 #   Author: M.Benjamin
 #   LastEd: Jan 2025
 #------------------------------------------------------------
@@ -106,8 +106,6 @@ SPEEDS=(`cat vspeeds.txt`)
 VNAMES=(`cat vnames.txt`)
 VCOLOR=(`cat vcolors.txt`)
 
-ALL_VNAMES=""
-
 #------------------------------------------------------------
 #  Part 5: If verbose, show vars and confirm before launching
 #------------------------------------------------------------
@@ -157,11 +155,6 @@ do
     IVARGS+=" --color=${VCOLOR[$IXX]} "
     vecho "Launching vehicle: $IVARGS"
 
-    if [ "${ALL_VNAMES}" != "" ]; then
-	ALL_VNAMES+=":"
-    fi
-    ALL_VNAMES+="$VNAME"
-
     CMD="./launch_vehicle.sh $IVARGS"    
     eval $CMD
     sleep 0.5
@@ -170,7 +163,7 @@ done
 #------------------------------------------------------------
 #  Part 7: Launch the Shoreside mission file
 #------------------------------------------------------------
-SARGS=" --auto --mport=9000 --pshare=9200 $NOGUI --vnames=$ALL_VNAMES "
+SARGS=" --auto --mport=9000 --pshare=9200 $NOGUI --vnames=abe:ben "
 SARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE "
 SARGS+=" --min_util_cpa=$MIN_UTIL_CPA "
 SARGS+=" --max_util_cpa=$MAX_UTIL_CPA "

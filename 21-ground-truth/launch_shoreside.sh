@@ -1,7 +1,7 @@
 #!/bin/bash 
 #------------------------------------------------------------ 
 #   Script: launch_shoreside.sh    
-#  Mission: 00-alpha_ufld
+#  Mission: m2_berta
 #   Author: M.Benjamin   
 #   LastEd: May 2024
 #------------------------------------------------------------ 
@@ -27,8 +27,7 @@ IP_ADDR="localhost"
 MOOS_PORT="9000"
 PSHARE_PORT="9200"
 
-VNAMES=""
-
+VNAMES="abe:ben"
 MIN_UTIL_CPA="5"
 MAX_UTIL_CPA="40"
 
@@ -64,7 +63,7 @@ for ARGI; do
 	echo "Options (custom):                              "
 	echo "  --min_util_cpa=N       min_util_cpa          " 
 	echo "  --max_util_cpa=N       max_util_cpa          " 
-	exit 0
+	exit 0;
     elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then 
         TIME_WARP=$ARGI
     elif [ "${ARGI}" = "--just_make" -o "${ARGI}" = "-j" ]; then
@@ -99,8 +98,8 @@ done
 
 #------------------------------------------------------------ 
 #  Part 4: If not auto_launched (likely running in the field),
-#          and the IP_ADDR has not been explicitly set, try
-#          to get it using the ipaddrs.sh script. 
+#          and the IP_ADDR has not be explicitly set, try to get
+#          it using the ipaddrs.sh script. 
 #------------------------------------------------------------ 
 if [ "${AUTO_LAUNCHED}" = "no" -a "${IP_ADDR}" = "localhost" ]; then
     MAYBE_IP_ADDR=`ipaddrs.sh --blunt`
@@ -126,7 +125,7 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "MOOS_PORT =     [${MOOS_PORT}]    "
     echo "PSHARE_PORT =   [${PSHARE_PORT}]  "
     echo "LAUNCH_GUI =    [${LAUNCH_GUI}]   "
-    echo "----------------------------------"
+    echo "------------Custom----------------"
     echo "VNAMES =        [${VNAMES}]       "
     echo "MIN_UTIL_CPA =  [$MIN_UTIL_CPA]   "
     echo "MAX_UTIL_CPA =  [$MAX_UTIL_CPA]   "
@@ -138,9 +137,9 @@ fi
 #------------------------------------------------------------ 
 #  Part 6: Create the shoreside mission file
 #------------------------------------------------------------ 
-NSFLAGS="--strict --force -x "
+NSFLAGS="--strict --force"
 if [ "${AUTO_LAUNCHED}" = "no" ]; then
-    NSFLAGS="--interactive --force -x "
+    NSFLAGS="--interactive --force"
 fi
 
 nsplug meta_shoreside.moos targ_shoreside.moos $NSFLAGS WARP=$TIME_WARP \

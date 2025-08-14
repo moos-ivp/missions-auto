@@ -1,9 +1,9 @@
 #!/bin/bash -e
 #------------------------------------------------------------
-#   Script: launch.sh
-#  Mission: 00-alpha_ufld
+#   Script: launch.sh                       
+#  Mission: 08-colavd-lanes
 #   Author: M.Benjamin
-#   LastEd: Jan 2025
+#   LastEd: Aug 2025
 #------------------------------------------------------------
 #  Part 1: Set convenience functions for producing terminal
 #          debugging output, and catching SIGINT (ctrl-c).
@@ -21,18 +21,16 @@ TIME_WARP=1
 VERBOSE=""
 JUST_MAKE=""
 LOG_CLEAN=""
-VAMT="1"
-MAX_VAMT="1"
+VAMT="4"
+MAX_VAMT="8"
 RAND_VPOS=""
-MAX_SPD="3"
+MAX_SPD="2"
 
 # Monte
 XLAUNCHED="no"
 NOGUI=""
 
 # Custom
-MIN_UTIL_CPA="5"
-MAX_UTIL_CPA="40"
 
 #------------------------------------------------------------
 #  Part 3: Check for and handle command-line arguments
@@ -56,8 +54,6 @@ for ARGI; do
 	echo "  --nogui, -ng       Headless launch, no gui   "
 	echo "                                               "
 	echo "Options (custom):                              "
-	echo "  --min_util_cpa=N   min_util_cpa              " 
-	echo "  --max_util_cpa=N   max_util_cpa              " 
 	exit 0
     elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then 
         TIME_WARP=$ARGI
@@ -83,12 +79,7 @@ for ARGI; do
     elif [ "${ARGI}" = "--nogui" -o "${ARGI}" = "-ng" ]; then
 	NOGUI="--nogui"
 
-    elif [ "${ARGI:0:15}" = "--min_util_cpa=" ]; then
-        MIN_UTIL_CPA="${ARGI#--min_util_cpa=*}"
-    elif [ "${ARGI:0:15}" = "--max_util_cpa=" ]; then
-        MAX_UTIL_CPA="${ARGI#--max_util_cpa=*}"
-
-    else 
+    else
 	echo "$ME: Bad arg:" $ARGI "Exit Code 1."
 	exit 1
     fi
@@ -101,10 +92,12 @@ INIT_VARS=" --amt=$VAMT $RAND_VPOS $VERBOSE "
 ./init_field.sh $INIT_VARS
 
 VEHPOS=(`cat vpositions.txt`)
-VDESTS=(`cat vdests.txt`)
 SPEEDS=(`cat vspeeds.txt`)
 VNAMES=(`cat vnames.txt`)
-VCOLOR=(`cat vcolors.txt`)
+VDESTS=(`cat vdests.txt`)
+VGROUPS=(`cat vgroups.txt`)
+VROLES=(`cat vroles.txt`)
+VTYPES=(`cat vtypes.txt`)
 
 ALL_VNAMES=""
 
@@ -131,9 +124,10 @@ if [ "${VERBOSE}" != "" ]; then
     echo "XLAUNCHED =     [${XLAUNCHED}]              "
     echo "NOGUI =         [${NOGUI}]                  "
     echo "--------------------------------(Custom)----"
-    echo "DEST_POS =      [${VDESTS[*]}]              "
-    echo "MIN_UTIL_CPA    [$MIN_UTIL_CPA]             "
-    echo "MAX_UTIL_CPA    [$MAX_UTIL_CPA]             "
+    echo "VDESTS =        [${VDESTS[*]}]              "
+    echo "VROLES =        [${VROLES[*]}]              "
+    echo "VTYPES =        [${VTYPES[*]}]              "
+    echo "VGROUPS =       [${VGROUPS[*]}]             "
     echo "                                            "
     echo -n "Hit any key to continue launch           "
     read ANSWER
@@ -144,16 +138,17 @@ fi
 #------------------------------------------------------------
 VARGS=" --sim --auto --max_spd=$MAX_SPD "
 VARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE "
-VARGS+=" --min_util_cpa=$MIN_UTIL_CPA "
-VARGS+=" --max_util_cpa=$MAX_UTIL_CPA "
 for IX in `seq 1 $VAMT`;
 do
     IXX=$(($IX - 1))
     IVARGS="$VARGS --mport=900${IX}  --pshare=920${IX} "
     IVARGS+=" --start_pos=${VEHPOS[$IXX]} "
+    IVARGS+=" --vdest=${VDESTS[$IXX]} "
     IVARGS+=" --stock_spd=${SPEEDS[$IXX]} "
     IVARGS+=" --vname=${VNAMES[$IXX]} "
-    IVARGS+=" --vdest=${VDESTS[$IXX]} "
+    IVARGS+=" --vtype=${VTYPES[$IXX]} "
+    IVARGS+=" --vrole=${VROLES[$IXX]} "
+    IVARGS+=" --vgroup=${VGROUPS[$IXX]} "
     IVARGS+=" --color=${VCOLOR[$IXX]} "
     vecho "Launching vehicle: $IVARGS"
 
@@ -161,7 +156,7 @@ do
 	ALL_VNAMES+=":"
     fi
     ALL_VNAMES+="$VNAME"
-
+    
     CMD="./launch_vehicle.sh $IVARGS"    
     eval $CMD
     sleep 0.5
@@ -172,8 +167,6 @@ done
 #------------------------------------------------------------
 SARGS=" --auto --mport=9000 --pshare=9200 $NOGUI --vnames=$ALL_VNAMES "
 SARGS+=" $TIME_WARP $JUST_MAKE $VERBOSE "
-SARGS+=" --min_util_cpa=$MIN_UTIL_CPA "
-SARGS+=" --max_util_cpa=$MAX_UTIL_CPA "
 vecho "Launching shoreside: $SARGS"
 ./launch_shoreside.sh $SARGS 
 

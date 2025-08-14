@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #------------------------------------------------------------
 #   Script: launch.sh
-#  Mission: m2_berta
+#  Mission: 01-berta
 #   Author: M.Benjamin
 #   LastEd: May 2024
 #------------------------------------------------------------

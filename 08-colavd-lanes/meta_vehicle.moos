@@ -1,0 +1,192 @@
+//-------------------------------------------------
+// NAME: M. Benjamin, MIT CSAIL
+// FILE: $(VNAME).moos
+//-------------------------------------------------
+
+ServerHost = localhost
+ServerPort = $(MOOS_PORT)
+Community  = $(VNAME)
+
+#include plugs.moos <origin_warp>
+
+//------------------------------------------------------------
+Processconfig = ANTLER
+{
+  MSBetweenLaunches = 50
+   
+  Run = MOOSDB         @ NewConsole = false
+  Run = pShare         @ NewConsole = false
+  Run = pLogger        @ NewConsole = false
+  Run = pNodeReporter  @ NewConsole = false
+  Run = pHelmIvP       @ NewConsole = false
+  Run = pHostInfo      @ NewConsole = false
+  Run = uFldNodeBroker @ NewConsole = false
+  Run = pContactMgrV20 @ NewConsole = false
+  Run = pRealm         @ NewConsole = false
+	Run = uSimMarineV22  @ NewConsole = false
+  Run = uLoadWatch     @ NewConsole = false
+  Run = uProcessWatch  @ NewConsole = false
+	}
+
+#include plugs.moos <pHostInfo>
+#include plugs.moos <pShare>	
+#include plugs.moos <uLoadWatch>
+#include plugs.moos <uProcessWatch>
+
+	
+//----------------------------------------------------
+// pHelmIvP Configuration Block  
+
+ProcessConfig = pHelmIvP
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+	app_logging = true
+	
+  behaviors    = targ_$(VNAME).bhv  
+  verbose      = false
+  domain       = course:0:359:360
+  domain       = speed:0:5:26
+
+	hold_on_apps = pContactMgrV20
+}
+	
+//--------------------------------------------------------
+// pNodeReporter Config Block 
+
+ProcessConfig = pNodeReporter
+{
+  AppTick     = 2
+  CommsTick   = 2
+
+  platform_type  = $(VTYPE=kayak)
+  platform_group = $(VGROUP)
+  terse_reports  = true
+}
+
+//------------------------------------------
+// uSimMarineV22 config block
+
+ProcessConfig = uSimMarineV22
+{
+  AppTick   = 10
+  CommsTick = 10
+
+  start_pos  = $(START_POS),heading=180
+  prefix     = NAV
+	turn_rate  = 95
+	thrust_map = 100:$(MAX_SPD)
+
+  turn_spd_loss = 0.7      // [0,1] Default is 0.85 
+	
+  // Below Parameters for embedded PID control. All params
+  // similar to those for pMarinePID
+  
+  depth_control = false
+  //active_start  = true
+  
+  // Yaw PID controller
+  yaw_pid_kp             = 1.2
+  yaw_pid_kp             = 0.4
+  yaw_pid_kd             = 0.1
+  yaw_pid_ki             = 0.0
+  yaw_pid_integral_limit = 0.07
+  
+  // Speed PID controller
+  speed_pid_kp           = 1.0
+  speed_pid_kd           = 0.0
+  speed_pid_ki           = 0.0
+  speed_pid_integral_limit = 0.07
+  
+  // Maximums
+  maxrudder  = 100
+  maxthrust  = 100
+  
+  // A non-zero SPEED_FACTOR overrides use of SPEED_PID
+  // Will set DESIRED_THRUST = DESIRED_SPEED * SPEED_FACTOR
+  speed_factor = 20
+}
+
+//--------------------------------------------------------
+// pContactMgrV20 Config Block
+
+ProcessConfig = pContactMgrV20
+{
+  AppTick   = 2
+  CommsTick = 2
+
+  decay = 30,60
+
+  alert_verbose = true
+
+#ifdef VGROUP
+	ownship_group = $(VGROUP)
+#endif
+	
+	ownship_type = $(VTYPE=kayak)
+	
+  contact_max_age  = 35
+  display_radii    = true
+	display_radii_id = avd
+
+	//match_region = pts = {60,-40 : 60,-160 : 150,-160 : 180,-100 : 150,-40}
+	//match_type = kayak, uuv
+	
+  alert_range_color = gray70
+  cpa_range_color   = gray30
+}
+
+//--------------------------------------------------
+// uFldNodeBroker Config Block
+
+ProcessConfig = uFldNodeBroker
+{
+  AppTick   = 1
+  CommsTick = 1
+
+  try_shore_host = pshare_route=$(SHORE_IP):$(SHORE_PSHARE)
+
+  bridge = src=VIEW_POLYGON
+  bridge = src=VIEW_CIRCLE
+  bridge = src=VIEW_POINT
+  bridge = src=VIEW_SEGLIST
+  bridge = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
+  bridge = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
+}
+
+
+//--------------------------------------------------
+// pLogger Config Block
+
+ProcessConfig = pLogger
+{
+  AppTick 	= 5
+  CommsTick = 5
+  
+  File          = LOG_%(VNAME)
+  PATH	        = ./
+  AsyncLog 	    = true
+  FileTimeStamp = true
+
+  Log = IVPHELM_LIFE_EVENT @ 0 nosync
+  Log = BCM_ALERT_REQUEST @ 0 nosync
+
+  LogAuxSrc = true
+
+  // Log it all!!!!!
+  WildCardLogging = true 
+  WildCardOmitPattern = *_STATUS
+  WildCardOmitPattern = APPCAST
+  WildCardOmitPattern = DB_VARSUMMARY
+//  WildCardOmitPattern = DB_RWSUMMARY
+
+  WildCardOmitPattern = NAV_PITCH, NAV_LAT, NAV_LONG, NAV_YAW, NAV_Z
+  WildCardOmitPattern = NAV_HEADING_OVER_GROUND
+  WildCardOmitPattern = SIMULATION_MODE, TRUE_X, TRUE_Y, DB_CLIENTS
+  WildCardOmitPattern = NAV_DEPTH, NAV_SPEED_OVER_GROUND, DB_QOS
+  WildCardOmitPattern = NODE_BROKER_PING_0, PSHARE*
+  WildCardOmitPattern = IVPHELM_ALLSTOP_DEBUG, *ITER_GAP, *ITER_LEN
+  WildCardOmitPattern = PHI_HOST*, NODE_REPORT_LOCAL
+
+}

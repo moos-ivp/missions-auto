@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/bash 
 #------------------------------------------------------------ 
 #   Script: launch_vehicle.sh
-#  Mission: 00-alpha_ufld
+#  Mission: 08-colavd-lanes
 #   Author: M.Benjamin
 #   LastEd: May 2024
 #------------------------------------------------------------ 
@@ -36,11 +36,6 @@ START_POS="x=0,y=0,heading=0"
 STOCK_SPD="1.4"
 MAX_SPD="2"
 
-# Custom
-DEST_POS="50,-50"  
-MIN_UTIL_CPA="5"
-MAX_UTIL_CPA="40"
-
 #------------------------------------------------------------
 #  Part 3: Check for and handle command-line arguments
 #------------------------------------------------------------
@@ -70,10 +65,11 @@ for ARGI; do
 	echo "  --max_spd=<m/s>        Max Sim and Helm speed  "
 	echo "                                                 "
 	echo "Options (custom):                                "
-	echo "  --vdest=<X,Y>          Destination x/y         "
-	echo "  --min_util_cpa=N       min_util_cpa            " 
-	echo "  --max_util_cpa=N       max_util_cpa            " 
-	exit 0;
+	echo "  --vdest=X,Y            Dest pos for TRANSITers "
+	echo "  --vtype=<kayak>        Vehicle type given      " 
+	echo "  --vgroup=<alpha>       Vehicle group given     " 
+	echo "  --vrole=<TRANSIT>      PATROL or TRANSIT       " 
+	exit 0
     elif [ "${ARGI//[^0-9]/}" = "$ARGI" -a "$TIME_WARP" = 1 ]; then 
         TIME_WARP=$ARGI
     elif [ "${ARGI}" = "--verbose" -o "${ARGI}" = "-v" ]; then
@@ -111,13 +107,14 @@ for ARGI; do
 
     elif [ "${ARGI:0:8}" = "--vdest=" ]; then
         VDEST_POS="${ARGI#--vdest=*}"
-    elif [ "${ARGI:0:15}" = "--min_util_cpa=" ]; then
-        MIN_UTIL_CPA="${ARGI#--min_util_cpa=*}"
-    elif [ "${ARGI:0:15}" = "--max_util_cpa=" ]; then
-        MAX_UTIL_CPA="${ARGI#--max_util_cpa=*}"
+    elif [ "${ARGI:0:8}" = "--vtype=" ]; then
+	VTYPE="${ARGI#--vtype=*}"
+    elif [ "${ARGI:0:9}" = "--vgroup=" ]; then
+	VGROUP="${ARGI#--vgroup=*}"
+    elif [ "${ARGI:0:8}" = "--vrole=" ]; then
+	VROLE="${ARGI#--vrole=*}"
 
-
-    else 
+    else
 	echo "$ME: Bad Arg:[$ARGI]. Exit Code 1."
 	exit 1
     fi
@@ -136,7 +133,7 @@ if [ "${XMODE}" = "M300" ]; then
 	exit 2
     fi
 fi
-     
+
 #------------------------------------------------------------
 #  Part 5: If verbose, show vars and confirm before launching
 #------------------------------------------------------------
@@ -168,9 +165,9 @@ if [ "${VERBOSE}" = "yes" ]; then
     echo "FSEAT_IP =      [${FSEAT_IP}]     "
     echo "------------Custom----------------"
     echo "VDEST_POS =     [${VDEST_POS}]    "
-    echo "MIN_UTIL_CPA =  [$MIN_UTIL_CPA]   "
-    echo "MAX_UTIL_CPA =  [$MAX_UTIL_CPA]   "
-    echo "                                  "
+    echo "VTYPE =         [${VTYPE}]        "
+    echo "VGROUP =        [${VGROUP}]       "
+    echo "VROLE =         [${VROLE}]        "
     echo -n "Hit any key to continue launching $VNAME "
     read ANSWER
 fi
@@ -188,7 +185,7 @@ fi
 #------------------------------------------------------------
 NSFLAGS="--strict --force"
 if [ "${AUTO_LAUNCHED}" = "no" ]; then
-    NSFLAGS="--interactive --force "
+    NSFLAGS="--interactive --force"
 fi
 
 nsplug meta_vehicle.moos targ_$VNAME.moos $NSFLAGS WARP=$TIME_WARP \
@@ -197,15 +194,16 @@ nsplug meta_vehicle.moos targ_$VNAME.moos $NSFLAGS WARP=$TIME_WARP \
        SHORE_PSHARE=$SHORE_PSHARE   VNAME=$VNAME         \
        COLOR=$COLOR                 XMODE=$XMODE         \
        START_POS=$START_POS         MAX_SPD=$MAX_SPD     \
+       VTYPE=$VTYPE                 VGROUP=$VGROUP       \
        FSEAT_IP=$FSEAT_IP
 
 nsplug meta_vehicle.bhv targ_$VNAME.bhv $NSFLAGS  \
        START_POS=$START_POS         VNAME=$VNAME  \
        STOCK_SPD=$STOCK_SPD                       \
-       VDEST_POS=$VDEST_POS                       \
-       MIN_UTIL_CPA=$MIN_UTIL_CPA                 \
-       MAX_UTIL_CPA=$MAX_UTIL_CPA
+       VDEST_POS=$VDEST_POS         VROLE=$VROLE  \
+       VGROUP=$VGROUP
 
+ 
 if [ "${JUST_MAKE}" = "yes" ]; then
     echo "$ME: Targ files made; exiting without launch."
     exit 0
