@@ -26,9 +26,8 @@ Processconfig = ANTLER
   Run = uMemWatch      @ NewConsole = false
   Run = pRealm         @ NewConsole = false
   Run = uSimMarineV22  @ NewConsole = false
-}
-	
-#include plugs.moos <uSimMarine>
+
+#include plugs.moos <uSimMarineV22>
 #include plugs.moos <pShare>
 #include plugs.moos <pHostInfo>
 #include plugs.moos <uProcessWatch>
@@ -41,10 +40,10 @@ ProcessConfig = pHelmIvP
   AppTick    = 4
   CommsTick  = 4
 
-  Behaviors    = targ_$(VNAME).bhv  
-  Verbose      = false
-  Domain       = course:0:359:360
-  Domain       = speed:0:$(MAX_SPD):21
+  behaviors    = targ_$(VNAME).bhv  
+  verbose      = false
+  domain       = course:0:359:360
+  domain       = speed:0:$(MAX_SPD):21
 
 	//hold_on_apps = pContactMgrV20
 }

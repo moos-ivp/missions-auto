@@ -65,7 +65,7 @@ ProcessConfig = uTimerScript
 	delay_reset = 0                                            
 
   // Event(s) are the key components of the script              
-  event = var=SPOOF, val="x=22,y=-52,vsource=ais,name=ID$[IDX],spd=0", time=2  
+  event = var=SPOOF, val="x=22,y=-52,vsource=ais,name=ID$[IDX],spd=0.5", time=2  
   event = var=SPOOF, val="x=32,y=-62,vsource=ais,name=ID$[IDX],spd=0", time=4  
   event = var=SPOOF, val="x=42,y=-72,vsource=ais,name=ID$[IDX],spd=0", time=6  
   event = var=SPOOF, val="x=62,y=-82,vsource=ais,name=ID$[IDX],spd=0", time=8  
@@ -285,7 +285,7 @@ ProcessConfig = pMarineViewer
 
 	scope = CMGR_WARNING
 	
-  left_context[spoof_ais] = SPOOF = "x=$[XPOS],y=$[YPOS],vsource=ais,name=ID$[IX],spd=0"
+  left_context[spoof_ais] = SPOOF = "x=$[XPOS],y=$[YPOS],vsource=ais,name=ID$[IX],spd=0.4"
   left_context[spoof_aisx] = SPOOF = "x=$[XPOS],y=$[YPOS],vsource=ais,name=ID999,spd=0,dur=20"
 
   left_context[spoof_cancel] = SPOOF_CANCEL = contact=$[UP_VNAME_CLOSEST]

@@ -45,7 +45,7 @@ Behavior = BHV_Loiter
      clockwise = false
         radius = 8.0
      nm_radius = 15.0
-       polygon = radial:: $(LOITER_POS), radius=20, pts=8, snap=1, label=$(VNAME)_LOITER
+       polygon = radial:: $(LOITER_POS), radius=14, pts=8, snap=1, label=$(VNAME)_LOITER
   visual_hints = nextpt_color=white, nextpt_lcolor=khaki
   visual_hints = edge_color=orange, vertex_color=white
   visual_hints = edge_size=1, vertex_size=2
@@ -67,31 +67,20 @@ Behavior = BHV_AvdColregsV22
          extrapolate = true
                decay = 30,60
 
-            runxflag = STATUS={"TargetId":"$[CN_NAME]", "Priority":"$[APWT]", "Mode":"$[FULL_MODE]", "ModeId":"$[MODE_ID]"}
-	
-	       //match_group = alpha
-        //  match_type = mokai
-
-	activeflag = FOO=124
-	run_flag = FOO=345
-	runx_flag = FOO=789
-	
 	can_disable = true
 	
 	exit_on_filter_group = true
-	
 	post_per_contact_info = true
-	
   use_refinery = true
 
    //     pwt_outer_dist = 15
    //     pwt_inner_dist = 5
    //     completed_dist = 20
-        pwt_outer_dist = 80
-        pwt_inner_dist = 50
-        completed_dist = 85
+        pwt_outer_dist = 40
+        pwt_inner_dist = 20
+        completed_dist = 45
 
-  min_util_cpa_dist = 10
+     min_util_cpa_dist = 10
      max_util_cpa_dist = 18
              pwt_grade = linear
    bearing_line_config = white:0, green:0.65, yellow:0.8, red:1.0
@@ -100,22 +89,16 @@ Behavior = BHV_AvdColregsV22
 //----------------------------------------------
 //Behavior = BHV_AvoidCollision
 {
-  name         = ac_
-  pwt          = 500
-  condition    = AVOID = true 
-  updates      = CONTACT_INFO
+  name       = ac_
+  pwt        = 500
+  condition  = AVOID = true 
+  updates    = CONTACT_INFO
+  templating = spawn
 
-  activeflag   = AVOIDING = active
-  inactiveflag = AVOIDING = inactive
-  runflag      = AVOIDING = running
-  endflag      = AVOIDING = end
-
-  templating   = spawn
-
-             contact = to-be-set
-    on_no_contact_ok = true
-         extrapolate = true
-               decay = 30,60
+           contact = to-be-set
+  on_no_contact_ok = true
+       extrapolate = true
+             decay = 30,60
 
 //	           cnflag = @<20 SAY_MOOS=hello
 	           cnflag = @<20 ROC=$[ROC]

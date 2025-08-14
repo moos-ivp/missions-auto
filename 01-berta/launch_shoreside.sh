@@ -123,9 +123,9 @@ fi
 #------------------------------------------------------------ 
 #  Part 6: Create the shoreside mission file
 #------------------------------------------------------------ 
-NSFLAGS="--strict --force"
+NSFLAGS="--strict --force -x "
 if [ "${AUTO_LAUNCHED}" = "no" ]; then
-    NSFLAGS="--interactive --force"
+    NSFLAGS="--interactive --force -x "
 fi
 
 nsplug meta_shoreside.moos targ_shoreside.moos $NSFLAGS WARP=$TIME_WARP \

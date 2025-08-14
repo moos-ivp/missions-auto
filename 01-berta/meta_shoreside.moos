@@ -131,6 +131,10 @@ ProcessConfig = pMarineViewer
   vehicles_shape_scale = 1.5
   vehicles_name_mode   = names
 
+	extrap_policy = mode=off
+
+	node_report_unc = true
+	
 	app_logging = true
 	
 	watch_cluster = key=mission_top, vars=DEPLOY:RETURN
@@ -146,13 +150,9 @@ ProcessConfig = pMarineViewer
   procs_font_size      = large
   nodes_font_size      = large
 
-  stale_report_thresh = 10
+  stale_report_thresh = 10  
   stale_remove_thresh = 18
 
-	scope = REALMCAST_REQ
-	scope = REALMCAST_REQ_GILDA
-	scope = REALMCAST_REQ_HENRY
-	
   left_context[disable] = BHV_ABLE_FILTER_$[UP_VNAME_CLOSEST] = contact=abe, action=disable
 
   left_context[disable] = BHV_ABLE_FILTER_$[UP_VNAME_CLOSEST] = contact=abe, action=disable
@@ -203,19 +203,14 @@ ProcessConfig = uTimerScript
   reset_max  = unlimited
   reset_time = end
 
-  //randvar = varname=X1, min=-25,  max=25,  key=at_reset
-  //randvar = varname=Y1, min=-100, max=-50, key=at_reset
-  //randvar = varname=X2, min=100,  max=150, key=at_reset
-  //randvar = varname=Y2, min=-75,  max=-25, key=at_reset
-
   randvar = varname=X1, min=0,     max=5,  key=at_reset
   randvar = varname=Y1, min=-80,  max=-70, key=at_reset
-  randvar = varname=X2, min=120,  max=130, key=at_reset
-  randvar = varname=Y2, min=-80,  max=-70, key=at_reset
+  randvar = varname=X2, min=110,  max=130, key=at_reset
+  randvar = varname=Y2, min=-90,  max=-70, key=at_reset
 
-  event = var=UP_LOITER_2, val="center_assign=$[X1],$[Y1]", time=180 
-  event = var=UP_LOITER_1, val="center_assign=$[X2],$[Y2]", time=180
+  event = var=UP_LOITER_2, val="center_assign=$[X1],$[Y1]", time=120 
+  event = var=UP_LOITER_1, val="center_assign=$[X2],$[Y2]", time=120
 
-  event = var=UP_LOITER_1, val="center_assign=$[X1],$[Y1]", time=360
-  event = var=UP_LOITER_2, val="center_assign=$[X2],$[Y2]", time=360
+  event = var=UP_LOITER_1, val="center_assign=$[X1],$[Y1]", time=280
+  event = var=UP_LOITER_2, val="center_assign=$[X2],$[Y2]", time=280
 }

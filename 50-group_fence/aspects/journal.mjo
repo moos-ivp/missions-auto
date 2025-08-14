@@ -6,7 +6,7 @@ git_repo = git@github.com:pavlab-mit/missions-auto.git
 author   = M.Benjamin
 org      = MIT Marine Autonomy Lab
 email    = mikerb@mit.edu
-location = mit_pavlat
+location = forest_lake
 vehamt   = 7 (max=12)
 lau_cmd  = ./launch.sh --amt=7 15  (7 vehicles, 15x realtime)
 gif      = group_fence.gif

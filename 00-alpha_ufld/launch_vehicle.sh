@@ -188,7 +188,7 @@ fi
 #------------------------------------------------------------
 NSFLAGS="--strict --force"
 if [ "${AUTO_LAUNCHED}" = "no" ]; then
-    NSFLAGS="--interactive --force"
+    NSFLAGS="--interactive --force "
 fi
 
 nsplug meta_vehicle.moos targ_$VNAME.moos $NSFLAGS WARP=$TIME_WARP \

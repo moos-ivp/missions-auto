@@ -37,6 +37,7 @@ rm -f   $VERBOSE   targ_* tmp_* *.tar
 rm -f   $VERBOSE   .LastOpenedMOOSLogDirectory
 rm -f   $VERBOSE   .mem_info* vloiterpos.txt vpositions.txt vdests.txt
 rm -f   $VERBOSE   vnames.txt vcolors.txt vcolors.txt vspeeds.txt
+rm -f   $VERBOSE   *.moosx *.bhvx
 
 for file in *; do
     if [ -d $file ]; then

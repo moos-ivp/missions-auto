@@ -5,6 +5,7 @@
 initialize  DEPLOY  = false
 initialize  RETURN  = false
 initialize  TRANSIT = true
+initialize  STATION = false
 
 set MODE = ACTIVE {
   DEPLOY = true
@@ -15,10 +16,16 @@ set MODE = RETURNING {
   RETURN = true
 } 
 
+set MODE = STATION-KEEPING {
+  MODE = ACTIVE
+  STATION = true
+} 
+
 set MODE = TRANSITING {
   MODE = ACTIVE
   TRANSIT = true
 } 
+
 
 //----------------------------------------------
 Behavior = BHV_Waypoint
@@ -36,7 +43,7 @@ Behavior = BHV_Waypoint
   updates   = WPT_UPDATE
   perpetual = false
 
-           speed = 3 
+           speed = $(STOCK_SPD)
     capture_line = true
   capture_radius = 5.0
      slip_radius = 15.0
