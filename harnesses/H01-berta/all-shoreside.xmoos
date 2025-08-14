@@ -1,0 +1,14 @@
+
+ANTLER::Run = pAutoPoke  @ NewConsole = false
+
+ProcessConfig = pAutoPoke
+{
+  AppTick    = 2
+  CommsTick  = 2
+
+  flag = DEPLOY_ALL=true 
+  flag = MOOS_MANUAL_OVERRIDE_ALL=false
+
+	required_nodes = 1
+}
+	

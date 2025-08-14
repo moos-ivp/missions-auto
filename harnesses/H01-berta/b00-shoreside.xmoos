@@ -1,0 +1,44 @@
+
+ANTLER::Run = uFldCollisionDetect @ NewConsole = false
+ANTLER::Run = pMissionEval @ NewConsole = false
+
+ProcessConfig = uFldCollisionDetect                             
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  condition = DEPLOY_ALL = true
+																																
+  encounter_flag = ENCOUNTER = $CPA
+  collision_flag = COLLISION = $CPA
+  near_miss_flag = NEAR_MISS = vname1=$V1,vname2=$V2,cpa=$CPA
+                                                                
+  encounter_range = 30    
+  near_miss_range = 10    
+  collision_range = 3     
+  encounter_rings = false  // default true
+}
+
+ProcessConfig = pMissionEval
+{
+  AppTick    = 4
+  CommsTick  = 4
+
+  lead_condition = ENCOUNTER_TOTAL = 3
+  pass_condition = COLLISION_TOTAL = 0
+
+  mission_form  = 01-berta
+  mission_mod   = b00
+  report_file   = results.txt
+	report_column = date=$[DATE]
+	report_column = hour=$[HOUR]
+	report_column = min=$[MIN]
+  report_column = grade=$[GRADE]
+  report_column = form=$[MISSION_FORM]
+  report_column = mmod=$[MMOD]
+  report_column = mhash_short=$[MHASH_SHORT]
+  report_column = mhash_lshort=$[MHASH_LSHORT]
+  report_column = wall=$[WALL_TIME]
+
+  result_flag = MISSION_EVALUATED = true
+}
