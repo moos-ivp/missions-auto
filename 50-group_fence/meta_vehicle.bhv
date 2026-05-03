@@ -62,8 +62,8 @@ Behavior = BHV_AvoidCollision
        pwt_outer_dist = 35
        pwt_inner_dist = 10
        completed_dist = 40
-    min_util_cpa_dist = 10
-    max_util_cpa_dist = 18
+    min_util_cpa_dist = 4
+    max_util_cpa_dist = 12
             pwt_grade = linear
   bearing_line_config = white:0, gray20:0.2, gray40:0.4, gray60:0.6, gray80:0.8, red:1.0
 }
@@ -93,7 +93,7 @@ Behavior = BHV_Loiter
        ipf_type = zaic_spd
 	
          patience = 95
-          polygon = radial:: x=75,y=-95,radius=45,pts=16  // example
+          polygon = radial:: x=75,y=-95,radius=65,pts=16  // example
 
      visual_hints = vertex_size  = 1             // default
      visual_hints = edge_size    = 1             // default

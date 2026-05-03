@@ -227,7 +227,7 @@ do
 	IVARGS+=" $LOG_CLEAN" # only sent to vehicles in mtasc mode
 	IVARGS+=" --mission=$MTASC_MISSION --shore=$SHORE_IP "
 	IVARGS+=" --ip=$IP "
-	CMD="ssh student2680@$IP $SSH_OPTIONS mlaunch.sh $IVARGS &"
+	CMD="ssh pabuser@$IP $SSH_OPTIONS mlaunch.sh $IVARGS &"
 	vecho "Launching vehicle: $CMD"
 	eval $CMD
     fi
