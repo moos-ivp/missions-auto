@@ -187,8 +187,8 @@ ProcessConfig = pMarineViewer
   button_five  = STATION:true # STATION_KEEP_ALL=true
   button_six   = STATION:false # STATION_KEEP_ALL=false
 
-	button_seven = REFINE:N # CONTACT_INFO_ALL = name=avdcol # use_refinery=false
-	button_eight = REFINE:Y # CONTACT_INFO_ALL = name=avdcol # use_refinery=true
+  button_seven = REFINE:N # CONTACT_INFO_ABE="name=ben # use_refinery=false" # CONTACT_INFO_BEN="name=abe # use_refinery=false"
+  button_eight = REFINE:Y # CONTACT_INFO_ABE="name=ben # use_refinery=true"  # CONTACT_INFO_BEN="name=abe # use_refinery=true"
 }
 
 //--------------------------------------------------------
