@@ -1,6 +1,8 @@
 //--------    FILE: abe.bhv   -------------
 
-initialize   DEPLOY = false
+initialize   DEPLOY       = false
+initialize   RETURN       = false
+initialize   STATION_KEEP = false
 
 //----------------------------------------------
 Behavior = BHV_OpRegionV24
@@ -28,13 +30,61 @@ Behavior = BHV_OpRegionV24
 //----------------------------------------------
 Behavior=BHV_Waypoint
 {
-  name       = waypt
+  name       = waypt_out
   pwt        = 100
+
   condition  = DEPLOY = true
+  condition  = RETURN = false
+  condition  = STATION_KEEP = false
 
            speed = 2.0
   capture_radius = 2.0
      slip_radius = 5.0
-          point = 100,-20
+           point = 100,-20
  }
 
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+
+  condition  = DEPLOY = true
+  condition  = RETURN = true
+  condition  = STATION_KEEP = false
+
+
+           speed = 1.0
+  capture_radius = 7.0
+     slip_radius = 10.0
+           point = 0,0
+
+         updates = RETURN_UPDATES
+     spawnx_flag = RETURN_UPDATES=point=$[OSX],$[OSY]
+
+  endflag = RETURN = false
+  endflag = STATION_KEEP = true
+
+ }
+
+//----------------------------------------------
+Behavior = BHV_StationKeep
+{
+  name      = station-keep
+  pwt       = 100
+
+  condition = DEPLOY = true
+  condition = STATION_KEEP = true
+
+     center_activate = true
+        inner_radius = 5
+        outer_radius = 10
+         outer_speed = 1.0
+
+       transit_speed = 1.3
+          swing_time = 7
+  hibernation_radius = 15
+        visual_hints = vertex_size=0, edge_color=blue
+
+}
