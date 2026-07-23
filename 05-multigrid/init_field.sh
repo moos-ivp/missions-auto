@@ -71,6 +71,11 @@ fi
 pickpos --amt=$VEHICLE_AMT --vnames > vnames.txt
 pickpos --amt=$VEHICLE_AMT --colors > vcolors.txt
 
+pickpos --poly="-25,-75 : -25,-25 : 25,-25 : 25,-75"       \
+        --poly="100,-75 : 100,-25 : 150,-25 : 150,-75"     \
+        --poly="100,-125 : 100,-105 : 150,-105 : 150,-125" \
+        --poly="-25,-125 : -25,-105 : 25,-105 : 25,-125"   \
+        --amt=$VEHICLE_AMT --buffer=35 > vloiterpos.txt
 
 #------------------------------------------------------------
 #  Part 6: Set other aspects of the field, e.g., obstacles
