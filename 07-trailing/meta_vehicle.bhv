@@ -58,7 +58,7 @@ Behavior = BHV_Waypoint
   spawnx_flag = RETURN_UPDATES=point=$[OSX],$[OSY]
 	
       speed = 2.5
-     points = 0,0
+     points = start
 }
 
 //----------------------------------------------

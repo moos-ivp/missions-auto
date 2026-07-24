@@ -46,7 +46,7 @@ done
 #------------------------------------------------------------
 #  Part 4: Source local coordinate grid if it exits
 #------------------------------------------------------------
-source fld_base.opf
+# source fld_base.opf
 
 #------------------------------------------------------------
 #  Part 5: Set starting positions, speeds, vnames, colors
