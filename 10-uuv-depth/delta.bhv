@@ -71,7 +71,7 @@ Behavior = BHV_Waypoint
   condition  = MODE == RETURNING
   updates    = UPDATES_RETURN
   perpetual  = true
-  endflag    = RETURNING = false
+  endflag    = RETURN = false
   endflag    = DEPLOY = false
 
        speed = 2.0
