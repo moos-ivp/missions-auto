@@ -98,6 +98,7 @@ ProcessConfig = pMarineViewer
   button_three = TRAIL-YES # PATROL=false # TRAILING_ALLOWED=true
   button_three = TRAIL=true
   button_four  = TRAIL-NO # TRAILING_ALLOWED=false
+  button_four  = TRAIL=false # PATROL=true
 }
 
 //--------------------------------------------------
