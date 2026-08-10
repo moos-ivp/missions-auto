@@ -133,6 +133,7 @@ ProcessConfig = pLogger
   WildCardOmitPattern = *_STATUS
   WildCardOmitPattern = DB_VARSUMMARY
   WildCardOmitPattern = DB_RWSUMMARY
+  WildCardOmitPattern = BHV_IPF
 }
 
 //--------------------------------------------------------
@@ -141,9 +142,10 @@ ProcessConfig = pLogger
 ProcessConfig = pNodeReporter
 {
   AppTick     = 2
-  CommsTick   = 
+  CommsTick   = 2 
   
   platform_type = kayak
+  platform_color = $(COLOR)
 }
 
 //--------------------------------------------------------
