@@ -99,6 +99,7 @@ VDESTS=(`cat vdests.txt`)
 VGROUPS=(`cat vgroups.txt`)
 VROLES=(`cat vroles.txt`)
 VTYPES=(`cat vtypes.txt`)
+VCOLOR=(`cat vcolors.txt`)
 
 ALL_VNAMES=""
 

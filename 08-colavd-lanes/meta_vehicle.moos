@@ -62,6 +62,7 @@ ProcessConfig = pNodeReporter
 
   platform_type  = $(VTYPE=kayak)
   platform_group = $(VGROUP)
+  platform_color = $(COLOR)
   terse_reports  = true
 }
 
