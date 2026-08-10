@@ -56,7 +56,7 @@ ProcessConfig = uFldShoreBroker
   qbridge  = DEPLOY, RETURN, STATION_KEEP, NODE_REPORT, NODE_MESSAGE
   qbridge  = MOOS_MANUAL_OVERRIDE, APPCAST_REQ
   qbridge  = LEG_RUN, LEG_UPDATE
-  qbridge  = OPREGION_RESET
+  qbridge  = RECOVER_UPDATES
 
 	bridge   = src=HEARTBEAT
 }
@@ -141,26 +141,24 @@ ProcessConfig = pMarineViewer
   button_1 = LEG_RUN_ALL=true
 
   button_2 = RETURN  # RETURN_ALL=true
-  button_2 = RETURN  # STATION_KEEP_ALL=false
+  button_2 = STATION_KEEP_ALL=false
 
 	button_3 = ALLSTOP # DEPLOY_ALL=false
 	button_4 = STATION # STATION_KEEP_ALL=true	
 
-	button_5 = LEN_MORE # LEG_UPDATE_ALL=leg_length_mod=2
-	button_6 = LEN_LESS # LEG_UPDATE_ALL=leg_length_mod=-2
+	button_5 = LEN_MORE # LEG_UPDATE_ALL=leg_len_mod=2
+	button_6 = LEN_LESS # LEG_UPDATE_ALL=leg_len_mod=-2
 
 	button_7 = RAD_MORE # LEG_UPDATE_ALL=turn_rad_mod=0.25
 	button_8 = RAD_LESS # LEG_UPDATE_ALL=turn_rad_mod=-0.25
 
-	button_9  = ANG_MORE # LEG_UPDATE_ALL=leg_angle_mod=2
-	button_10 = ANG_LESS # LEG_UPDATE_ALL=leg_angle_mod=-2
+	button_9  = ANG_MORE # LEG_UPDATE_ALL=leg_ang_mod=2
+	button_10 = ANG_LESS # LEG_UPDATE_ALL=leg_ang_mod=-2
 
-	button_11 = OPR_RESET # OPREGION_RESET_ALL=true
-	button_12 = RFact1p0 # IM300_UPDATE_ALL=rfactor=1
-
-	button_17 = LEGV_1p4 # LEG_UPDATE_ALL=speed=1.4
-	button_18 = LEGV_1p2 # LEG_UPDATE_ALL=speed=1.2
-
-	button_19 = LEGV_1p0 # LEG_UPDATE_ALL=speed=1.0
-	button_20 = LEGV_0p8 # LEG_UPDATE_ALL=speed=0.8
+	button_11 = OPR_RESET # RECOVER_UPDATES_ALL=reset=true
+	//button_12 = RFact1p0 # IM300_UPDATE_ALL=rfactor=1
+	button_12 = LEGV_1p4 # LEG_UPDATE_ALL=speed=1.4
+	button_13 = LEGV_1p2 # LEG_UPDATE_ALL=speed=1.2
+	button_14 = LEGV_1p0 # LEG_UPDATE_ALL=speed=1.0
+	button_15 = LEGV_0p8 # LEG_UPDATE_ALL=speed=0.8
 }
